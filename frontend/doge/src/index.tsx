@@ -9,7 +9,12 @@ import { theme } from "./theme";
 import router from "./routes/Router";
 
 const GlobalStyle = createGlobalStyle`
-
+@font-face {
+  font-family: 'Do Hyeon';
+  font-style: normal;
+  font-weight: 100;
+  src: url('./assets/fonts/DoHyeon-Regular.ttf') format("truetype") url("./assets/fonts/AnyConv.com__DoHyeon-Regular.woff") format("woff");
+}
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -58,7 +63,8 @@ table {
   box-sizing: border-box;
 }
 body{  
-  color: ${(props) => props.theme.black.darker};  
+  font-family: 'Do Hyeon';
+  color: ${props => props.theme.black.darker};  
   line-height: 1.2;
 }
 a{
