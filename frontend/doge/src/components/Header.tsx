@@ -1,9 +1,11 @@
 import { ReactComponent as Logo } from "../assets/img/dgu-elephant.svg";
 import { ReactComponent as Home } from "../assets/img/house-solid.svg";
 import { ReactComponent as Logout } from "../assets/img/right-from-bracket-solid.svg";
+import { ReactComponent as User } from "../assets/imgs/user-solid.svg";
 import { ReactComponent as Star } from "../assets/img/star-regular.svg";
 import { ReactComponent as FullStar } from "../assets/img/star-solid.svg";
-import { ReactComponent as User } from "../assets/img/user-solid.svg";
+import { ReactComponent as Xmark } from "../assets/imgs/xmark-solid.svg";
+import { ReactComponent as Search } from "../assets/img/magnifying-glass-solid.svg";
 import styled from "styled-components";
 
 const Nav = styled.nav`
@@ -12,7 +14,7 @@ const Nav = styled.nav`
   align-items: center;
   width: 100%;
   top: 0;
-  background-color: ${(props) => props.theme.orange};
+  background-color: ${props => props.theme.orange};
   font-size: 14px;
   padding: 20px 60px;
   color: rgba(255, 255, 255, 1);
