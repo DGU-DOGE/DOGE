@@ -6,6 +6,7 @@ import Join from "../screens/Join";
 import UserInfo from "../screens/UserInfo";
 import Favorites from "../screens/Favorites";
 import Logout from "../screens/Logout";
+import Search from "../screens/Search";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "join",
         element: <Join />,
+      },
+      {
+        path: "search",
+        element: <Search />,
       },
       { path: "userInfo", element: <UserInfo /> },
       { path: "favorites", element: <Favorites /> },
