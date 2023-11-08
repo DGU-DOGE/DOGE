@@ -62,7 +62,7 @@ const Search = styled.form`
   align-items: center;
   position: relative;
   input:focus {
-    background-color: transparent;
+    background-color: ${props => props.theme.white.lighter};
   }
 `;
 const Input = styled.input`
