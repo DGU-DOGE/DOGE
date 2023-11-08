@@ -27,7 +27,7 @@ const Title = styled.div`
   margin-top: 25px;
   h1 {
     font-size: 68px;
-    color: ${props => props.theme.orange};
+    color: ${(props) => props.theme.orange};
   }
 `;
 const LoginWrapper = styled.div`
@@ -45,43 +45,36 @@ const LoginForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${props => props.theme.orange};
-    color: ${props => props.theme.white.lighter};
-    font-size: 24px;
+    background-color: ${(props) => props.theme.orange};
+    color: ${(props) => props.theme.white.lighter};
+    font-size: 30px;
   }
 `;
 const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${props => props.theme.gray.medium};
-  border: 1px solid ${props => props.theme.gray.medium};
+  background-color: ${(props) => props.theme.gray.medium};
+  border: 1px solid ${(props) => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
 `;
-const SubmitWrapper = styled.div`
+const ExtraWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  min-width: 800px;
 `;
-const Submit = styled.div`
+const Extra = styled.div`
   width: 80%;
-  height: 60px;
-  margin: 10px;
-  background-color: ${props => props.theme.orange};
-  border: 1px solid ${props => props.theme.orange};
-  border-radius: 10px;
-
-  font-size: 24px;
-  a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: ${props => props.theme.white.lighter};
-    font-size: 24px;
-    padding-top: 13px;
+  display: flex;
+  justify-content: flex-end;
+  a,
+  span {
+    color: ${(props) => props.theme.orange};
+    margin-left: 10px;
+    font-size: 22px;
   }
 `;
 interface ILogin {
@@ -116,11 +109,13 @@ const Login = () => {
           <Input type="submit" value="로그인" />
         </LoginForm>
       </LoginWrapper>
-      <SubmitWrapper>
-        <Submit>
-          <Link to={`/join`}>회원가입</Link>
-        </Submit>
-      </SubmitWrapper>
+      <ExtraWrapper>
+        <Extra>
+          <Link to={"/"}>비밀번호 찾기</Link>
+          <span>/</span>
+          <Link to={"/join"}>회원가입</Link>
+        </Extra>
+      </ExtraWrapper>
     </Wrapper>
   );
 };
