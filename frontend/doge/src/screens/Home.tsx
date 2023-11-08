@@ -61,6 +61,9 @@ const Search = styled.form`
   justify-content: center;
   align-items: center;
   position: relative;
+  input:focus {
+    background-color: transparent;
+  }
 `;
 const Input = styled.input`
   width: 95%;
