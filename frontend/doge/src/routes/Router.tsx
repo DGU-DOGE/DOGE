@@ -18,6 +18,10 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
+        path: "map-detail/:mapId",
+        element: <Home />,
+      },
+      {
         path: "login",
         element: <Login />,
       },

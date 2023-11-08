@@ -4,12 +4,16 @@ import FloorB2 from "../assets/imgs/floorB2.png";
 import FloorB1 from "../assets/imgs/floorB1.png";
 import Floor1 from "../assets/imgs/floor1.png";
 import Floor3 from "../assets/imgs/floor3.png";
+import FloorB2Detail from "../assets/imgs/floorB2-detail.png";
+import FloorB1Detail from "../assets/imgs/floorB1-detail.png";
+import Floor1Detail from "../assets/imgs/floor1-detail.png";
+import Floor3Detail from "../assets/imgs/floor3-detail.png";
 import { ReactComponent as LeftAngle } from "../assets/imgs/angle-left-solid.svg";
 import { ReactComponent as RightAngle } from "../assets/imgs/angle-right-solid.svg";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useMatch } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, useScroll } from "framer-motion";
 import { useState } from "react";
 import { motion } from "framer-motion";
 
@@ -41,7 +45,7 @@ const Title = styled.div`
     font-size: 68px;
   }
   span {
-    color: ${(props) => props.theme.orange};
+    color: ${props => props.theme.orange};
   }
 `;
 const InfoWrapper = styled.div`
@@ -49,7 +53,7 @@ const InfoWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   min-width: 800px;
-  background-color: ${(props) => props.theme.gray.lighter};
+  background-color: ${props => props.theme.gray.lighter};
   border-radius: 10px;
 `;
 const Search = styled.form`
@@ -57,13 +61,16 @@ const Search = styled.form`
   justify-content: center;
   align-items: center;
   position: relative;
+  input:focus {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
 `;
 const Input = styled.input`
   width: 95%;
   height: 70px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 28px;
@@ -90,8 +97,18 @@ const Map = styled(motion.img)`
   height: 700px;
   background-size: cover;
   background-position: center center;
+  cursor: pointer;
+`;
+const Overlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  opacity: 0;
 `;
 const Bottom = styled.div`
+  margin-top: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -100,15 +117,36 @@ const Circle = styled.span<{ current: boolean }>`
   width: 20px;
   height: 20px;
   border-radius: 20px;
-  background-color: ${(props) =>
+  background-color: ${props =>
     props.current ? props.theme.gray.darker : props.theme.gray.medium};
   margin-right: 50px;
   margin-bottom: 50px;
 `;
+const DetailMap = styled(motion.div)`
+  position: absolute;
+  width: 800px;
+  min-width: 800px;
+  height: 700px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background-color: ${props => props.theme.gray.darker};
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const DetailMapInfo = styled.img`
+  background-size: cover;
+  background-position: center center;
+  width: 90%;
+  height: 100%;
+`;
 interface IForm {
   keyword: string;
 }
-const boxVariants = {
+const mapVariants = {
   initial: (isNext: boolean) => ({
     x: isNext ? window.outerWidth : -window.outerWidth,
   }),
@@ -116,27 +154,33 @@ const boxVariants = {
   exit: (isNext: boolean) => ({
     x: isNext ? -window.outerWidth : window.outerWidth,
   }),
+  hover: { scale: 1.05 },
 };
 const Home = () => {
   const navigate = useNavigate();
+  const { scrollY } = useScroll();
+  const detailMapMatch = useMatch(`/map-detail/:mapId`);
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [next, setNext] = useState(true);
   const { register, handleSubmit } = useForm<IForm>();
   const increaseIndex = () => {
     if (leaving) return;
-    setNext(true);
     toggleLeaving();
-    setIndex((prev) => (prev === 3 ? 0 : prev + 1));
+    setNext(true);
+    setIndex(prev => (prev === 3 ? 0 : prev + 1));
   };
   const decreaseIndex = () => {
     if (leaving) return;
-    setNext(false);
     toggleLeaving();
-    setIndex((prev) => (prev === 0 ? 3 : prev - 1));
+    setNext(false);
+    setIndex(prev => (prev === 0 ? 3 : prev - 1));
   };
   const toggleLeaving = () => {
-    setLeaving((prev) => !prev);
+    setLeaving(prev => !prev);
+  };
+  const onOverlayClick = () => {
+    navigate(-1);
   };
   const onValid = (data: IForm) => {
     navigate(`/search?keyword=${data.keyword}`);
@@ -169,12 +213,15 @@ const Home = () => {
           <AnimatePresence onExitComplete={toggleLeaving} initial={false}>
             <Map
               key={index}
+              layoutId={index + ""}
+              whileHover="hover"
               custom={next}
-              variants={boxVariants}
+              variants={mapVariants}
               initial="initial"
               animate="animate"
               exit="exit"
               transition={{ type: "tween", duration: 0.2 }}
+              onClick={() => navigate(`/map-detail/${index}`)}
               src={
                 index === 0
                   ? FloorB2
@@ -207,8 +254,37 @@ const Home = () => {
             onClick={increaseIndex}
           />
         </MapWrapper>
+        <AnimatePresence>
+          {detailMapMatch ? (
+            <>
+              <Overlay
+                onClick={onOverlayClick}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              />
+              <DetailMap
+                layoutId={detailMapMatch.params.mapId + ""}
+                style={{ top: scrollY.get() + 30 }}
+              >
+                <DetailMapInfo
+                  src={
+                    +detailMapMatch.params.mapId! === 0
+                      ? FloorB2Detail
+                      : +detailMapMatch.params.mapId! === 1
+                      ? FloorB1Detail
+                      : +detailMapMatch.params.mapId! === 2
+                      ? Floor1Detail
+                      : +detailMapMatch.params.mapId! === 3
+                      ? Floor3Detail
+                      : ""
+                  }
+                />
+              </DetailMap>
+            </>
+          ) : null}
+        </AnimatePresence>
         <Bottom>
-          {[0, 1, 2, 3].map((idx) => (
+          {[0, 1, 2, 3].map(idx => (
             <Circle current={index === idx} />
           ))}
         </Bottom>
