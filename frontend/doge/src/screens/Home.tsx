@@ -94,6 +94,7 @@ const MapWrapper = styled.div`
 const Map = styled(motion.img)`
   min-width: 800px;
   margin-top: 20px;
+  width: 300px;
   height: 700px;
   background-size: cover;
   background-position: center center;
