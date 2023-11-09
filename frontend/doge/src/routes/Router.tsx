@@ -37,6 +37,10 @@ const router = createBrowserRouter([
         path: "search",
         element: <Search />,
       },
+      {
+        path: "search/book-detail/:bookId",
+        element: <Search />,
+      },
       { path: "userInfo", element: <UserInfo /> },
       { path: "favorites", element: <Favorites /> },
     ],
