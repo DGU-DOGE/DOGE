@@ -13,6 +13,7 @@ export const theme: DefaultTheme = {
   },
   orange: "#E17100",
   gray: {
+    bright: "#F3F3F3",
     darker: "#898585",
     medium: "#D9D9D9",
     lighter: "#EBE8E8",
