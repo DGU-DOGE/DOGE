@@ -156,7 +156,7 @@ const Home = () => {
   const detailMapMatch = useMatch(`/map-detail/:mapId`);
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
-  const [next, setNext] = useState(true);
+  const [isNext, setNext] = useState(true);
   const { register, handleSubmit } = useForm<IForm>();
   const increaseIndex = () => {
     if (leaving) return;
@@ -212,7 +212,7 @@ const Home = () => {
               key={index}
               layoutId={index + ""}
               whileHover="hover"
-              custom={next}
+              custom={isNext}
               variants={mapVariants}
               initial="initial"
               animate="animate"
