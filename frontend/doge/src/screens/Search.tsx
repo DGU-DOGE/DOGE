@@ -62,13 +62,6 @@ const SearchBtn = styled.div`
   position: absolute;
   right: 45px;
 `;
-const MapWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-width: 800px;
-  margin-bottom: 20px;
-  position: relative;
-`;
 const Slider = styled(motion.div)`
   display: flex;
   flex-direction: column;
@@ -169,8 +162,8 @@ const Overlay = styled(motion.div)`
 `;
 const DetailWrapper = styled(motion.div)`
   position: absolute;
-  width: 90%;
-  height: 60%;
+  width: 80%;
+  height: 90vh;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -212,6 +205,19 @@ const DetailInfo = styled.div`
     cursor: pointer;
   }
 `;
+const MapLocation = styled.div`
+  align-items: center;
+  background-color: red;
+  width: 70%;
+  height: 600px;
+  max-width: 550px;
+  margin: 20px 0px;
+
+  img {
+    background-size: cover;
+    background-position: center center;
+  }
+`;
 const Bottom = styled.div`
   display: flex;
   justify-content: center;
@@ -223,6 +229,7 @@ const Circle = styled.span`
   height: 20px;
   border-radius: 20px;
   margin-right: 20px;
+  margin-top: 20px;
 `;
 const sliderVariants = {
   initial: (isNext: boolean) => ({
@@ -381,6 +388,7 @@ const Search = () => {
     navigate(`/search?keyword=${data.keyword}`);
   };
   const onOverlayClick = () => {
+    setDetailIdx(0);
     navigate(-1);
   };
 
@@ -454,16 +462,17 @@ const Search = () => {
                 <Slider key={detailIdx}>
                   <CancelBtn
                     onClick={() => {
+                      setDetailIdx(0);
                       navigate(-1);
                     }}
                   />
                   {detailIdx === 0 ? (
                     <>
-                      <div style={{ marginTop: 100 }}>
+                      <div style={{ marginTop: 250 }}>
                         <BookImg
                           style={{
-                            width: 300,
-                            height: 300,
+                            width: 450,
+                            height: 450,
                             marginTop: 50,
                           }}
                         />
@@ -503,6 +512,7 @@ const Search = () => {
                     </>
                   ) : (
                     <>
+                      <MapLocation></MapLocation>
                       <DetailInfo>
                         {clickedBook && (
                           <>
