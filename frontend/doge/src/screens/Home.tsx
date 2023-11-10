@@ -45,7 +45,7 @@ const Title = styled.div`
     font-size: 68px;
   }
   span {
-    color: ${props => props.theme.orange};
+    color: ${(props) => props.theme.orange};
   }
 `;
 const InfoWrapper = styled.div`
@@ -53,7 +53,7 @@ const InfoWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   min-width: 800px;
-  background-color: ${props => props.theme.gray.lighter};
+  background-color: ${(props) => props.theme.gray.lighter};
   border-radius: 10px;
 `;
 const Search = styled.form`
@@ -69,8 +69,8 @@ const Input = styled.input`
   width: 95%;
   height: 70px;
   margin: 10px;
-  background-color: ${props => props.theme.gray.medium};
-  border: 1px solid ${props => props.theme.gray.medium};
+  background-color: ${(props) => props.theme.gray.medium};
+  border: 1px solid ${(props) => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 28px;
@@ -119,12 +119,12 @@ const Circle = styled.span`
 `;
 const DetailMap = styled(motion.div)`
   position: absolute;
-  width: 90%;
-  height: 70vh;
+  width: 60%;
+  height: 80vh;
   left: 0;
   right: 0;
   margin: 0 auto;
-  background-color: ${props => props.theme.gray.darker};
+  background-color: ${(props) => props.theme.gray.darker};
   border-radius: 15px;
   overflow: hidden;
   display: flex;
@@ -162,16 +162,16 @@ const Home = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(true);
-    setIndex(prev => (prev === 3 ? 0 : prev + 1));
+    setIndex((prev) => (prev === 3 ? 0 : prev + 1));
   };
   const decreaseIndex = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(false);
-    setIndex(prev => (prev === 0 ? 3 : prev - 1));
+    setIndex((prev) => (prev === 0 ? 3 : prev - 1));
   };
   const toggleLeaving = () => {
-    setLeaving(prev => !prev);
+    setLeaving((prev) => !prev);
   };
   const onOverlayClick = () => {
     navigate(-1);
@@ -283,7 +283,7 @@ const Home = () => {
           ) : null}
         </AnimatePresence>
         <Bottom>
-          {[0, 1, 2, 3].map(idx => (
+          {[0, 1, 2, 3].map((idx) => (
             <Circle
               key={idx}
               style={{ backgroundColor: idx === index ? "#898585" : "#D9D9D9" }}
