@@ -14,9 +14,11 @@ declare module "styled-components" {
     };
     orange: string;
     gray: {
+      bright: string;
       darker: string;
       medium: string;
       lighter: string;
+      lightdark: string;
     };
   }
 }
