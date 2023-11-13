@@ -233,7 +233,7 @@ const Circle = styled.span`
 `;
 const NoResult = styled.div`
   font-size: 45px;
-  margin: 30px 30px;
+  margin: 60px 30px;
 `;
 const sliderVariants = {
   initial: (isNext: boolean) => ({
@@ -264,7 +264,11 @@ const Search = () => {
   const [leaving, setLeaving] = useState(false);
   const [detailLeaving, setDetailLeaving] = useState(false);
   const { scrollY } = useScroll();
-  const { register, handleSubmit } = useForm<IForm>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IForm>();
   //useQuery로 검색결과 받아오는 코드 작성 필요!!
   const data = [
     {
