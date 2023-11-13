@@ -157,7 +157,11 @@ const Home = () => {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [isNext, setNext] = useState(true);
-  const { register, handleSubmit } = useForm<IForm>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IForm>({ mode: "onChange" });
   const increaseIndex = () => {
     if (leaving) return;
     toggleLeaving();
