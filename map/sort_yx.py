@@ -5,7 +5,7 @@ def sort_rects_by_yx(svg_file_path, output_file_path):
     tree = ET.parse(svg_file_path)
     root = tree.getroot()
 
-    # x 좌표를 기준으로 rect 요소를 정렬합니다.
+    # y,x 좌표를 기준으로 rect 요소를 정렬합니다.
     sorted_rects = sorted(root.findall(".//{http://www.w3.org/2000/svg}rect"), key=lambda rect: (float(rect.get('y', 0)), float(rect.get('x', 0))))
 
 
