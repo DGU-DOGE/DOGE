@@ -30,7 +30,7 @@ const InfoWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   min-width: 800px;
-  background-color: ${(props) => props.theme.gray.lighter};
+  background-color: ${props => props.theme.gray.lighter};
   border-radius: 10px;
   position: relative;
 `;
@@ -48,8 +48,8 @@ const Input = styled.input`
   width: 95%;
   height: 70px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 28px;
@@ -86,7 +86,7 @@ const Slider = styled(motion.div)`
 `;
 const Book = styled(motion.div)`
   display: flex;
-  background-color: ${(props) => props.theme.gray.lightdark};
+  background-color: ${props => props.theme.gray.lightdark};
   width: 95%;
   height: 200px;
   margin: 20px 0px;
@@ -167,7 +167,7 @@ const DetailWrapper = styled(motion.div)`
   left: 0;
   right: 0;
   margin: 0 auto;
-  background-color: ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
   border-radius: 15px;
   overflow: hidden;
   display: flex;
@@ -177,7 +177,7 @@ const DetailWrapper = styled(motion.div)`
 const DetailInfo = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.gray.bright};
+  background-color: ${props => props.theme.gray.bright};
   width: 70%;
   max-width: 500px;
 
@@ -195,9 +195,9 @@ const DetailInfo = styled.div`
     margin-top: 20px;
   }
   span {
-    background-color: ${(props) => props.theme.orange};
+    background-color: ${props => props.theme.orange};
     font-size: 12px;
-    color: ${(props) => props.theme.white.lighter};
+    color: ${props => props.theme.white.lighter};
     width: 60px;
     text-align: center;
     padding: 3px;
@@ -231,6 +231,16 @@ const Circle = styled.span`
   margin-right: 20px;
   margin-top: 20px;
 `;
+const NoResult = styled.div`
+  font-size: 45px;
+  margin: 60px 30px;
+`;
+const AlertMessage = styled.span`
+  margin-left: 23px;
+  margin-bottom: 10px;
+  color: ${props => props.theme.orange};
+  font-size: 20px;
+`;
 const sliderVariants = {
   initial: (isNext: boolean) => ({
     x: isNext ? window.outerWidth : -window.outerWidth,
@@ -260,7 +270,11 @@ const Search = () => {
   const [leaving, setLeaving] = useState(false);
   const [detailLeaving, setDetailLeaving] = useState(false);
   const { scrollY } = useScroll();
-  const { register, handleSubmit } = useForm<IForm>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IForm>({ mode: "onSubmit" });
   //useQuery로 검색결과 받아오는 코드 작성 필요!!
   const data = [
     {
@@ -350,7 +364,7 @@ const Search = () => {
   ];
   const clickedBook =
     bookDetailMatch?.params.bookId &&
-    data.find((book) => book.id + "" === bookDetailMatch.params.bookId);
+    data.find(book => book.id + "" === bookDetailMatch.params.bookId);
   const onBookClick = (bookId: number) => {
     navigate(`/search/book-detail/${bookId}`);
   };
@@ -358,31 +372,31 @@ const Search = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(true);
-    setIndex((prev) =>
+    setIndex(prev =>
       prev === Math.floor(data.length / offset) ? 0 : prev + 1
     );
   };
   const increaseDetailIdx = () => {
     setIsDetailNext(true);
-    setDetailIdx((prev) => (prev === 1 ? 0 : prev + 1));
+    setDetailIdx(prev => (prev === 1 ? 0 : prev + 1));
   };
   const decreaseIndex = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(false);
-    setIndex((prev) =>
+    setIndex(prev =>
       prev === 0 ? Math.floor(data.length / offset) : prev - 1
     );
   };
   const decreaseDetailIdx = () => {
     setIsDetailNext(false);
-    setDetailIdx((prev) => (prev === 0 ? 1 : prev - 1));
+    setDetailIdx(prev => (prev === 0 ? 1 : prev - 1));
   };
   const toggleLeaving = () => {
-    setLeaving((prev) => !prev);
+    setLeaving(prev => !prev);
   };
   const toggleDetailLeaving = () => {
-    setDetailLeaving((prev) => !prev);
+    setDetailLeaving(prev => !prev);
   };
   const onValid = (data: IForm) => {
     navigate(`/search?keyword=${data.keyword}`);
@@ -392,169 +406,237 @@ const Search = () => {
     navigate(-1);
   };
 
+  // 추후에 isLoading인 경우에는 Loader컴포넌트 렌더링, 아닌 경우에는 data의 length에 따라 다른 컴포넌트 렌더링
   return (
     <Wrapper>
-      <Banner>
-        <Title>검색결과 [{searchParams.get("keyword")}]</Title>
-      </Banner>
-      <InfoWrapper>
-        <SearchForm onSubmit={handleSubmit(onValid)}>
-          <Input
-            {...register("keyword", { required: true })}
-            placeholder="도서명 또는 저자를 검색하세요."
-          />
-          <SearchBtn>
-            <input type="submit" id="btnSubmit" style={{ display: "none" }} />
-            <label htmlFor="btnSubmit">
-              <SearchIcon style={{ cursor: "pointer" }} />
-            </label>
-          </SearchBtn>
-        </SearchForm>
-        <AnimatePresence onExitComplete={toggleLeaving} initial={false}>
-          <Slider
-            key={index}
-            custom={isNext}
-            variants={sliderVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={{ type: "tween", duration: 0.2 }}
-          >
-            {data.slice(index * offset, index * offset + offset).map((book) => (
-              <Book
-                key={book.id}
-                layoutId={book.id + ""}
-                variants={bookVariants}
-                whileHover="hover"
-                onClick={() => onBookClick(book.id)}
-              >
-                <BookImg />
-                <BookInfo>
-                  <h1>{book.bookName}</h1>
-                  <h1>도서 위치 정보</h1>
-                  <h1>
-                    중앙도서관/{book.floor}/{book.shelfname}
-                  </h1>
-                </BookInfo>
-              </Book>
-            ))}
-            <ArrowWrapper>
-              <LeftArrow onClick={decreaseIndex} />
-              <h1>{index + 1}</h1>
-              <RightArrow onClick={increaseIndex} />
-            </ArrowWrapper>
-          </Slider>
-        </AnimatePresence>
-        <AnimatePresence onExitComplete={toggleDetailLeaving} initial={false}>
-          {bookDetailMatch && (
-            <>
-              <Overlay
-                onClick={onOverlayClick}
-                animate={{ opacity: 1, transition: { type: "tween" } }}
-                exit={{
-                  opacity: 0,
-                }}
+      {data.length === 0 ? (
+        <>
+          <Banner>
+            <Title>검색결과 [{searchParams.get("keyword")}]</Title>
+          </Banner>
+          <InfoWrapper>
+            <SearchForm onSubmit={handleSubmit(onValid)}>
+              <Input
+                {...register("keyword", {
+                  required: "도서명 또는 저자를 입력해주세요",
+                  minLength: {
+                    value: 2,
+                    message: "검색어를 2자 이상 입력해주세요",
+                  },
+                })}
+                placeholder="도서명 또는 저자를 검색하세요."
               />
-              <DetailWrapper
-                layoutId={bookDetailMatch.params.bookId + ""}
-                style={{ top: scrollY.get() + 20 }}
+              <SearchBtn>
+                <input
+                  type="submit"
+                  id="btnSubmit"
+                  style={{ display: "none" }}
+                />
+                <label htmlFor="btnSubmit">
+                  <SearchIcon style={{ cursor: "pointer" }} />
+                </label>
+              </SearchBtn>
+            </SearchForm>
+            {errors.keyword && errors.keyword.type === "required" && (
+              <AlertMessage>{errors.keyword.message}</AlertMessage>
+            )}
+            {errors.keyword && errors.keyword.type === "minLength" && (
+              <AlertMessage>{errors.keyword.message}</AlertMessage>
+            )}
+          </InfoWrapper>
+          <NoResult>
+            <h1>검색결과가 없습니다</h1>
+          </NoResult>
+        </>
+      ) : (
+        <>
+          <Banner>
+            <Title>검색결과 [{searchParams.get("keyword")}]</Title>
+          </Banner>
+          <InfoWrapper>
+            <SearchForm onSubmit={handleSubmit(onValid)}>
+              <Input
+                {...register("keyword", {
+                  required: "도서명 또는 저자를 입력해주세요",
+                  minLength: {
+                    value: 2,
+                    message: "검색어를 2자 이상 입력해주세요",
+                  },
+                })}
+                placeholder="도서명 또는 저자를 검색하세요."
+              />
+              <SearchBtn>
+                <input
+                  type="submit"
+                  id="btnSubmit"
+                  style={{ display: "none" }}
+                />
+                <label htmlFor="btnSubmit">
+                  <SearchIcon style={{ cursor: "pointer" }} />
+                </label>
+              </SearchBtn>
+            </SearchForm>
+            {errors.keyword && errors.keyword.type === "required" && (
+              <AlertMessage>{errors.keyword.message}</AlertMessage>
+            )}
+            {errors.keyword && errors.keyword.type === "minLength" && (
+              <AlertMessage>{errors.keyword.message}</AlertMessage>
+            )}
+            <AnimatePresence onExitComplete={toggleLeaving} initial={false}>
+              <Slider
+                key={index}
+                custom={isNext}
+                variants={sliderVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={{ type: "tween", duration: 0.2 }}
               >
-                <Slider key={detailIdx}>
-                  <CancelBtn
-                    onClick={() => {
-                      setDetailIdx(0);
-                      navigate(-1);
+                {data
+                  .slice(index * offset, index * offset + offset)
+                  .map(book => (
+                    <Book
+                      key={book.id}
+                      layoutId={book.id + ""}
+                      variants={bookVariants}
+                      whileHover="hover"
+                      onClick={() => onBookClick(book.id)}
+                    >
+                      <BookImg />
+                      <BookInfo>
+                        <h1>{book.bookName}</h1>
+                        <h1>도서 위치 정보</h1>
+                        <h1>
+                          중앙도서관/{book.floor}/{book.shelfname}
+                        </h1>
+                      </BookInfo>
+                    </Book>
+                  ))}
+                <ArrowWrapper>
+                  <LeftArrow onClick={decreaseIndex} />
+                  <h1>{index + 1}</h1>
+                  <RightArrow onClick={increaseIndex} />
+                </ArrowWrapper>
+              </Slider>
+            </AnimatePresence>
+            <AnimatePresence
+              onExitComplete={toggleDetailLeaving}
+              initial={false}
+            >
+              {bookDetailMatch && (
+                <>
+                  <Overlay
+                    onClick={onOverlayClick}
+                    animate={{ opacity: 1, transition: { type: "tween" } }}
+                    exit={{
+                      opacity: 0,
                     }}
                   />
-                  {detailIdx === 0 ? (
-                    <>
-                      <div style={{ marginTop: 250 }}>
-                        <BookImg
-                          style={{
-                            width: 450,
-                            height: 450,
-                            marginTop: 50,
-                          }}
-                        />
-                      </div>
-                      <DetailInfo>
-                        {clickedBook && (
-                          <>
-                            <h1>{clickedBook.bookName}</h1>
-                            <h1>저자명 : {clickedBook.author}</h1>
-                            <h1>발행사항 : {clickedBook.company}</h1>
-                            <h1>ISBN : {clickedBook.isbn}</h1>
-                            <h1>언어 : {clickedBook.language}</h1>
-                            <span onClick={increaseDetailIdx}>지도 보기</span>
-                            <RightAngle
-                              onClick={increaseDetailIdx}
+                  <DetailWrapper
+                    layoutId={bookDetailMatch.params.bookId + ""}
+                    style={{ top: scrollY.get() + 20 }}
+                  >
+                    <Slider key={detailIdx}>
+                      <CancelBtn
+                        onClick={() => {
+                          setDetailIdx(0);
+                          navigate(-1);
+                        }}
+                      />
+                      {detailIdx === 0 ? (
+                        <>
+                          <div style={{ marginTop: 250 }}>
+                            <BookImg
                               style={{
-                                position: "absolute",
-                                width: 70,
-                                height: 70,
-                                top: "50%",
+                                width: 450,
+                                height: 450,
+                                marginTop: 50,
                               }}
                             />
-                          </>
-                        )}
-                      </DetailInfo>
-                      <Bottom>
-                        {[0, 1].map((idx) => (
-                          <Circle
-                            key={idx}
-                            style={{
-                              backgroundColor:
-                                idx === detailIdx ? "#898585" : "#C2C0C0",
-                            }}
-                          />
-                        ))}
-                      </Bottom>
-                    </>
-                  ) : (
-                    <>
-                      <MapLocation></MapLocation>
-                      <DetailInfo>
-                        {clickedBook && (
-                          <>
-                            <h1>도서관 {clickedBook.floor}</h1>
-                            <h1>책장 이름 : {clickedBook.shelfname}</h1>
-                            <h1>
-                              표시된 서가에서 :{" "}
-                              {clickedBook.loaction.shelffloor}층, 왼쪽에서{" "}
-                              {clickedBook.loaction.shelfleft}번째에 존재합니다
-                            </h1>
-                            <LeftAngle
-                              onClick={decreaseDetailIdx}
-                              style={{
-                                position: "absolute",
-                                width: 70,
-                                height: 70,
-                                left: 0,
-                                top: "50%",
-                              }}
-                            />
-                          </>
-                        )}
-                      </DetailInfo>
-                      <Bottom>
-                        {[0, 1].map((idx) => (
-                          <Circle
-                            key={idx}
-                            style={{
-                              backgroundColor:
-                                idx === detailIdx ? "#898585" : "#C2C0C0",
-                            }}
-                          />
-                        ))}
-                      </Bottom>
-                    </>
-                  )}
-                </Slider>
-              </DetailWrapper>
-            </>
-          )}
-        </AnimatePresence>
-      </InfoWrapper>
+                          </div>
+                          <DetailInfo>
+                            {clickedBook && (
+                              <>
+                                <h1>{clickedBook.bookName}</h1>
+                                <h1>저자명 : {clickedBook.author}</h1>
+                                <h1>발행사항 : {clickedBook.company}</h1>
+                                <h1>ISBN : {clickedBook.isbn}</h1>
+                                <h1>언어 : {clickedBook.language}</h1>
+                                <span onClick={increaseDetailIdx}>
+                                  지도 보기
+                                </span>
+                                <RightAngle
+                                  onClick={increaseDetailIdx}
+                                  style={{
+                                    position: "absolute",
+                                    width: 70,
+                                    height: 70,
+                                    top: "50%",
+                                  }}
+                                />
+                              </>
+                            )}
+                          </DetailInfo>
+                          <Bottom>
+                            {[0, 1].map(idx => (
+                              <Circle
+                                key={idx}
+                                style={{
+                                  backgroundColor:
+                                    idx === detailIdx ? "#898585" : "#C2C0C0",
+                                }}
+                              />
+                            ))}
+                          </Bottom>
+                        </>
+                      ) : (
+                        <>
+                          <MapLocation></MapLocation>
+                          <DetailInfo>
+                            {clickedBook && (
+                              <>
+                                <h1>도서관 {clickedBook.floor}</h1>
+                                <h1>책장 이름 : {clickedBook.shelfname}</h1>
+                                <h1>
+                                  표시된 서가에서 :{" "}
+                                  {clickedBook.loaction.shelffloor}층, 왼쪽에서{" "}
+                                  {clickedBook.loaction.shelfleft}번째에
+                                  존재합니다
+                                </h1>
+                                <LeftAngle
+                                  onClick={decreaseDetailIdx}
+                                  style={{
+                                    position: "absolute",
+                                    width: 70,
+                                    height: 70,
+                                    left: 0,
+                                    top: "50%",
+                                  }}
+                                />
+                              </>
+                            )}
+                          </DetailInfo>
+                          <Bottom>
+                            {[0, 1].map(idx => (
+                              <Circle
+                                key={idx}
+                                style={{
+                                  backgroundColor:
+                                    idx === detailIdx ? "#898585" : "#C2C0C0",
+                                }}
+                              />
+                            ))}
+                          </Bottom>
+                        </>
+                      )}
+                    </Slider>
+                  </DetailWrapper>
+                </>
+              )}
+            </AnimatePresence>
+          </InfoWrapper>
+        </>
+      )}
     </Wrapper>
   );
 };
