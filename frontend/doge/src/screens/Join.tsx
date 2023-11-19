@@ -105,7 +105,7 @@ const Join = () => {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<IJoin>({ mode: "onSubmit" });
+  } = useForm<IJoin>({ mode: "onChange" });
   // 인증번호 발송에 대한 함수
   const { mutate: sendVerificationCode } = useMutation(
     (userId: string) => fetchSendCode(userId),
