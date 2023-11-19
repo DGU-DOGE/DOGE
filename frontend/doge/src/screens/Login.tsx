@@ -1,9 +1,11 @@
 import { useForm } from "react-hook-form";
 import { ReactComponent as ElephantLogo } from "../assets/imgs/dgu-elephant.svg";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { fetchLogin } from "../apis/api";
+import { useRecoilState } from "recoil";
+import { LoginState } from "../stores/atoms";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -91,6 +93,8 @@ interface ILogin {
 }
 
 const Login = () => {
+  const [isLogin, setIsLogin] = useRecoilState(LoginState);
+  const navigate = useNavigate();
   // atoms.tsx에서 로그인 상태에 대한 변수를 가져온다음, 로그인이 성공적으로 이루어졌을경우
   // 해당값을 true로 설정해주는 과정 필요
   const { mutate, isLoading, data } = useMutation(fetchLogin, {
@@ -99,6 +103,7 @@ const Login = () => {
       // 서버에서 받은 토큰을 저장하고 로그인 상태를 전역적으로 관리하여야 함.
       //localStorage.setItem("accessToken", data.accessToken);
       // atom.tsx의 Login상태 변경 하는 코드필요
+      // 홈화면으로 이동하는 과정 navigate코드 쓸 필요있음
     },
     onError: (data) => {
       console.log(`로그인 실패`);
@@ -109,8 +114,10 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<ILogin>({ mode: "onSubmit" });
-  const onValid = (data: ILogin) => {
+  const onValid = async (data: ILogin) => {
+    setIsLogin(true); // 일단 예시로 여기에다가 둠, 실제 해당코드의 위치는 위의 mutatet의 onSuccess안으로
     console.log(data);
+
     /*
     try{
       await mutate(data);
