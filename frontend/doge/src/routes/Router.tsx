@@ -43,6 +43,7 @@ const router = createBrowserRouter([
       },
       { path: "userInfo", element: <UserInfo /> },
       { path: "favorites", element: <Favorites /> },
+      { path: "favorites/book-detail/:bookId", element: <Favorites /> },
     ],
   },
 ]);
