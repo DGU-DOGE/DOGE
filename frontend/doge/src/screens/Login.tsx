@@ -160,7 +160,7 @@ const Login = () => {
       </LoginWrapper>
       <ExtraWrapper>
         <Extra>
-          <Link to={"/"}>비밀번호 찾기</Link>
+          <Link to={"/find-password"}>비밀번호 찾기</Link>
           <span>/</span>
           <Link to={"/join"}>회원가입</Link>
         </Extra>
