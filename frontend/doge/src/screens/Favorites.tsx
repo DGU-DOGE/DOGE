@@ -7,7 +7,7 @@ import { useMatch, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Loader from "../components/Loader";
 import { useQuery } from "react-query";
-import { fetchFavorite } from "../apis/api";
+import { fetchUserData } from "../apis/api";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -192,7 +192,7 @@ const Favorites = () => {
   const [detailIdx, setDetailIdx] = useState(0);
   const [isdetailNext, setIsDetailNext] = useState(true);
   const [detailLeaving, setDetailLeaving] = useState(false);
-  //const {data, isLoading} = useQuery(["favorites"], fetchFavorite);
+  //const {data, isLoading} = useQuery(["favorites"], fetchUserData);
   const data = [
     {
       id: 100,
