@@ -7,6 +7,7 @@ import UserInfo from "../screens/UserInfo";
 import Favorites from "../screens/Favorites";
 import Logout from "../screens/Logout";
 import Search from "../screens/Search";
+import FindPassword from "../screens/FindPassword";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,7 @@ const router = createBrowserRouter([
       { path: "userInfo", element: <UserInfo /> },
       { path: "favorites", element: <Favorites /> },
       { path: "favorites/book-detail/:bookId", element: <Favorites /> },
+      { path: "find-password", element: <FindPassword /> },
     ],
   },
 ]);
