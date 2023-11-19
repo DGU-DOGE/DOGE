@@ -6,6 +6,8 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useMatch, Link } from "react-router-dom";
 import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { LoginState } from "../stores/atoms";
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -14,14 +16,14 @@ const Nav = styled(motion.nav)`
   width: 100%;
   min-width: 800px;
   top: 0;
-  background-color: ${props => props.theme.orange};
+  background-color: ${(props) => props.theme.orange};
   font-size: 24px;
   padding: 15px 20px;
   color: rgba(255, 255, 255, 1);
   svg {
     width: 30px;
     height: 30px;
-    fill: ${props => props.theme.white.lighter};
+    fill: ${(props) => props.theme.white.lighter};
   }
 `;
 const Col = styled.div`
@@ -34,13 +36,13 @@ const Items = styled.ul`
 `;
 const Item = styled.li`
   margin-right: 20px;
-  color: ${props => props.theme.white.darker};
+  color: ${(props) => props.theme.white.darker};
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   &:hover {
-    color: ${props => props.theme.white.lighter};
+    color: ${(props) => props.theme.white.lighter};
   }
 `;
 const Circle = styled(motion.span)`
@@ -52,10 +54,10 @@ const Circle = styled(motion.span)`
   left: 0;
   right: 0;
   margin: 0 auto;
-  background-color: ${props => props.theme.white.lighter};
+  background-color: ${(props) => props.theme.white.lighter};
 `;
 const Header = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const isLogin = useRecoilValue(LoginState);
   const HomeMatch = useMatch("/");
   const LoginMatch = useMatch("/login");
   const UserInfoMatch = useMatch("/userInfo");
@@ -75,7 +77,7 @@ const Header = () => {
       </Col>
       <Col>
         <Items>
-          {true ? (
+          {!isLogin ? (
             <>
               <Item>
                 <Link to="/login">Login</Link>

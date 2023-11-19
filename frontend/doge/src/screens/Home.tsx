@@ -169,7 +169,7 @@ const Home = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<IForm>({ mode: "onSubmit" });
-
+  const map = [FloorB2, FloorB1, Floor1, Floor3];
   const increaseIndex = () => {
     if (leaving) return;
     toggleLeaving();
@@ -243,15 +243,7 @@ const Home = () => {
               exit="exit"
               transition={{ type: "tween", duration: 0.2 }}
               onClick={() => navigate(`/map-detail/${index}`)}
-              src={
-                index === 0
-                  ? FloorB2
-                  : index === 1
-                  ? FloorB1
-                  : index === 2
-                  ? Floor1
-                  : Floor3
-              }
+              src={map[index]}
             />
           </AnimatePresence>
           <LeftAngle
