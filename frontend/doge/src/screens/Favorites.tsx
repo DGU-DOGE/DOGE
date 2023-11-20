@@ -3,7 +3,7 @@ import { ReactComponent as RightAngle } from "../assets/imgs/angle-right-solid.s
 import { ReactComponent as CancelBtn } from "../assets/imgs/xmark-solid.svg";
 import styled from "styled-components";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
-import { useMatch, useNavigate } from "react-router-dom";
+import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Loader from "../components/Loader";
 import { useQuery } from "react-query";
