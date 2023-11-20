@@ -111,6 +111,7 @@ const Join = () => {
     (userId: string) => fetchSendCode(userId),
     {
       onSuccess: () => {
+        //인증번호가 발송되었습니다 라는 메세지 출력도 해주면 좋을 것 같음
         setVerificationSent(true);
         startTimer();
       },

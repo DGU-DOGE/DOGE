@@ -20,5 +20,6 @@ declare module "styled-components" {
       lighter: string;
       lightdark: string;
     };
+    yellow: string;
   }
 }

@@ -10,8 +10,13 @@ import styled from "styled-components";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useState } from "react";
 import Loader from "../components/Loader";
-import { fetchSearch } from "../apis/api";
-import { useQuery } from "react-query";
+import {
+  IBook,
+  fetchAddFavorite,
+  fetchSearch,
+  fetchUserData,
+} from "../apis/api";
+import { useMutation, useQuery } from "react-query";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -186,7 +191,7 @@ const DetailInfo = styled.div`
   border-radius: 7px;
   h1,
   span {
-    margin: 10px 10px;
+    margin: 10px 0px;
     margin-left: 30px;
     font-size: 18px;
     overflow: hidden;
@@ -196,15 +201,22 @@ const DetailInfo = styled.div`
   h1:first-child {
     margin-top: 20px;
   }
-  span {
-    background-color: ${(props) => props.theme.orange};
-    font-size: 12px;
-    color: ${(props) => props.theme.white.lighter};
-    width: 60px;
-    text-align: center;
-    padding: 3px;
-    border-radius: 3px;
-    cursor: pointer;
+  div {
+    display: flex;
+    margin-bottom: 15px;
+    span {
+      background-color: ${(props) => props.theme.orange};
+      font-size: 13px;
+      color: ${(props) => props.theme.white.lighter};
+      width: 60px;
+      text-align: center;
+      padding: 3px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    span:nth-child(2) {
+      width: 80px;
+    }
   }
 `;
 const MapLocation = styled.div`
@@ -259,10 +271,37 @@ const bookVariants = {
 interface IForm {
   keyword: string;
 }
+interface IFavorite {
+  userId: string;
+  book: IBook;
+}
 const offset = 5;
 
 const Search = () => {
   const [searchParams, _] = useSearchParams();
+  const { isLoading: userDataLoading, data: userData } = useQuery(
+    ["userInfo"],
+    fetchUserData,
+    {
+      onSuccess: () => {
+        console.log("사용자 정보 가져오기 성공");
+      },
+      onError: () => {
+        console.log("사용자 정보 가져오기 실패");
+      },
+    }
+  );
+  const { mutate: addFavorite } = useMutation(
+    (favoriteData: IFavorite) => fetchAddFavorite(favoriteData),
+    {
+      onSuccess: () => {
+        console.log("즐겨찾기 등록 성공");
+      },
+      onError: (error) => {
+        console.log(`즐겨찾기 등록 실패`, error);
+      },
+    }
+  );
   const navigate = useNavigate();
   const bookDetailMatch = useMatch(`/search/book-detail/:bookId`);
   const [index, setIndex] = useState(0);
@@ -284,7 +323,7 @@ const Search = () => {
       id: 100,
       bookName: "국부론",
       language: "한국어",
-      isbn: 0,
+      isbn: "",
       author: "저자0",
       company: "com0",
       bookImg: "",
@@ -296,7 +335,7 @@ const Search = () => {
       id: 101,
       bookName: "공산당 선언",
       language: "한국어",
-      isbn: 1,
+      isbn: "",
       author: "저자1",
       company: "com1",
       bookImg: "",
@@ -565,9 +604,12 @@ const Search = () => {
                                 <h1>발행사항 : {clickedBook.company}</h1>
                                 <h1>ISBN : {clickedBook.isbn}</h1>
                                 <h1>언어 : {clickedBook.language}</h1>
-                                <span onClick={increaseDetailIdx}>
-                                  지도 보기
-                                </span>
+                                <div>
+                                  <span onClick={increaseDetailIdx}>
+                                    지도 보기
+                                  </span>
+                                  <span>즐겨 찾기 추가</span>
+                                </div>
                                 <RightAngle
                                   onClick={increaseDetailIdx}
                                   style={{
