@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as ElephantLogo } from "../assets/imgs/dgu-elephant.svg";
 import styled from "styled-components";
+import axios from "axios";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -70,8 +71,16 @@ const UserInfo = () => {
   const handleFavorite = () => {
     navigate("/favorites");
   };
-  const handleDeleteUser = () => {
-    navigate("/delete-account", { state: { email: "hello" } }); // useQuery를 통해 얻은 유저의 이메일로 대체해야함
+  const handleDeleteUser = (event: React.MouseEvent<HTMLInputElement>) => {
+    axios
+      .delete(``, { headers: {}, withCredentials: true }) //Authorization 필요
+      .then(() => {
+        //atoms.tsx참고해서 userLogin상태 false로 처리
+        //localStorage.removeItem("accessToken");
+        //alert("회원 탈퇴 완료");
+        navigate("/");
+      })
+      .catch((err) => console.log("회원 탈퇴 실패", err));
   };
   return (
     <>
