@@ -6,7 +6,18 @@ export interface IUserData {
   userId: string;
   userPassword: string;
 }
-
+export interface IBook {
+  id: number;
+  bookName: string;
+  language: string;
+  isbn: string;
+  author: string;
+  company: string;
+  bookImg: "";
+  floor: string;
+  shelfname: string;
+  loaction: { shelffloor: number; shelfleft: number };
+}
 export const fetchLogin = async (userData: IUserData) => {
   const { data } = await axios.post(``, userData, {
     headers: {
@@ -32,11 +43,32 @@ export const fetchSearch = async (keyword: string) => {
   const { data } = await axios.get(``); // get url뒤에 keyword붙여서 요청할 것
   return data;
 };
+
+//사용자의 정보 (email, 즐겨찾기 목록 등)를 받아오는 함수
 export const fetchUserData = async () => {
   // 로그인이 되었는지를 확인하고 로그인이 되었을 경우에
   // locaStorage에 저장된 accessToken을 가져와서 axios.get요청에 Authenication으로 넣기
   // + withCredentials: true설정해주기
   const { data } = await axios.get(``);
+  return data;
+};
+export const fetchAddFavorite = async (favoriteData: {
+  userId: string;
+  book: IBook;
+}) => {
+  // 로그인이 되었는지를 확인하고 로그인이 되었을 경우에
+  // locaStorage에 저장된 accessToken을 가져와서 axios.get요청에 Authenication으로 넣기
+  // + withCredentials: true설정해주기
+  const { data } = await axios.post(
+    ``,
+    { email: favoriteData.userId, bookInfo: favoriteData.book },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
   return data;
 };
 //백엔드에 해당 이메일로 인증번호를 요청하는 함수
