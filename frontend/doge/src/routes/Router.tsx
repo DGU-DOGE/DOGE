@@ -5,7 +5,6 @@ import Login from "../screens/Login";
 import Join from "../screens/Join";
 import UserInfo from "../screens/UserInfo";
 import Favorites from "../screens/Favorites";
-import Logout from "../screens/Logout";
 import Search from "../screens/Search";
 import FindPassword from "../screens/FindPassword";
 import DeleteAccount from "../screens/DeleteAccount";
@@ -26,10 +25,6 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
-      },
-      {
-        path: "logout",
-        element: <Logout />,
       },
       {
         path: "join",
