@@ -37,7 +37,7 @@ const InfoWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   min-width: 800px;
-  background-color: ${(props) => props.theme.gray.lighter};
+  background-color: ${props => props.theme.gray.lighter};
   border-radius: 10px;
   position: relative;
 `;
@@ -55,8 +55,8 @@ const Input = styled.input`
   width: 95%;
   height: 70px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 28px;
@@ -93,7 +93,7 @@ const Slider = styled(motion.div)`
 `;
 const Book = styled(motion.div)`
   display: flex;
-  background-color: ${(props) => props.theme.gray.lightdark};
+  background-color: ${props => props.theme.gray.lightdark};
   width: 95%;
   height: 200px;
   margin: 20px 0px;
@@ -170,11 +170,11 @@ const Overlay = styled(motion.div)`
 const DetailWrapper = styled(motion.div)`
   position: absolute;
   width: 80%;
-  height: 90vh;
+  height: 100vh;
   left: 0;
   right: 0;
   margin: 0 auto;
-  background-color: ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
   border-radius: 15px;
   overflow: hidden;
   display: flex;
@@ -184,7 +184,7 @@ const DetailWrapper = styled(motion.div)`
 const DetailInfo = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.gray.bright};
+  background-color: ${props => props.theme.gray.bright};
   width: 70%;
   max-width: 500px;
 
@@ -205,9 +205,9 @@ const DetailInfo = styled.div`
     display: flex;
     margin-bottom: 15px;
     span {
-      background-color: ${(props) => props.theme.orange};
+      background-color: ${props => props.theme.orange};
       font-size: 13px;
-      color: ${(props) => props.theme.white.lighter};
+      color: ${props => props.theme.white.lighter};
       width: 60px;
       text-align: center;
       padding: 3px;
@@ -222,9 +222,8 @@ const DetailInfo = styled.div`
 const MapLocation = styled.div`
   align-items: center;
   background-color: red;
-  width: 70%;
-  height: 600px;
-  max-width: 550px;
+  width: 500px;
+  height: 100%;
   margin: 20px 0px;
 
   img {
@@ -252,7 +251,7 @@ const NoResult = styled.div`
 const AlertMessage = styled.span`
   margin-left: 23px;
   margin-bottom: 10px;
-  color: ${(props) => props.theme.orange};
+  color: ${props => props.theme.orange};
   font-size: 20px;
 `;
 const sliderVariants = {
@@ -297,7 +296,7 @@ const Search = () => {
       onSuccess: () => {
         console.log("즐겨찾기 등록 성공");
       },
-      onError: (error) => {
+      onError: error => {
         console.log(`즐겨찾기 등록 실패`, error);
       },
     }
@@ -406,7 +405,7 @@ const Search = () => {
   ];
   const clickedBook =
     bookDetailMatch?.params.bookId &&
-    data.find((book) => book.id + "" === bookDetailMatch.params.bookId);
+    data.find(book => book.id + "" === bookDetailMatch.params.bookId);
   const onBookClick = (bookId: number) => {
     navigate(`/search/book-detail/${bookId}`);
   };
@@ -414,31 +413,31 @@ const Search = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(true);
-    setIndex((prev) =>
+    setIndex(prev =>
       prev === Math.floor(data.length / offset) ? 0 : prev + 1
     );
   };
   const increaseDetailIdx = () => {
     setIsDetailNext(true);
-    setDetailIdx((prev) => (prev === 1 ? 0 : prev + 1));
+    setDetailIdx(prev => (prev === 1 ? 0 : prev + 1));
   };
   const decreaseIndex = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(false);
-    setIndex((prev) =>
+    setIndex(prev =>
       prev === 0 ? Math.floor(data.length / offset) : prev - 1
     );
   };
   const decreaseDetailIdx = () => {
     setIsDetailNext(false);
-    setDetailIdx((prev) => (prev === 0 ? 1 : prev - 1));
+    setDetailIdx(prev => (prev === 0 ? 1 : prev - 1));
   };
   const toggleLeaving = () => {
-    setLeaving((prev) => !prev);
+    setLeaving(prev => !prev);
   };
   const toggleDetailLeaving = () => {
-    setDetailLeaving((prev) => !prev);
+    setDetailLeaving(prev => !prev);
   };
   const onValid = (data: IForm) => {
     navigate(`/search?keyword=${data.keyword}`);
@@ -536,7 +535,7 @@ const Search = () => {
               >
                 {data
                   .slice(index * offset, index * offset + offset)
-                  .map((book) => (
+                  .map(book => (
                     <Book
                       key={book.id}
                       layoutId={book.id + ""}
@@ -576,7 +575,7 @@ const Search = () => {
                   />
                   <DetailWrapper
                     layoutId={bookDetailMatch.params.bookId + ""}
-                    style={{ top: scrollY.get() + 20 }}
+                    style={{ top: scrollY.get() - 80 }}
                   >
                     <Slider key={detailIdx}>
                       <CancelBtn
@@ -590,8 +589,8 @@ const Search = () => {
                           <div style={{ marginTop: 250 }}>
                             <BookImg
                               style={{
-                                width: 450,
-                                height: 450,
+                                width: 250,
+                                height: 250,
                                 marginTop: 50,
                               }}
                             />
@@ -623,7 +622,7 @@ const Search = () => {
                             )}
                           </DetailInfo>
                           <Bottom>
-                            {[0, 1].map((idx) => (
+                            {[0, 1].map(idx => (
                               <Circle
                                 key={idx}
                                 style={{
@@ -662,7 +661,7 @@ const Search = () => {
                             )}
                           </DetailInfo>
                           <Bottom>
-                            {[0, 1].map((idx) => (
+                            {[0, 1].map(idx => (
                               <Circle
                                 key={idx}
                                 style={{
