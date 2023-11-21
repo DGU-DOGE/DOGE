@@ -157,6 +157,7 @@ const Login = () => {
             <AlertMessage>{errors.userId.message}</AlertMessage>
           )}
           <Input
+            type="password"
             {...register("userPassword", {
               required: "비밀번호를 입력해주세요",
             })}

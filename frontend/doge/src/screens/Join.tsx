@@ -263,6 +263,7 @@ const Join = () => {
             ) : (
               <>
                 <Input
+                  type="password"
                   {...register("userPassword", {
                     required: "비밀번호를 입력하세요",
                   })}
@@ -273,6 +274,7 @@ const Join = () => {
                     <AlertMessage>{errors.userPassword.message}</AlertMessage>
                   )}
                 <Input
+                  type="password"
                   {...register("userPassword1", {
                     required: "다시 한번 비밀번호를 입력하세요",
                   })}
