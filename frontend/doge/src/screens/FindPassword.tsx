@@ -105,6 +105,8 @@ const FindPassword = () => {
     handleSubmit,
     formState: { errors },
     setError,
+    setValue,
+    getValues,
   } = useForm<IJoin>({ mode: "onSubmit" });
   // 인증번호 발송에 대한 함수
   const { mutate: sendVerificationCode } = useMutation(
