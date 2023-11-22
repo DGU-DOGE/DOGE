@@ -1,4 +1,4 @@
-package com.donggukdoze.doze.domain.member;
+package com.doge.backend.domain.member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
