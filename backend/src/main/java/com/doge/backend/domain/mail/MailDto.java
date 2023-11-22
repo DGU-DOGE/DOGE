@@ -1,4 +1,4 @@
-package com.donggukdoze.doze.domain.mail;
+package com.doge.backend.domain.mail;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.donggukdoze.doze.domain.member;
+package com.doge.backend.domain.member;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.Errors;

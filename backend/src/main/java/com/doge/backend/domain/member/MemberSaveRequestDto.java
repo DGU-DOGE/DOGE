@@ -1,4 +1,4 @@
-package com.donggukdoze.doze.domain.member;
+package com.doge.backend.domain.member;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
