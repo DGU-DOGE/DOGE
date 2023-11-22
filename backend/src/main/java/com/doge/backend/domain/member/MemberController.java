@@ -1,6 +1,6 @@
 package com.doge.backend.domain.member;
 
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -26,9 +26,9 @@ public class MemberController {
         return "home";
     }
 
-    @GetMapping("/members/new")
+    @GetMapping("/user/join")
     public String createMemberForm() {
-        return "members/createMemberForm";
+        return "/user/createMemberForm";
     }
 
     @InitBinder
@@ -36,7 +36,7 @@ public class MemberController {
         binder.addValidators(checkEmailValidator);
     }
 
-    @PostMapping("/members/new")
+    @PostMapping("/user/join")
     public String createMember(@Valid MemberSaveRequestDto memberSaveRequestDTO, Errors errors, Model model) {
         /* 검증 */
         if (errors.hasErrors()) {
@@ -50,7 +50,7 @@ public class MemberController {
             }
 
             /* 회원가입 페이지로 리턴 */
-            return "/members/createMemberForm";
+            return "/user/createMemberForm";
         }
 
         Long memberId = memberService.join(memberSaveRequestDTO);
