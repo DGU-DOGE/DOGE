@@ -106,7 +106,7 @@ export const fetchConfirmCode = async (userData: {
   return data;
 };
 
-// 비밀번호 변경에 대한 함수 + 비밀번호를 변경하는 경우 기존 유저에 대한 새로운 accessToken을 부여받게 되는 것인지도 확인할것 + Authentication같이 보내야하는지도 확인
+// 비밀번호 변경에 대한 함수 + 비밀번호를 변경하는 경우 기존 유저에 대한 새로운 accessToken을 부여받게 되는 것인지도 확인할것
 export const fetchChangePassword = async (userData: IUserData) => {
   const { data } = await axios.put(
     ``,
