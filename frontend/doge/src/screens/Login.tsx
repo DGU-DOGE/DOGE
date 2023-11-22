@@ -98,6 +98,7 @@ const Login = () => {
   const { mutate, isLoading, data } = useMutation(fetchLogin, {
     onSuccess: (data) => {
       console.log("로그인 성공!");
+      console.log(data);
       localStorage.setItem("accessToken", data.accessToken);
       setIsLogin(true);
       navigate(`/`);
