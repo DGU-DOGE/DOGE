@@ -14,8 +14,9 @@ import styled from "styled-components";
 import { useNavigate, useMatch } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { AnimatePresence, useScroll } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -158,6 +159,11 @@ interface IForm {
 }
 
 const Home = () => {
+  useEffect(() => {
+    axios
+      .get("/api/demo-web")
+      .then((response) => console.log("백엔드 연동 성공", response.data));
+  }, []);
   const navigate = useNavigate();
   const { scrollY } = useScroll();
   const detailMapMatch = useMatch(`/map-detail/:mapId`);
