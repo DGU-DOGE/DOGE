@@ -31,7 +31,7 @@ const Title = styled.div`
   margin-top: 25px;
   h1 {
     font-size: 68px;
-    color: ${(props) => props.theme.orange};
+    color: ${props => props.theme.orange};
   }
 `;
 const LoginWrapper = styled.div`
@@ -48,8 +48,8 @@ const LoginForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${(props) => props.theme.orange};
-    color: ${(props) => props.theme.white.lighter};
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.lighter};
     font-size: 30px;
   }
 `;
@@ -57,8 +57,8 @@ const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
@@ -75,7 +75,7 @@ const Extra = styled.div`
   justify-content: flex-end;
   a,
   span {
-    color: ${(props) => props.theme.orange};
+    color: ${props => props.theme.orange};
     margin-left: 10px;
     font-size: 22px;
   }
@@ -84,7 +84,7 @@ const AlertMessage = styled.span`
   width: 80%;
   margin-left: 23px;
   margin-bottom: 10px;
-  color: ${(props) => props.theme.orange};
+  color: ${props => props.theme.orange};
   font-size: 20px;
 `;
 interface ILogin {
@@ -95,18 +95,16 @@ interface ILogin {
 const Login = () => {
   const [isLogin, setIsLogin] = useRecoilState(LoginState);
   const navigate = useNavigate();
-  // atoms.tsx에서 로그인 상태에 대한 변수를 가져온다음, 로그인이 성공적으로 이루어졌을경우
-  // 해당값을 true로 설정해주는 과정 필요
   const { mutate, isLoading, data } = useMutation(fetchLogin, {
-    onSuccess: (data) => {
+    onSuccess: data => {
       //로그인 성공 시 실행되는 부분
       // 서버에서 받은 토큰을 저장하고 로그인 상태를 전역적으로 관리하여야 함.
       //localStorage.setItem("accessToken", data.accessToken);
-      // atom.tsx의 Login상태 변경 하는 코드필요
-      // 홈화면으로 이동하는 과정 navigate코드 쓸 필요있음
+      // atom.tsx의 Login상태 변경 하는 코드필요 ,, setIsLogin(true);
+      // 홈화면으로 이동하는 과정 navigate코드 쓸 필요있음  ,, navigate(`/`);
     },
-    onError: (data) => {
-      console.log(`로그인 실패`);
+    onError: error => {
+      console.log(`로그인 실패2`, error);
     },
   });
   const {
@@ -123,7 +121,7 @@ const Login = () => {
       await mutate(data);
     }
     catch(error){
-      console.error("로그인 실패", error);
+      console.error("로그인 실패1", error);
     }
     */
   };
@@ -140,13 +138,24 @@ const Login = () => {
       <LoginWrapper>
         <LoginForm onSubmit={handleSubmit(onValid)}>
           <Input
-            {...register("userId", { required: "이메일을 입력해주세요" })}
+            {...register("userId", {
+              required: "이메일을 입력해주세요",
+              pattern: {
+                value:
+                  /^(.+)@(dongguk\.edu|dgu\.edu|mail\.dgu\.edu|mail\.dongguk\.edu|dgu\.ac\.kr)$/,
+                message: "올바른 동국대학교 이메일 형식을 입력해주세요",
+              },
+            })}
             placeholder="이메일을 입력하세요"
           />
           {errors.userId && errors.userId.type === "required" && (
             <AlertMessage>{errors.userId.message}</AlertMessage>
           )}
+          {errors.userId && errors.userId.type === "pattern" && (
+            <AlertMessage>{errors.userId.message}</AlertMessage>
+          )}
           <Input
+            type="password"
             {...register("userPassword", {
               required: "비밀번호를 입력해주세요",
             })}

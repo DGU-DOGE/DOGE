@@ -4,9 +4,9 @@ import { ReactComponent as User } from "../assets/imgs/user-solid.svg";
 import { ReactComponent as FullStar } from "../assets/imgs/star-solid.svg";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { useMatch, Link } from "react-router-dom";
+import { useMatch, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { LoginState } from "../stores/atoms";
 
 const Nav = styled(motion.nav)`
@@ -44,6 +44,9 @@ const Item = styled.li`
   &:hover {
     color: ${(props) => props.theme.white.lighter};
   }
+  svg {
+    cursor: pointer;
+  }
 `;
 const Circle = styled(motion.span)`
   position: absolute;
@@ -57,12 +60,19 @@ const Circle = styled(motion.span)`
   background-color: ${(props) => props.theme.white.lighter};
 `;
 const Header = () => {
-  const isLogin = useRecoilValue(LoginState);
+  const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useRecoilState(LoginState);
   const HomeMatch = useMatch("/");
   const LoginMatch = useMatch("/login");
   const UserInfoMatch = useMatch("/userInfo");
   const FavoriteMatch = useMatch("/favorites");
 
+  const handleLogout = () => {
+    setIsLogin(false);
+    localStorage.removeItem("accessToken");
+    console.log("로그아웃 완료");
+    navigate(`/`);
+  };
   return (
     <Nav>
       <Col>
@@ -99,9 +109,7 @@ const Header = () => {
                 {UserInfoMatch && <Circle layoutId="circle" />}
               </Item>
               <Item>
-                <Link to="/logout">
-                  <Logout />
-                </Link>
+                <Logout onClick={handleLogout} />
               </Item>
             </>
           )}

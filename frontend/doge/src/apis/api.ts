@@ -19,21 +19,29 @@ export interface IBook {
   loaction: { shelffloor: number; shelfleft: number };
 }
 export const fetchLogin = async (userData: IUserData) => {
-  const { data } = await axios.post(``, userData, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
+  const { data } = await axios.post(
+    `/user/login`,
+    { email: userData.userId, password: userData.userPassword },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
   return data;
 };
 export const fetchJoin = async (userData: IUserData) => {
-  const { data } = await axios.post(``, userData, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
+  const { data } = await axios.post(
+    `/user/join`,
+    { email: userData.userId, password: userData.userPassword },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
   return data;
 };
 export const fetchSearch = async (keyword: string) => {
