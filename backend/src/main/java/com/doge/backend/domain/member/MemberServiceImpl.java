@@ -1,6 +1,7 @@
-package com.donggukdoze.doze.domain.member;
+package com.doge.backend.domain.member;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
@@ -14,9 +15,12 @@ import java.util.Map;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Long join(MemberSaveRequestDto memberFormDto){
+        memberFormDto.setPassword(passwordEncoder.encode(memberFormDto.getPassword()));
+
         Member member = Member.builder()
                 .email(memberFormDto.getEmail())
                 .password(memberFormDto.getPassword())
