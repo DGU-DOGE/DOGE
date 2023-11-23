@@ -120,7 +120,7 @@ const Login = () => {
   } = useForm<ILogin>({ mode: "onSubmit" });
   const onValid = async (data: ILogin) => {
     axios
-      .post("http://localhost:8080/user/login", data, {
+      .post("/user/login", data, {
         withCredentials: true,
       })
       .then(res => console.log("로그인성공", res));
