@@ -6,6 +6,7 @@ import { useMutation } from "react-query";
 import { fetchLogin } from "../apis/api";
 import { useRecoilState } from "recoil";
 import { LoginState } from "../stores/atoms";
+import axios from "axios";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -31,7 +32,7 @@ const Title = styled.div`
   margin-top: 25px;
   h1 {
     font-size: 68px;
-    color: ${(props) => props.theme.orange};
+    color: ${props => props.theme.orange};
   }
 `;
 const LoginWrapper = styled.div`
@@ -48,8 +49,8 @@ const LoginForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${(props) => props.theme.orange};
-    color: ${(props) => props.theme.white.lighter};
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.lighter};
     font-size: 30px;
   }
 `;
@@ -57,8 +58,8 @@ const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
@@ -75,7 +76,7 @@ const Extra = styled.div`
   justify-content: flex-end;
   a,
   span {
-    color: ${(props) => props.theme.orange};
+    color: ${props => props.theme.orange};
     margin-left: 10px;
     font-size: 22px;
   }
@@ -84,7 +85,7 @@ const AlertMessage = styled.span`
   width: 80%;
   margin-left: 23px;
   margin-bottom: 10px;
-  color: ${(props) => props.theme.orange};
+  color: ${props => props.theme.orange};
   font-size: 20px;
 `;
 interface ILogin {
@@ -96,7 +97,7 @@ const Login = () => {
   const [isLogin, setIsLogin] = useRecoilState(LoginState);
   const navigate = useNavigate();
   const { mutate, isLoading, data } = useMutation(fetchLogin, {
-    onSuccess: (data) => {
+    onSuccess: data => {
       console.log("로그인 성공!");
       console.log(data);
       localStorage.setItem("accessToken", data.accessToken);
@@ -108,7 +109,7 @@ const Login = () => {
       // atom.tsx의 Login상태 변경 하는 코드필요 ,, setIsLogin(true);
       // 홈화면으로 이동하는 과정 navigate코드 쓸 필요있음  ,, navigate(`/`);
     },
-    onError: (error) => {
+    onError: error => {
       console.log(`로그인 실패 (사용자 입력 데이터 오류)`, error);
     },
   });
@@ -118,11 +119,14 @@ const Login = () => {
     formState: { errors },
   } = useForm<ILogin>({ mode: "onSubmit" });
   const onValid = async (data: ILogin) => {
-    try {
+    axios
+      .post("/user/login", data, { withCredentials: true })
+      .then(res => console.log("로그인성공", res));
+    /*try {
       mutate(data);
     } catch (error) {
       console.error("로그인 실패 onValid부분 문제", error);
-    }
+    }*/
   };
   return (
     <Wrapper>
