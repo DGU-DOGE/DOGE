@@ -20,7 +20,7 @@ export interface IBook {
 }
 export const fetchLogin = async (userData: IUserData) => {
   const payload = { email: userData.userId, password: userData.userPassword };
-  const { data } = await axios.post(`/api/user/login`, payload, {
+  const { data } = await axios.post(`/user/login`, payload, {
     withCredentials: true,
   });
   return data;
