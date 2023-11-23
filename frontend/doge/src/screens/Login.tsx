@@ -119,16 +119,18 @@ const Login = () => {
     formState: { errors },
   } = useForm<ILogin>({ mode: "onSubmit" });
   const onValid = async (data: ILogin) => {
-    axios
-      .post("/user/login", data, {
+    /*axios
+      .post(`/user/login`, JSON.stringify(data), {
         withCredentials: true,
       })
-      .then(res => console.log("로그인성공", res));
-    /*try {
+      .then(response => console.log("로그인 성공", response.data))
+      .catch(err => console.log(err));
+      */
+    try {
       mutate(data);
     } catch (error) {
       console.error("로그인 실패 onValid부분 문제", error);
-    }*/
+    }
   };
   return (
     <Wrapper>
