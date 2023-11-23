@@ -119,7 +119,9 @@ const Login = () => {
     formState: { errors },
   } = useForm<ILogin>({ mode: "onSubmit" });
   const onValid = async (data: ILogin) => {
-    axios.post("/user/login", data, { withCredentials: true });
+    axios
+      .post("/user/login", data, { withCredentials: true })
+      .then(res => console.log("로그인성공", res));
     /*try {
       mutate(data);
     } catch (error) {
