@@ -19,16 +19,10 @@ export interface IBook {
   loaction: { shelffloor: number; shelfleft: number };
 }
 export const fetchLogin = async (userData: IUserData) => {
-  const { data } = await axios.post(
-    `/user/login`,
-    { email: userData.userId, password: userData.userPassword },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    }
-  );
+  const payload = { email: userData.userId, password: userData.userPassword };
+  const { data } = await axios.post(`/user/login`, JSON.stringify(payload), {
+    withCredentials: true,
+  });
   return data;
 };
 export const fetchJoin = async (userData: IUserData) => {
