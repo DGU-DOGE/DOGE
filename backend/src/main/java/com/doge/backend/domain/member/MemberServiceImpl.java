@@ -18,13 +18,14 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Long join(MemberSaveRequestDto memberFormDto){
-        memberFormDto.setPassword(passwordEncoder.encode(memberFormDto.getPassword()));
+    public Long join(MemberSaveRequestDto memberSaveRequestDto){
+        memberSaveRequestDto.setPassword(passwordEncoder.encode(memberSaveRequestDto.getPassword()));
 
         Member member = Member.builder()
-                .email(memberFormDto.getEmail())
-                .password(memberFormDto.getPassword())
+                .email(memberSaveRequestDto.getEmail())
+                .password(memberSaveRequestDto.getPassword())
                 .favoriteCount(0)
+                .role(Role.ROLE_USER)
                 .build();
 
         return memberRepository.save(member).getId();

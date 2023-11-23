@@ -32,8 +32,11 @@ public class SecurityConfig {
                 .csrf().disable()                           // csrf 방지
                 .headers().frameOptions().disable();        // x frame 방어 해제
 
+        http.authorizeRequests()
+                // 페이지 권한 설정
+                .anyRequest().permitAll();
+
         http.formLogin()
-                .loginPage("/user/login")
                 .loginProcessingUrl("/user/login")
                 .defaultSuccessUrl("/")
                 .failureUrl("/user/login?error=true")

@@ -3,6 +3,7 @@ package com.doge.backend.domain.security;
 import com.doge.backend.domain.member.Member;
 import com.doge.backend.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,7 +17,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final MemberRepository memberRepository;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("이메일이 존재하지 않습니다."));
 
@@ -27,6 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return User.builder()
                 .username(member.getEmail())
                 .password(member.getPassword())
+                .authorities(new SimpleGrantedAuthority(member.getRole().toString()))
                 .build();
     }
 }
