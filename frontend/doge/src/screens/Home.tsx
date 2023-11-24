@@ -159,12 +159,12 @@ interface IForm {
 }
 
 const Home = () => {
-  const test = "소프트웨어공학개론";
+  const dummydata = { email: "1234", password: "123456" };
   useEffect(() => {
     axios
-      .get(`/test/doge?keyword=${test}`)
-      .then((res) => console.log("도지 쿼리 테스트 성공", res))
-      .catch((err) => console.log(err));
+      .post(`/test/doge`, dummydata, { withCredentials: true })
+      .then((res) => console.log("도지 post 테스트 성공", res))
+      .catch((err) => console.log("도지 post 요청 실패", err));
   }, []);
   const navigate = useNavigate();
   const { scrollY } = useScroll();
