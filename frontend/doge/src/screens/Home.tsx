@@ -159,10 +159,11 @@ interface IForm {
 }
 
 const Home = () => {
+  const test = "소프트웨어공학개론";
   useEffect(() => {
     axios
-      .get(`/test/doge`)
-      .then((res) => console.log("도지 테스트 성공", res))
+      .get(`/test/doge?keyword=${test}`)
+      .then((res) => console.log("도지 쿼리 테스트 성공", res))
       .catch((err) => console.log(err));
   }, []);
   const navigate = useNavigate();
