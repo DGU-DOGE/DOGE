@@ -8,20 +8,20 @@ import org.springframework.validation.Validator;
 public abstract class AbstractValidator<T> implements Validator {
 
     @Override
-    public boolean supports(Class<?> clazz){
+    public boolean supports(Class<?> clazz) {
         return true;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void validate(Object target, Errors errors){
-        try{
+    public void validate(Object target, Errors errors) {
+        try {
             doValidate((T) target, errors);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             log.error("중복 검증 에러", e);
             throw e;
         }
     }
 
-    protected abstract void doValidate(final T dto, final  Errors errors);
+    protected abstract void doValidate(final T dto, final Errors errors);
 }

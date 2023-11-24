@@ -1,7 +1,6 @@
 package com.doge.backend;
 
 import com.doge.backend.domain.member.Member;
-import com.doge.backend.domain.member.Role;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,13 +18,12 @@ public class HelloController {
     }
 
     @PostMapping("/test/doge")
-    public Member doge(@RequestBody Member member){
+    public Member doge(@RequestBody Member member) {
         Member member1 = new Member();
-        member1.setId(1L);
+        member1.setMemberId(1L);
         member1.setEmail("backmail " + member.getEmail());
         member1.setPassword("backpass " + member.getPassword());
         member1.setFavoriteCount(0);
-        member1.setRole(Role.ROLE_USER);
 
         return member1;
     }

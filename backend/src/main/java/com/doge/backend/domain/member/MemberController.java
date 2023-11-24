@@ -1,6 +1,7 @@
 package com.doge.backend.domain.member;
 
 import javax.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -32,7 +33,7 @@ public class MemberController {
     }
 
     @InitBinder
-    public void validatorBinder(WebDataBinder binder){
+    public void validatorBinder(WebDataBinder binder) {
         binder.addValidators(checkEmailValidator);
     }
 
@@ -53,7 +54,7 @@ public class MemberController {
             return "/user/createMemberForm";
         }
 
-        Long memberId = memberService.join(memberSaveRequestDTO);
+        memberService.join(memberSaveRequestDTO);
 
         return "home";
     }
