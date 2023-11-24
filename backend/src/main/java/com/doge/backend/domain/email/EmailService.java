@@ -39,9 +39,9 @@ public class EmailService {
         emailRepository.save(authNumber);
     }
 
-    public Boolean validateNumber(AuthNumber req) {
+    public void validateNumber(AuthNumber req) {
         if (!emailRepository.existsByAuthEmail(req.getAuthEmail())) {
-            throw new RuntimeException("인증번호가 없거나 만료");
+            throw new RuntimeException("인증번호가 없음");
         }
 
         AuthNumber authNumber = emailRepository.findByAuthEmail(req.getAuthEmail());
@@ -54,10 +54,9 @@ public class EmailService {
         }
 
         if (authNumber.getAuthNumber() != req.getAuthNumber()) {
-            return false;
+            throw new RuntimeException("인증 번호가 맞지 않음");
         }
 
         emailRepository.deleteById(authNumber.getAuthId());
-        return true;
     }
 }
