@@ -161,8 +161,9 @@ interface IForm {
 const Home = () => {
   useEffect(() => {
     axios
-      .get("/api/demo-web")
-      .then((response) => console.log("백엔드 연동 성공", response.data));
+      .get(`/test/doge`)
+      .then((res) => console.log("도지 테스트 성공", res))
+      .catch((err) => console.log(err));
   }, []);
   const navigate = useNavigate();
   const { scrollY } = useScroll();
