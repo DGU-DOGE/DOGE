@@ -16,7 +16,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/join")
-    public void join(@RequestBody Member req){
+    public void join(@RequestBody Member req) {
         memberService.join(req);
     }
 }

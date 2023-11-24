@@ -15,12 +15,8 @@ public class EmailService {
     private final EmailRepository emailRepository;
 
     public void sendEmail(String email) {
-        if(overTime(email)){
-            emailRepository.deleteById(emailRepository.findByAuthEmail(email).getAuthId());
-        }
-
         if (emailRepository.existsByAuthEmail(email)) {
-            throw new RuntimeException("이미 있는 인증번호");
+            emailRepository.deleteById(emailRepository.findByAuthEmail(email).getAuthId());
         }
 
         Random random = new Random();
@@ -50,7 +46,9 @@ public class EmailService {
 
         AuthNumber authNumber = emailRepository.findByAuthEmail(req.getAuthEmail());
 
-        if (overTime(authNumber.getAuthEmail())) {
+        Date now = new Date();
+        long timeDiff = now.getTime() - authNumber.getCreatedAt().getTime();
+        if (timeDiff > 3 * 60 * 1000) {
             emailRepository.deleteById(authNumber.getAuthId());
             throw new RuntimeException("만료된 인증");
         }
@@ -61,14 +59,5 @@ public class EmailService {
 
         emailRepository.deleteById(authNumber.getAuthId());
         return true;
-    }
-
-    public boolean overTime(String email) {
-        AuthNumber authNumber = emailRepository.findByAuthEmail(email);
-
-        Date now = new Date();
-        long timeDiff = now.getTime() - authNumber.getCreatedAt().getTime();
-
-        return timeDiff > 3 * 60 * 1000;
     }
 }

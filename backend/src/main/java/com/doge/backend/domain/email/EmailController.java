@@ -15,12 +15,12 @@ public class EmailController {
     private final EmailService emailService;
 
     @PostMapping("send-email")
-    public void sendEmail(String email){
+    public void sendEmail(String email) {
         emailService.sendEmail(email);
     }
 
     @GetMapping("validate-number")
-    public Boolean validateNumber(AuthNumber authNumber){
+    public Boolean validateNumber(AuthNumber authNumber) {
         return emailService.validateNumber(authNumber);
     }
 }
