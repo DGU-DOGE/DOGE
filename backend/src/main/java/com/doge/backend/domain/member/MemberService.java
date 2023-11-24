@@ -1,12 +1,28 @@
 package com.doge.backend.domain.member;
 
-import org.springframework.validation.Errors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-import java.util.Map;
+@Service
+@RequiredArgsConstructor
+public class MemberService {
 
-public interface MemberService {
+    private final MemberRepository memberRepository;
 
-    void join(MemberSaveRequestDto memberFormDto);
+    public void join(Member req) {
+        emailDuplicateValidate(req.getEmail());
 
-    Map<String, String> validateHandling(Errors errors);
+        Member member = Member.builder()
+                .email(req.getEmail())
+                .password(req.getPassword())
+                .favoriteCount(0)
+                .build();
+        memberRepository.save(member);
+    }
+
+    public void emailDuplicateValidate(String email) {
+        if (memberRepository.existsByEmail(email)) {
+            throw new RuntimeException();
+        }
+    }
 }

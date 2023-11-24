@@ -18,13 +18,13 @@ public class HelloController {
     }
 
     @PostMapping("/test/doge")
-    public Member doge(@RequestBody Member member) {
-        Member member1 = new Member();
-        member1.setMemberId(1L);
-        member1.setEmail("backmail " + member.getEmail());
-        member1.setPassword("backpass " + member.getPassword());
-        member1.setFavoriteCount(0);
+    public Member doge(@RequestBody Member req) {
+        Member member = new Member();
+        member.setMemberId(1L);
+        member.setEmail("backmail " + req.getEmail());
+        member.setPassword("backpass " + req.getPassword());
+        member.setFavoriteCount(0);
 
-        return member1;
+        return member;
     }
 }
