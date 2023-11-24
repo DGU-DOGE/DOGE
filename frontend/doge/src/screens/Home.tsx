@@ -159,10 +159,12 @@ interface IForm {
 }
 
 const Home = () => {
+  const test = "소프트웨어공학개론";
   useEffect(() => {
     axios
-      .get("/api/demo-web")
-      .then((response) => console.log("백엔드 연동 성공", response.data));
+      .get(`/test/doge?keyword=${test}`)
+      .then((res) => console.log("도지 쿼리 테스트 성공", res))
+      .catch((err) => console.log(err));
   }, []);
   const navigate = useNavigate();
   const { scrollY } = useScroll();
