@@ -132,7 +132,7 @@ const Login = () => {
       .then(response => console.log("로그인 성공", response.data))
       .catch(err => console.log(err));
       */
-    /*
+
     axios
       .post(
         `/api/user/login`,
@@ -151,12 +151,12 @@ const Login = () => {
       .catch((err) => {
         console.log("로그인 실패", err);
       });
-      */
-    try {
+
+    /*try {
       mutate(data);
     } catch (error) {
       console.error("로그인 실패 onValid부분 문제", error);
-    }
+    }*/
   };
   return (
     <Wrapper>
