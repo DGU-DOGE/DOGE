@@ -103,8 +103,8 @@ const Login = () => {
   } = useMutation(fetchLogin, {
     onSuccess: (data) => {
       console.log("로그인 성공!");
+      console.log(data);
       console.log(LoginData);
-      console.log(LoginData.sessionId);
       localStorage.setItem("sessionId", LoginData.sessionId);
       setIsLogin(true);
       navigate(`/`);
@@ -131,11 +131,28 @@ const Login = () => {
       .then(response => console.log("로그인 성공", response.data))
       .catch(err => console.log(err));
       */
-    try {
+    axios
+      .post(
+        `/api/user/login`,
+        { email: data.userId, password: data.userPassword },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        console.log("로그인 성공!!!");
+        console.log(res.data);
+        console.log(res.data.sessionId);
+        localStorage.setItem("sessionId", res.data.sessionId);
+        setIsLogin(true);
+        navigate(`/`);
+      })
+      .catch((err) => {
+        console.log("로그인 실패", err);
+      });
+    /*try {
       mutate(data);
     } catch (error) {
       console.error("로그인 실패 onValid부분 문제", error);
-    }
+    }*/
   };
   return (
     <Wrapper>
