@@ -96,11 +96,16 @@ interface ILogin {
 const Login = () => {
   const [isLogin, setIsLogin] = useRecoilState(LoginState);
   const navigate = useNavigate();
-  const { mutate, isLoading, data } = useMutation(fetchLogin, {
+  const {
+    mutate,
+    isLoading,
+    data: LoginData,
+  } = useMutation(fetchLogin, {
     onSuccess: (data) => {
       console.log("로그인 성공!");
-      console.log(data);
-      localStorage.setItem("sessionId", data.sessionId);
+      console.log(LoginData);
+      console.log(LoginData.sessionId);
+      localStorage.setItem("sessionId", LoginData.sessionId);
       setIsLogin(true);
       navigate(`/`);
       //로그인 성공 시 실행되는 부분
