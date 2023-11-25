@@ -139,6 +139,7 @@ const Login = () => {
       )
       .then((res) => {
         console.log("로그인 성공!!!");
+        console.log(res);
         console.log(res.data);
         console.log(res.data.sessionId);
         localStorage.setItem("sessionId", res.data.sessionId);
