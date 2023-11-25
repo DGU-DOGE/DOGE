@@ -77,8 +77,9 @@ const Header = () => {
       )
       .then((res) => {
         setIsLogin(false);
+        console.log(localStorage.getItem("sessionId"));
         localStorage.removeItem("sessionId");
-        console.log("로그아웃 완료");
+        console.log("로그아웃 성공!");
         navigate(`/`);
       })
       .catch((err) => console.log("로그아웃 실패", err));
