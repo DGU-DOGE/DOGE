@@ -2,7 +2,7 @@ package com.doge.backend.domain.member;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,9 +48,9 @@ public class MemberService {
         sessionManager.expire(request);
     }
 
+    @Transactional
     public void changePassword(Member req) {
         Member member = memberRepository.findByEmail(req.getEmail());
-
         member.setPassword(req.getPassword());
     }
 }
