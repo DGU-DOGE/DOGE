@@ -3,9 +3,15 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { fetchConfirmCode, fetchJoin, fetchSendCode } from "../apis/api";
+import {
+  fetchChangePassword,
+  fetchConfirmCode,
+  fetchJoin,
+  fetchSendCode,
+} from "../apis/api";
 import { useNavigate } from "react-router-dom";
 import { formatTime } from "../utils/formatTime";
+import axios from "axios";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -35,7 +41,7 @@ const Title = styled.div`
     font-size: 68px;
   }
   span {
-    color: ${props => props.theme.orange};
+    color: ${(props) => props.theme.orange};
   }
 `;
 const JoinWrapper = styled.div`
@@ -53,8 +59,8 @@ const JoinForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${props => props.theme.orange};
-    color: ${props => props.theme.white.lighter};
+    background-color: ${(props) => props.theme.orange};
+    color: ${(props) => props.theme.white.lighter};
     font-size: 30px;
   }
   padding-top: 70px;
@@ -63,8 +69,8 @@ const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${props => props.theme.gray.medium};
-  border: 1px solid ${props => props.theme.gray.medium};
+  background-color: ${(props) => props.theme.gray.medium};
+  border: 1px solid ${(props) => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
@@ -73,7 +79,7 @@ const AlertMessage = styled.span`
   width: 80%;
   margin-left: 23px;
   margin-bottom: 10px;
-  color: ${props => props.theme.orange};
+  color: ${(props) => props.theme.orange};
   font-size: 20px;
 `;
 const Timer = styled.div`
@@ -117,7 +123,7 @@ const FindPassword = () => {
         setVerificationSent(true);
         startTimer();
       },
-      onError: error => {
+      onError: (error) => {
         console.error("인증번호 발송 실패", error);
       },
     }
@@ -130,20 +136,21 @@ const FindPassword = () => {
         setVerificationSuccess(true);
         console.log("인증번호 인증 성공!");
       },
-      onError: error => {
+      onError: (error) => {
         console.log("인증번호 인증 실패", error);
       },
     }
   );
-  // 회원가입 post요청 함수
+  // 비밀번호 변경 post요청 함수
   const { mutate: changePassword } = useMutation(
-    (data: { userId: string; userPassword: string }) => fetchJoin(data),
+    (data: { userId: string; userPassword: string }) =>
+      fetchChangePassword(data),
     {
       onSuccess: () => {
         console.log("비밀번호 변경 성공!");
         navigate(`/login`);
       },
-      onError: error => {
+      onError: (error) => {
         console.log("비밀번호 변경 실패!", error);
       },
     }
@@ -165,10 +172,24 @@ const FindPassword = () => {
         if (!verificationSuccess) {
           verifyCode({ userId: data.userId, verifyNumber: data.verifyNumber });
         } else {
+          axios
+            .post(
+              "/api/user/change-password",
+              { email: data.userId, password: data.userPassword },
+              { withCredentials: true }
+            )
+            .then((res) => {
+              console.log("비밀번호 변경 성공!!");
+              console.log(res);
+              navigate("/login");
+            })
+            .catch((err) => console.log("비밀번호 변경 실패!!", err));
+          /*
           changePassword({
             userId: data.userId,
             userPassword: data.userPassword,
           });
+          */
         }
       }
     } catch (error) {
@@ -178,7 +199,7 @@ const FindPassword = () => {
   const startTimer = () => {
     setTimer(180); // 3분을 초 단위로 설정
     const intervalId = setInterval(() => {
-      setTimer(prevTimer => prevTimer - 1);
+      setTimer((prevTimer) => prevTimer - 1);
     }, 1000);
 
     // 3분 후에 타이머 중지
