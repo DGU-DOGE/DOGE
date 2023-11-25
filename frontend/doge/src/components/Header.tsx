@@ -8,6 +8,7 @@ import { useMatch, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { LoginState } from "../stores/atoms";
+import axios from "axios";
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -68,10 +69,19 @@ const Header = () => {
   const FavoriteMatch = useMatch("/favorites");
 
   const handleLogout = () => {
-    setIsLogin(false);
-    localStorage.removeItem("accessToken");
-    console.log("로그아웃 완료");
-    navigate(`/`);
+    axios
+      .post(
+        "/api/user/logout",
+        { sessionId: localStorage.getItem("sessionId") },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        setIsLogin(false);
+        localStorage.removeItem("sessionId");
+        console.log("로그아웃 완료");
+        navigate(`/`);
+      })
+      .catch((err) => console.log("로그아웃 실패", err));
   };
   return (
     <Nav>

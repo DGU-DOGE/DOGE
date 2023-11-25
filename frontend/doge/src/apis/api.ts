@@ -20,14 +20,14 @@ export interface IBook {
 }
 export const fetchLogin = async (userData: IUserData) => {
   const payload = { email: userData.userId, password: userData.userPassword };
-  const { data } = await axios.post(`/user/login`, payload, {
+  const { data } = await axios.post(`/api/user/login`, payload, {
     withCredentials: true,
   });
   return data;
 };
 export const fetchJoin = async (userData: IUserData) => {
   const { data } = await axios.post(
-    `/user/join`,
+    `/api/user/join`,
     { email: userData.userId, password: userData.userPassword },
     {
       headers: {
@@ -76,8 +76,8 @@ export const fetchAddFavorite = async (favoriteData: {
 //백엔드에 해당 이메일로 인증번호를 요청하는 함수
 export const fetchSendCode = async (email: string) => {
   const { data } = await axios.post(
-    ``,
-    { email },
+    `/api/email/send-email`,
+    { authEmail: email },
     {
       withCredentials: true,
     }
@@ -90,10 +90,10 @@ export const fetchConfirmCode = async (userData: {
   verifyNumber: string;
 }) => {
   const { data } = await axios.post(
-    ``,
+    `/api/email/validate-number`,
     {
-      email: userData.userId,
-      verifyNumber: userData.verifyNumber,
+      authEmail: userData.userId,
+      authNumber: userData.verifyNumber,
     },
     { withCredentials: true }
   );
