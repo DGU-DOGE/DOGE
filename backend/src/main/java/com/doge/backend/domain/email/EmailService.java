@@ -5,7 +5,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.Random;
 
 @Service
@@ -21,6 +20,14 @@ public class EmailService {
 
         Random random = new Random();
         int keyValue = random.nextInt(899999) + 100000;
+        long nowTime = System.currentTimeMillis();
+
+        AuthNumber authNumber = AuthNumber.builder()
+                .authEmail(email)
+                .authNumber(keyValue)
+                .createdAt(nowTime)
+                .build();
+        emailRepository.save(authNumber);
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("donggukdoze@gmail.com");
@@ -28,15 +35,6 @@ public class EmailService {
         message.setSubject("도지 인증 번호");
         message.setText("인증 번호는 " + keyValue + "입니다.");
         emailSender.send(message);
-
-        Date now = new Date();
-
-        AuthNumber authNumber = AuthNumber.builder()
-                .authEmail(email)
-                .authNumber(keyValue)
-                .createdAt(now)
-                .build();
-        emailRepository.save(authNumber);
     }
 
     public void validateNumber(AuthNumber req) {
@@ -46,8 +44,8 @@ public class EmailService {
 
         AuthNumber authNumber = emailRepository.findByAuthEmail(req.getAuthEmail());
 
-        Date now = new Date();
-        long timeDiff = now.getTime() - authNumber.getCreatedAt().getTime();
+        long nowTime = System.currentTimeMillis();
+        long timeDiff = nowTime - authNumber.getCreatedAt();
         if (timeDiff > 3 * 60 * 1000) {
             emailRepository.deleteById(authNumber.getAuthId());
             throw new RuntimeException("만료된 인증");

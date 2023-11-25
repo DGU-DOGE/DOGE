@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
 
 @Entity
 @Data
@@ -29,5 +28,5 @@ public class AuthNumber {
     private int authNumber;
 
     @Column
-    private Date createdAt;
+    private Long createdAt;
 }

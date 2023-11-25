@@ -2,7 +2,6 @@ package com.doge.backend.domain.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class MemberController {
 
     private final MemberService memberService;
@@ -25,7 +24,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public Object login(@ModelAttribute Member req, HttpServletRequest request, HttpServletResponse response) {
+    public Object login(@RequestBody Member req, HttpServletRequest request, HttpServletResponse response) {
         return memberService.login(req, request, response);
     }
 

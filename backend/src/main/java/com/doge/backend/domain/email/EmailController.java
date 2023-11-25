@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/email")
+@RequestMapping("/api/email")
 public class EmailController {
     private final EmailService emailService;
 
-    @PostMapping("send-email")
-    public void sendEmail(@RequestBody String email) {
-        emailService.sendEmail(email);
+    @PostMapping("/send-email")
+    public void sendEmail(@RequestBody AuthNumber email) {
+        emailService.sendEmail(email.getAuthEmail());
     }
 
-    @PostMapping("validate-number")
+    @PostMapping("/validate-number")
     public void validateNumber(@RequestBody AuthNumber authNumber) {
         emailService.validateNumber(authNumber);
     }
