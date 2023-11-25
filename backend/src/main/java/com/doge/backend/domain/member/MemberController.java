@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,8 +26,10 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public Object login(@RequestBody Member req, HttpServletRequest request, HttpServletResponse response) {
-        return memberService.login(req, request, response);
+    public Map<String, String> login(@RequestBody Member req, HttpServletResponse response) {
+        HashMap<String, String> result = new HashMap<>();
+        result.put("sessionId", memberService.login(req, response));
+        return result;
     }
 
     @PostMapping("/logout")
