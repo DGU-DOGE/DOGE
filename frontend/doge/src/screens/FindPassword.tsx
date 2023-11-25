@@ -173,7 +173,7 @@ const FindPassword = () => {
           verifyCode({ userId: data.userId, verifyNumber: data.verifyNumber });
         } else {
           axios
-            .post(
+            .patch(
               "/api/user/change-password",
               { email: data.userId, password: data.userPassword },
               { withCredentials: true }
