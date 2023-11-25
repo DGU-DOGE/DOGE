@@ -2,6 +2,7 @@ package com.doge.backend.domain.member;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,5 +46,11 @@ public class MemberService {
 
     public void logout(HttpServletRequest request) {
         sessionManager.expire(request);
+    }
+
+    public void changePassword(Member req) {
+        Member member = memberRepository.findByEmail(req.getEmail());
+
+        member.setPassword(req.getPassword());
     }
 }
