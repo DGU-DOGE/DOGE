@@ -133,9 +133,16 @@ const FindPassword = () => {
     (data: { userId: string; verifyNumber: string }) => fetchConfirmCode(data),
     {
       onSuccess: () => {
-        setVerificationSuccess(true);
         setValue("userPassword", "");
-        console.log("인증번호 인증 성공!");
+        if (timer > 0) {
+          setVerificationSuccess(true);
+          console.log("인증번호 인증 성공!");
+        } else {
+          setVerificationSuccess(false);
+          alert(`인증실패`);
+          navigate(`/find-password`);
+          console.log("인증번호 실패!");
+        }
       },
       onError: (error) => {
         console.log("인증번호 인증 실패", error);
@@ -248,24 +255,26 @@ const FindPassword = () => {
           {errors.userId && errors.userId.type === "pattern" && (
             <AlertMessage>{errors.userId.message}</AlertMessage>
           )}
-          {!verificationSuccess && (
-            <input
-              type="submit"
-              value={`인증번호 발송`}
-              style={{
-                position: "absolute",
-                top: 95,
-                display: "flex",
-                justifyContent: "flex-end",
-                width: "80%",
-                marginRight: 10,
-                fontSize: "24px",
-                border: "none",
-                backgroundColor: "transparent",
-                color: "#E17100",
-              }}
-            />
-          )}
+          {!verificationSuccess ? (
+            !verificationSent ? (
+              <input
+                type="submit"
+                value={`인증번호 발송`}
+                style={{
+                  position: "absolute",
+                  top: 95,
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "80%",
+                  marginRight: 10,
+                  fontSize: "24px",
+                  border: "none",
+                  backgroundColor: "transparent",
+                  color: "#E17100",
+                }}
+              />
+            ) : null
+          ) : null}
 
           {verificationSent ? (
             !verificationSuccess ? (
