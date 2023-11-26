@@ -460,7 +460,9 @@ const Search = () => {
   };
 
   // 추후에 isLoading인 경우에는 Loader컴포넌트 렌더링, 아닌 경우에는 data의 length에 따라 다른 컴포넌트 렌더링
-  return (
+  return bookLoading ? (
+    <Loader />
+  ) : (
     <Wrapper>
       {data.length === 0 ? (
         <>
