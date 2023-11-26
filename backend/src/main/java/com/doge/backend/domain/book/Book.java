@@ -38,7 +38,7 @@ public class Book {
 
 
     @Column
-    private int floor;
+    private String floor;
 
     @Column
     private String shelfName;
