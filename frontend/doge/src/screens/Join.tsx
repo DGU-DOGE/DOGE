@@ -233,6 +233,7 @@ const Join = () => {
           )}
           {!verificationSuccess && (
             <input
+              disabled={verificationSent}
               type="submit"
               value={`인증번호 발송`}
               style={{

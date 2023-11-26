@@ -134,6 +134,7 @@ const FindPassword = () => {
     {
       onSuccess: () => {
         setVerificationSuccess(true);
+        setValue("userPassword", "");
         console.log("인증번호 인증 성공!");
       },
       onError: (error) => {
