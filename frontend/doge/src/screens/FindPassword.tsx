@@ -209,16 +209,6 @@ const FindPassword = () => {
     const intervalId = setInterval(() => {
       setTimer((prevTimer) => prevTimer - 1);
     }, 1000);
-
-    // 3분 후에 타이머 중지
-    setTimeout(() => {
-      clearInterval(intervalId);
-      setTimer(0);
-      setVerificationSent(false);
-      setVerificationSuccess(false); // 타이머가 종료되면 verification 상태 초기화
-      alert(`인증실패`);
-      navigate(`/find-password`);
-    }, 180000);
   };
   return (
     <>
