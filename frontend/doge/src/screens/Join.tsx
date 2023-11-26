@@ -95,6 +95,7 @@ interface IJoin {
 }
 
 const Join = () => {
+  const [timerId, setTimerId] = useState<any>(null);
   const navigate = useNavigate();
   const [timer, setTimer] = useState(0);
   const [verificationSent, setVerificationSent] = useState(false);
@@ -184,12 +185,15 @@ const Join = () => {
 
     // 3분 후에 타이머 중지
     setTimeout(() => {
-      clearInterval(intervalId);
-      setTimer(0);
-      setVerificationSent(false);
-      setVerificationSuccess(false); // 타이머가 종료되면 verification 상태 초기화
-      alert(`인증실패`);
-      navigate(`/join`);
+      if (verificationSent && verificationSuccess) {
+        clearInterval(intervalId);
+        setTimer(0);
+      } else {
+        setVerificationSent(false);
+        setVerificationSuccess(false); // 타이머가 종료되면 verification 상태 초기화
+        alert(`인증실패`);
+        navigate(`/join`);
+      }
     }, 180000);
   };
   return (
