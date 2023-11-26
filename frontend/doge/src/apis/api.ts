@@ -16,8 +16,8 @@ export interface IBook {
   floor: string;
   shelfname: string;
   shelfnum: number;
-  row: number;
-  cell: number;
+  bookRow: number;
+  bookCell: number;
 }
 export const fetchLogin = async (userData: IUserData) => {
   const payload = { email: userData.userId, password: userData.userPassword };
