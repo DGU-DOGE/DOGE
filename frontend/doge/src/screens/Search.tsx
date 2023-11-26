@@ -18,6 +18,8 @@ import {
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import Loader from "./../components/Loader";
+import { useRecoilValue } from "recoil";
+import { LoginState } from "../stores/atoms";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -270,30 +272,25 @@ const bookVariants = {
 interface IForm {
   keyword: string;
 }
-interface IFavorite {
-  userId: string;
+export interface IFavorite {
   book: IBook;
+  sessionId: any;
+}
+interface IDeleteFavorite {
+  bookId: number;
+  sessionId: any;
 }
 const offset = 5;
 
 const Search = () => {
+  const isLogin = useRecoilValue(LoginState);
   const [searchParams, _] = useSearchParams();
-  const [clickedBook, setClickedBook] = useState<IBook>();
-  const [data, setData] = useState<IBook[]>([]);
-  const [bookLoading, setBookLoading] = useState(true);
   const keyword = searchParams.get("keyword");
+  const [bookLoading, setBookLoading] = useState(true);
+  const [data, setData] = useState<IBook[]>([]);
+  const [clickedBook, setClickedBook] = useState<IBook>();
+  const [favoriteList, setFavoriteList] = useState<IBook[]>([]);
 
-  const { mutate: addFavorite } = useMutation(
-    (favoriteData: IFavorite) => fetchAddFavorite(favoriteData),
-    {
-      onSuccess: () => {
-        console.log("즐겨찾기 등록 성공");
-      },
-      onError: (error) => {
-        console.log(`즐겨찾기 등록 실패`, error);
-      },
-    }
-  );
   const navigate = useNavigate();
   const bookDetailMatch = useMatch(`/search/book-detail/:bookId`);
   const [index, setIndex] = useState(0);
@@ -303,6 +300,7 @@ const Search = () => {
   const [leaving, setLeaving] = useState(false);
   const [detailLeaving, setDetailLeaving] = useState(false);
   const { scrollY } = useScroll();
+
   useEffect(() => {
     (async () => {
       if (keyword) {
@@ -324,99 +322,61 @@ const Search = () => {
     }
     setBookLoading(false);
   }, [bookDetailMatch]);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await axios.post(
+        "/api/favorite/check",
+        { sessionId: localStorage.getItem("sessionId") },
+        {
+          withCredentials: true,
+        }
+      );
+      setFavoriteList(data);
+      console.log("사용자 즐겨찾기 목록", data);
+    })();
+  }, []);
+
+  const addFavorite = (favoriteData: IFavorite) => {
+    axios
+      .post(
+        `/api/favorite/post`,
+        {
+          book: favoriteData.book,
+          sessionId: favoriteData.sessionId,
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        setFavoriteList((prev) => [...prev, favoriteData.book]);
+        console.log("즐겨찾기 등록 후 즐겨찾기 목록", favoriteList);
+      })
+      .catch((err) => console.log("즐겨찾기 등록 실패", err));
+  };
+  const deleteFavorite = (deleteData: IDeleteFavorite) => {
+    axios
+      .post(
+        `/api/favorite/delete`,
+        { bookId: deleteData.bookId, sessionId: deleteData.sessionId },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        setFavoriteList((prev) => {
+          const newFavorite = prev.filter(
+            (book) => book.bookId !== deleteData.bookId
+          );
+          return newFavorite;
+        });
+        console.log("즐겨찾기 삭제 후 즐겨찾기 목록", favoriteList);
+      })
+      .catch((err) => console.log("즐겨 찾기 실패!"));
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IForm>({ mode: "onSubmit" });
-  // const {isLoading, data, error} = useQuery(["searchResult", ()=>fetchSearch(searchParams.get("keyword") ?? "")])
-  //useQuery로 검색결과 받아오는 코드 작성 필요!!
-  /*const data = [
-    {
-      id: 100,
-      bookName: "국부론",
-      language: "한국어",
-      isbn: "",
-      author: "저자0",
-      company: "com0",
-      bookImg: "",
-      floor: "지하1층",
-      shelfname: "일반도서",
-      loaction: { shelffloor: 0, shelfleft: 0 },
-    },
-    {
-      id: 101,
-      bookName: "공산당 선언",
-      language: "한국어",
-      isbn: "",
-      author: "저자1",
-      company: "com1",
-      bookImg: "",
-      floor: "1층",
-      shelfname: "책장 이름1",
-      loaction: { shelffloor: 1, shelfleft: 1 },
-    },
-    {
-      id: 102,
-      bookName: "책2",
-      language: "한국어",
-      isbn: 2,
-      author: "저자2",
-      company: "com2",
-      bookImg: "",
-      floor: "2층",
-      shelfname: "책장 이름2",
-      loaction: { shelffloor: 2, shelfleft: 2 },
-    },
-    {
-      id: 103,
-      bookName: "책3",
-      language: "한국어",
-      isbn: 3,
-      author: "저자3",
-      company: "com3",
-      bookImg: "",
-      floor: "3층",
-      shelfname: "책장 이름3",
-      loaction: { shelffloor: 3, shelfleft: 3 },
-    },
-    {
-      id: 104,
-      bookName: "책4",
-      language: "한국어",
-      isbn: 4,
-      author: "저자4",
-      company: "com4",
-      bookImg: "",
-      floor: "4층",
-      shelfname: "책장 이름4",
-      loaction: { shelffloor: 4, shelfleft: 4 },
-    },
-    {
-      id: 105,
-      bookName: "책5",
-      language: "한국어",
-      isbn: 5,
-      author: "저자5",
-      company: "com5",
-      bookImg: "",
-      floor: "5층",
-      shelfname: "책장 이름5",
-      loaction: { shelffloor: 5, shelfleft: 5 },
-    },
-    {
-      id: 106,
-      bookName: "책6",
-      language: "한국어",
-      isbn: 6,
-      author: "저자6",
-      company: "com6",
-      bookImg: "",
-      floor: "6층",
-      shelfname: "책장 이름6",
-      loaction: { shelffloor: 6, shelfleft: 6 },
-    },
-  ];*/
 
   const onBookClick = (bookId: number) => {
     navigate(`/search/book-detail/${bookId}`);
@@ -459,7 +419,6 @@ const Search = () => {
     navigate(-1);
   };
 
-  // 추후에 isLoading인 경우에는 Loader컴포넌트 렌더링, 아닌 경우에는 data의 length에 따라 다른 컴포넌트 렌더링
   return bookLoading ? (
     <Loader />
   ) : (
@@ -621,7 +580,35 @@ const Search = () => {
                                   <span onClick={increaseDetailIdx}>
                                     지도 보기
                                   </span>
-                                  <span>즐겨 찾기 추가</span>
+
+                                  {isLogin &&
+                                  favoriteList?.find(
+                                    (book) => book.bookId === clickedBook.bookId
+                                  ) ? (
+                                    <span
+                                      onClick={() =>
+                                        deleteFavorite({
+                                          bookId: clickedBook.bookId,
+                                          sessionId:
+                                            localStorage.getItem("sessionId"),
+                                        })
+                                      }
+                                    >
+                                      즐겨 찾기 삭제
+                                    </span>
+                                  ) : (
+                                    <span
+                                      onClick={() =>
+                                        addFavorite({
+                                          book: clickedBook,
+                                          sessionId:
+                                            localStorage.getItem("sessionId"),
+                                        })
+                                      }
+                                    >
+                                      즐겨 찾기 추가
+                                    </span>
+                                  )}
                                 </div>
                                 <RightAngle
                                   onClick={increaseDetailIdx}
