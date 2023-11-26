@@ -47,8 +47,8 @@ public class Book {
     private int shelfCount;
 
     @Column
-    private int row;
+    private int bookRow;
 
     @Column
-    private int cell;
+    private int bookCell;
 }

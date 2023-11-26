@@ -9,10 +9,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BookService {
-    BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
     List<Book> searchBook(String keyword) {
-        List<Book> books = bookRepository.findTop30ByBookNameLikeOrAuthorLike(keyword, keyword);
+        List<Book> books = bookRepository.findTop30ByBookNameContainsOrAuthorContains(keyword, keyword);
         if (CollectionUtils.isEmpty(books)) {
             throw new RuntimeException("없는 책");
         }

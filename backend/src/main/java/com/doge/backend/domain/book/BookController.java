@@ -12,10 +12,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class BookController {
-    BookService bookService;
+    private final BookService bookService;
 
     @GetMapping("/search")
-    List<Book> searchBook(@RequestParam String keyword) {
+    List<Book> searchBook(@RequestParam(name = "keyword") String keyword) {
         return bookService.searchBook(keyword);
     }
 }
