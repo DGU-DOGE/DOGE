@@ -4,6 +4,7 @@ import com.doge.backend.domain.book.Book;
 import com.doge.backend.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,5 +23,10 @@ public class FavoriteService {
                 .member(member)
                 .build();
         favoriteRepository.save(favorite);
+    }
+
+    @Transactional
+    public void delete(Long bookId, Long memberId) {
+        favoriteRepository.delete(favoriteRepository.findByMember_MemberIdAndBook_BookId(memberId, bookId));
     }
 }

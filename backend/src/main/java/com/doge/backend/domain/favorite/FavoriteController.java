@@ -29,4 +29,9 @@ public class FavoriteController {
     public void post(@RequestBody Favorite favorite, HttpServletRequest request) {
         favoriteService.post(favorite.getBook(), sessionManager.getSession(request));
     }
+
+    @PostMapping("/delete")
+    public void delete(@RequestBody Favorite favorite, HttpServletRequest request) {
+        favoriteService.delete(favorite.getBook().getBookId(), sessionManager.getSession(request).getMemberId());
+    }
 }
