@@ -329,6 +329,9 @@ const Search = () => {
         "/api/favorite/check",
         { sessionId: localStorage.getItem("sessionId") },
         {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("sessionId")}`,
+          },
           withCredentials: true,
         }
       );
@@ -345,7 +348,9 @@ const Search = () => {
           book: favoriteData.book,
           sessionId: favoriteData.sessionId,
         },
-        { withCredentials: true }
+        {
+          withCredentials: true,
+        }
       )
       .then((res) => {
         setFavoriteList((prev) => [...prev, favoriteData.book]);
@@ -358,7 +363,9 @@ const Search = () => {
       .post(
         `/api/favorite/delete`,
         { bookId: deleteData.bookId, sessionId: deleteData.sessionId },
-        { withCredentials: true }
+        {
+          withCredentials: true,
+        }
       )
       .then((res) => {
         setFavoriteList((prev) => {
