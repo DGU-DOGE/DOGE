@@ -39,11 +39,13 @@ export const fetchJoin = async (userData: IUserData) => {
   );
   return data;
 };
-export const fetchSearch = async (keyword: string) => {
+export const fetchSearch = async (keyword: string | null) => {
   // 로그인이 되었는지를 확인하고 로그인이 되었을 경우에
   // locaStorage에 저장된 accessToken을 가져와서 axios.get요청에 Authenication으로 넣기
   // + withCredentials: true설정해주기
-  const { data } = await axios.get(``); // get url뒤에 keyword붙여서 요청할 것
+  const { data } = await axios.get(`/search?keyword=${keyword}`, {
+    withCredentials: true,
+  }); // get url뒤에 keyword붙여서 요청할 것
   return data;
 };
 

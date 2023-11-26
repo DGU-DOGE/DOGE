@@ -8,8 +8,7 @@ import { useMatch, useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
-import { useState } from "react";
-import Loader from "../components/Loader";
+import { useEffect, useState } from "react";
 import {
   IBook,
   fetchAddFavorite,
@@ -17,6 +16,8 @@ import {
   fetchUserData,
 } from "../apis/api";
 import { useMutation, useQuery } from "react-query";
+import axios from "axios";
+import Loader from "./../components/Loader";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -37,7 +38,7 @@ const InfoWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   min-width: 800px;
-  background-color: ${props => props.theme.gray.lighter};
+  background-color: ${(props) => props.theme.gray.lighter};
   border-radius: 10px;
   position: relative;
 `;
@@ -55,8 +56,8 @@ const Input = styled.input`
   width: 95%;
   height: 70px;
   margin: 10px;
-  background-color: ${props => props.theme.gray.medium};
-  border: 1px solid ${props => props.theme.gray.medium};
+  background-color: ${(props) => props.theme.gray.medium};
+  border: 1px solid ${(props) => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 28px;
@@ -93,7 +94,7 @@ const Slider = styled(motion.div)`
 `;
 const Book = styled(motion.div)`
   display: flex;
-  background-color: ${props => props.theme.gray.lightdark};
+  background-color: ${(props) => props.theme.gray.lightdark};
   width: 95%;
   height: 200px;
   margin: 20px 0px;
@@ -174,7 +175,7 @@ const DetailWrapper = styled(motion.div)`
   left: 0;
   right: 0;
   margin: 0 auto;
-  background-color: ${props => props.theme.gray.medium};
+  background-color: ${(props) => props.theme.gray.medium};
   border-radius: 15px;
   overflow: hidden;
   display: flex;
@@ -184,7 +185,7 @@ const DetailWrapper = styled(motion.div)`
 const DetailInfo = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${props => props.theme.gray.bright};
+  background-color: ${(props) => props.theme.gray.bright};
   width: 70%;
   max-width: 500px;
 
@@ -205,9 +206,9 @@ const DetailInfo = styled.div`
     display: flex;
     margin-bottom: 15px;
     span {
-      background-color: ${props => props.theme.orange};
+      background-color: ${(props) => props.theme.orange};
       font-size: 13px;
-      color: ${props => props.theme.white.lighter};
+      color: ${(props) => props.theme.white.lighter};
       width: 60px;
       text-align: center;
       padding: 3px;
@@ -251,7 +252,7 @@ const NoResult = styled.div`
 const AlertMessage = styled.span`
   margin-left: 23px;
   margin-bottom: 10px;
-  color: ${props => props.theme.orange};
+  color: ${(props) => props.theme.orange};
   font-size: 20px;
 `;
 const sliderVariants = {
@@ -278,25 +279,28 @@ const offset = 5;
 
 const Search = () => {
   const [searchParams, _] = useSearchParams();
-  const { isLoading: userDataLoading, data: userData } = useQuery(
-    ["userInfo"],
-    fetchUserData,
-    {
-      onSuccess: () => {
-        console.log("사용자 정보 가져오기 성공");
-      },
-      onError: () => {
-        console.log("사용자 정보 가져오기 실패");
-      },
-    }
-  );
+  const [data, setData] = useState<IBook[]>([]);
+  const [bookLoading, setBookLoading] = useState(true);
+  const keyword = searchParams.get("keyword");
+  useEffect(() => {
+    (async () => {
+      if (keyword) {
+        const { data: searchResult } = await axios.get(
+          `/search?keyword=${keyword}`,
+          { withCredentials: true }
+        );
+        setData(searchResult);
+        setBookLoading(false);
+      }
+    })();
+  }, [keyword]);
   const { mutate: addFavorite } = useMutation(
     (favoriteData: IFavorite) => fetchAddFavorite(favoriteData),
     {
       onSuccess: () => {
         console.log("즐겨찾기 등록 성공");
       },
-      onError: error => {
+      onError: (error) => {
         console.log(`즐겨찾기 등록 실패`, error);
       },
     }
@@ -317,7 +321,7 @@ const Search = () => {
   } = useForm<IForm>({ mode: "onSubmit" });
   // const {isLoading, data, error} = useQuery(["searchResult", ()=>fetchSearch(searchParams.get("keyword") ?? "")])
   //useQuery로 검색결과 받아오는 코드 작성 필요!!
-  const data = [
+  /*const data = [
     {
       id: 100,
       bookName: "국부론",
@@ -402,10 +406,12 @@ const Search = () => {
       shelfname: "책장 이름6",
       loaction: { shelffloor: 6, shelfleft: 6 },
     },
-  ];
+  ];*/
+
   const clickedBook =
     bookDetailMatch?.params.bookId &&
-    data.find(book => book.id + "" === bookDetailMatch.params.bookId);
+    data &&
+    data.find((book) => book.id + "" === bookDetailMatch.params.bookId);
   const onBookClick = (bookId: number) => {
     navigate(`/search/book-detail/${bookId}`);
   };
@@ -413,31 +419,31 @@ const Search = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(true);
-    setIndex(prev =>
+    setIndex((prev) =>
       prev === Math.floor(data.length / offset) ? 0 : prev + 1
     );
   };
   const increaseDetailIdx = () => {
     setIsDetailNext(true);
-    setDetailIdx(prev => (prev === 1 ? 0 : prev + 1));
+    setDetailIdx((prev) => (prev === 1 ? 0 : prev + 1));
   };
   const decreaseIndex = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(false);
-    setIndex(prev =>
+    setIndex((prev) =>
       prev === 0 ? Math.floor(data.length / offset) : prev - 1
     );
   };
   const decreaseDetailIdx = () => {
     setIsDetailNext(false);
-    setDetailIdx(prev => (prev === 0 ? 1 : prev - 1));
+    setDetailIdx((prev) => (prev === 0 ? 1 : prev - 1));
   };
   const toggleLeaving = () => {
-    setLeaving(prev => !prev);
+    setLeaving((prev) => !prev);
   };
   const toggleDetailLeaving = () => {
-    setDetailLeaving(prev => !prev);
+    setDetailLeaving((prev) => !prev);
   };
   const onValid = (data: IForm) => {
     navigate(`/search?keyword=${data.keyword}`);
@@ -533,9 +539,9 @@ const Search = () => {
                 exit="exit"
                 transition={{ type: "tween", duration: 0.2 }}
               >
-                {data
+                {data!
                   .slice(index * offset, index * offset + offset)
-                  .map(book => (
+                  .map((book) => (
                     <Book
                       key={book.id}
                       layoutId={book.id + ""}
@@ -600,9 +606,8 @@ const Search = () => {
                               <>
                                 <h1>{clickedBook.bookName}</h1>
                                 <h1>저자명 : {clickedBook.author}</h1>
-                                <h1>발행사항 : {clickedBook.company}</h1>
-                                <h1>ISBN : {clickedBook.isbn}</h1>
-                                <h1>언어 : {clickedBook.language}</h1>
+                                <h1>발행사항 : {clickedBook.publisher}</h1>
+                                <h1>청구기호 : {clickedBook.callNumber}</h1>
                                 <div>
                                   <span onClick={increaseDetailIdx}>
                                     지도 보기
@@ -622,7 +627,7 @@ const Search = () => {
                             )}
                           </DetailInfo>
                           <Bottom>
-                            {[0, 1].map(idx => (
+                            {[0, 1].map((idx) => (
                               <Circle
                                 key={idx}
                                 style={{
@@ -642,9 +647,8 @@ const Search = () => {
                                 <h1>도서관 {clickedBook.floor}</h1>
                                 <h1>책장 이름 : {clickedBook.shelfname}</h1>
                                 <h1>
-                                  표시된 서가에서 :{" "}
-                                  {clickedBook.loaction.shelffloor}층, 왼쪽에서{" "}
-                                  {clickedBook.loaction.shelfleft}번째에
+                                  표시된 서가에서 : {clickedBook.bookRow}층,
+                                  왼쪽에서 {clickedBook.bookCell}번째에
                                   존재합니다
                                 </h1>
                                 <LeftAngle
@@ -661,7 +665,7 @@ const Search = () => {
                             )}
                           </DetailInfo>
                           <Bottom>
-                            {[0, 1].map(idx => (
+                            {[0, 1].map((idx) => (
                               <Circle
                                 key={idx}
                                 style={{
