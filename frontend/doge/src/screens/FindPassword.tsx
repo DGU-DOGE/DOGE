@@ -134,6 +134,7 @@ const FindPassword = () => {
     {
       onSuccess: () => {
         setVerificationSuccess(true);
+        setValue("userPassword", "");
         console.log("인증번호 인증 성공!");
       },
       onError: (error) => {
@@ -209,7 +210,7 @@ const FindPassword = () => {
       setVerificationSent(false);
       setVerificationSuccess(false); // 타이머가 종료되면 verification 상태 초기화
       alert(`인증실패`);
-      navigate(`/join`);
+      navigate(`/find-password`);
     }, 180000);
   };
   return (

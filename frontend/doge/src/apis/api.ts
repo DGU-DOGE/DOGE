@@ -8,15 +8,16 @@ export interface IUserData {
 }
 export interface IBook {
   id: number;
+  callNumber: string;
   bookName: string;
-  language: string;
-  isbn: string;
   author: string;
-  company: string;
-  bookImg: "";
+  publisher: string;
+  photoLink: string;
   floor: string;
   shelfname: string;
-  loaction: { shelffloor: number; shelfleft: number };
+  shelfnum: number;
+  row: number;
+  cell: number;
 }
 export const fetchLogin = async (userData: IUserData) => {
   const payload = { email: userData.userId, password: userData.userPassword };
