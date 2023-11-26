@@ -278,21 +278,11 @@ const offset = 5;
 
 const Search = () => {
   const [searchParams, _] = useSearchParams();
+  const [clickedBook, setClickedBook] = useState<IBook>();
   const [data, setData] = useState<IBook[]>([]);
   const [bookLoading, setBookLoading] = useState(true);
   const keyword = searchParams.get("keyword");
-  useEffect(() => {
-    (async () => {
-      if (keyword) {
-        const { data: searchResult } = await axios.get(
-          `/search?keyword=${keyword}`,
-          { withCredentials: true }
-        );
-        setData(searchResult);
-        setBookLoading(false);
-      }
-    })();
-  }, [keyword]);
+
   const { mutate: addFavorite } = useMutation(
     (favoriteData: IFavorite) => fetchAddFavorite(favoriteData),
     {
@@ -313,6 +303,27 @@ const Search = () => {
   const [leaving, setLeaving] = useState(false);
   const [detailLeaving, setDetailLeaving] = useState(false);
   const { scrollY } = useScroll();
+  useEffect(() => {
+    (async () => {
+      if (keyword) {
+        const { data: searchResult } = await axios.get(
+          `/search?keyword=${keyword}`,
+          { withCredentials: true }
+        );
+        setData(searchResult);
+        setBookLoading(false);
+      }
+    })();
+  }, [keyword]);
+
+  useEffect(() => {
+    if (bookDetailMatch?.params.bookId && data) {
+      setClickedBook(
+        data.find((book) => book.id + "" === bookDetailMatch.params.bookId)
+      );
+    }
+    setBookLoading(false);
+  }, [bookDetailMatch]);
   const {
     register,
     handleSubmit,
@@ -407,10 +418,6 @@ const Search = () => {
     },
   ];*/
 
-  const clickedBook =
-    bookDetailMatch?.params.bookId &&
-    data &&
-    data.find((book) => book.id + "" === bookDetailMatch.params.bookId);
   const onBookClick = (bookId: number) => {
     navigate(`/search/book-detail/${bookId}`);
   };
@@ -593,6 +600,7 @@ const Search = () => {
                         <>
                           <div style={{ marginTop: 250 }}>
                             <BookImg
+                              src={clickedBook?.photoLink}
                               style={{
                                 width: 250,
                                 height: 250,
