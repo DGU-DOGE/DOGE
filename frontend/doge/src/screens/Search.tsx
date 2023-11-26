@@ -349,9 +349,6 @@ const Search = () => {
           sessionId: favoriteData.sessionId,
         },
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("sessionId")}`,
-          },
           withCredentials: true,
         }
       )
@@ -367,9 +364,6 @@ const Search = () => {
         `/api/favorite/delete`,
         { bookId: deleteData.bookId, sessionId: deleteData.sessionId },
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("sessionId")}`,
-          },
           withCredentials: true,
         }
       )
