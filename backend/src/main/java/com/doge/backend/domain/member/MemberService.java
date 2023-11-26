@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -53,5 +55,11 @@ public class MemberService {
     public void changePassword(Member req) {
         Member member = memberRepository.findByEmail(req.getEmail());
         member.setPassword(req.getPassword());
+    }
+
+    public Map<String, String> check(Member req) {
+        Map<String, String> memberEmail = new HashMap<>();
+        memberEmail.put("email", req.getEmail());
+        return memberEmail;
     }
 }
