@@ -7,7 +7,7 @@ export interface IUserData {
   userPassword: string;
 }
 export interface IBook {
-  id: number;
+  bookId: number;
   callNumber: string;
   bookName: string;
   author: string;
