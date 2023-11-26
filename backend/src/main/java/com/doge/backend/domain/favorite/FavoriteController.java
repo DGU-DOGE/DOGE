@@ -1,11 +1,10 @@
 package com.doge.backend.domain.favorite;
 
-import com.doge.backend.utils.SessionManager;
+import com.doge.backend.domain.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,21 +16,20 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/api/favorite")
 public class FavoriteController {
-    private final FavoriteService favoriteService;
-    private final SessionManager sessionManager;
+    private final MemberService memberService;
 
-    @GetMapping("/check")
+    @PostMapping("/check")
     public List<Favorite> check(HttpServletRequest request) {
-        return favoriteService.check(sessionManager.getSession(request).getMemberId());
+        return memberService.check(request);
     }
 
     @PostMapping("/post")
-    public void post(@RequestBody Favorite favorite, HttpServletRequest request) {
-        favoriteService.post(favorite.getBook(), sessionManager.getSession(request));
+    public void post(@ModelAttribute Favorite favorite, HttpServletRequest request) {
+        memberService.post(favorite.getBook(), request);
     }
 
     @PostMapping("/delete")
-    public void delete(@RequestBody Favorite favorite, HttpServletRequest request) {
-        favoriteService.delete(favorite.getBook().getBookId(), sessionManager.getSession(request).getMemberId());
+    public void delete(@ModelAttribute Favorite favorite, HttpServletRequest request) {
+        memberService.favoriteDelete(favorite.getBook().getBookId(), request);
     }
 }

@@ -1,5 +1,8 @@
 package com.doge.backend.domain.member;
 
+import com.doge.backend.domain.book.Book;
+import com.doge.backend.domain.favorite.Favorite;
+import com.doge.backend.domain.favorite.FavoriteRepository;
 import com.doge.backend.utils.SessionManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -7,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -15,6 +20,7 @@ import java.util.Map;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final FavoriteRepository favoriteRepository;
     private final SessionManager sessionManager;
 
     public void join(Member req) {
@@ -71,5 +77,28 @@ public class MemberService {
         }
         sessionManager.expire(request);
         memberRepository.deleteById(member.getMemberId());
+    }
+
+    public List<Favorite> check(HttpServletRequest request) {
+        List<Favorite> favorites;
+        try {
+            favorites = favoriteRepository.findAllByMember_MemberId(sessionManager.getSession(request).getMemberId());
+        } catch (NullPointerException e) {
+            return new ArrayList<>();
+        }
+        return favorites;
+    }
+
+    public void post(Book book, HttpServletRequest request) {
+        Favorite favorite = Favorite.builder()
+                .book(book)
+                .member(sessionManager.getSession(request))
+                .build();
+        favoriteRepository.save(favorite);
+    }
+
+    @Transactional
+    public void favoriteDelete(Long bookId, HttpServletRequest request) {
+        favoriteRepository.delete(favoriteRepository.findByMember_MemberIdAndBook_BookId(sessionManager.getSession(request).getMemberId(), bookId));
     }
 }
