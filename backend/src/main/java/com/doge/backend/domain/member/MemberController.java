@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,5 +50,10 @@ public class MemberController {
     @GetMapping("/check")
     public Map<String, String> check(HttpServletRequest request) {
         return memberService.check(sessionManager.getSession(request));
+    }
+
+    @PostMapping("/delete")
+    public void delete(@RequestBody Member password, HttpServletRequest request) {
+        memberService.delete(password.getPassword(), request);
     }
 }

@@ -62,4 +62,14 @@ public class MemberService {
         memberEmail.put("email", req.getEmail());
         return memberEmail;
     }
+
+    @Transactional
+    public void delete(String password, HttpServletRequest request) {
+        Member member = sessionManager.getSession(request);
+        if (!member.getPassword().equals(password)) {
+            throw new RuntimeException("비밀번호 불일치");
+        }
+        sessionManager.expire(request);
+        memberRepository.deleteById(member.getMemberId());
+    }
 }
