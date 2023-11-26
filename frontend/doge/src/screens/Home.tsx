@@ -159,13 +159,6 @@ interface IForm {
 }
 
 const Home = () => {
-  const dummydata = { email: "1234", password: "123456" };
-  useEffect(() => {
-    axios
-      .post(`/test/doge`, dummydata, { withCredentials: true })
-      .then((res) => console.log("도지 post 테스트 성공", res))
-      .catch((err) => console.log("도지 post 요청 실패", err));
-  }, []);
   const navigate = useNavigate();
   const { scrollY } = useScroll();
   const detailMapMatch = useMatch(`/map-detail/:mapId`);

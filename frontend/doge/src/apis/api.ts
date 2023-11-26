@@ -1,4 +1,5 @@
 import axios from "axios";
+import { IFavorite } from "../screens/Search";
 
 // 로그인이 되었다면, 즐겨찾기나 다른 fetch요청시에 headers속성에 accessToken값을 넣어주어야 하므로,
 // 해당 값을 참고하여 필요한 부분에 설정해 주는 과정이 필요하다.
@@ -57,16 +58,10 @@ export const fetchUserData = async () => {
   const { data } = await axios.get(``);
   return data;
 };
-export const fetchAddFavorite = async (favoriteData: {
-  userId: string;
-  book: IBook;
-}) => {
-  // 로그인이 되었는지를 확인하고 로그인이 되었을 경우에
-  // locaStorage에 저장된 accessToken을 가져와서 axios.get요청에 Authenication으로 넣기
-  // + withCredentials: true설정해주기
+export const fetchAddFavorite = async (favoriteData: IFavorite) => {
   const { data } = await axios.post(
-    ``,
-    { email: favoriteData.userId, bookInfo: favoriteData.book },
+    `/api/favorite/post`,
+    { book: favoriteData.book, sessionId: favoriteData.sessionId },
     {
       headers: {
         "Content-Type": "application/json",
