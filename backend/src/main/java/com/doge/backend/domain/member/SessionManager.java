@@ -6,21 +6,24 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class SessionManager {
     public static final String SESSION_COOKIE_NAME = "mySessionId";
-    private final Map<String, Object> sessionStore = new ConcurrentHashMap<>();
+    private final Map<String, Member> sessionStore = new HashMap<>();
 
-    public void createSession(Object value, HttpServletResponse response) {
+    public String createSession(Member value, HttpServletResponse response) {
         String sessionId = UUID.randomUUID().toString();
         sessionStore.put(sessionId, value);
 
         Cookie cookie = new Cookie(SESSION_COOKIE_NAME, sessionId);
+        cookie.setMaxAge(3600);
         response.addCookie(cookie);
+
+        return sessionId;
     }
 
     public Object getSession(HttpServletRequest request) {
