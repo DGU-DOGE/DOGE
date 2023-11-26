@@ -105,8 +105,7 @@ const Book = styled(motion.div)`
   }
   cursor: pointer;
 `;
-const BookImg = styled.div`
-  background-color: red;
+const BookImg = styled.img`
   background-size: cover;
   background-position: center center;
   min-width: 180px;
@@ -549,12 +548,12 @@ const Search = () => {
                       whileHover="hover"
                       onClick={() => onBookClick(book.id)}
                     >
-                      <BookImg />
+                      <BookImg src={book.photoLink} />
                       <BookInfo>
                         <h1>{book.bookName}</h1>
                         <h1>도서 위치 정보</h1>
                         <h1>
-                          중앙도서관/{book.floor}/{book.shelfname}
+                          중앙도서관/{book.floor}/{book.shelfName}
                         </h1>
                       </BookInfo>
                     </Book>
@@ -645,7 +644,7 @@ const Search = () => {
                             {clickedBook && (
                               <>
                                 <h1>도서관 {clickedBook.floor}</h1>
-                                <h1>책장 이름 : {clickedBook.shelfname}</h1>
+                                <h1>책장 이름 : {clickedBook.shelfName}</h1>
                                 <h1>
                                   표시된 서가에서 : {clickedBook.bookRow}층,
                                   왼쪽에서 {clickedBook.bookCell}번째에

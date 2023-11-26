@@ -14,7 +14,7 @@ export interface IBook {
   publisher: string;
   photoLink: string;
   floor: string;
-  shelfname: string;
+  shelfName: string;
   shelfnum: number;
   bookRow: number;
   bookCell: number;
