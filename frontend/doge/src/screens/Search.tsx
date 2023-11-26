@@ -319,7 +319,7 @@ const Search = () => {
   useEffect(() => {
     if (bookDetailMatch?.params.bookId && data) {
       setClickedBook(
-        data.find((book) => book.id + "" === bookDetailMatch.params.bookId)
+        data.find((book) => book.bookId + "" === bookDetailMatch.params.bookId)
       );
     }
     setBookLoading(false);
@@ -551,11 +551,11 @@ const Search = () => {
                   .slice(index * offset, index * offset + offset)
                   .map((book) => (
                     <Book
-                      key={book.id}
-                      layoutId={book.id + ""}
+                      key={book.bookId}
+                      layoutId={book.bookId + ""}
                       variants={bookVariants}
                       whileHover="hover"
-                      onClick={() => onBookClick(book.id)}
+                      onClick={() => onBookClick(book.bookId)}
                     >
                       <BookImg src={book.photoLink} />
                       <BookInfo>
