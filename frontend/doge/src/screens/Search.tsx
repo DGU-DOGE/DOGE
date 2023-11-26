@@ -581,34 +581,36 @@ const Search = () => {
                                     지도 보기
                                   </span>
 
-                                  {isLogin &&
-                                  favoriteList?.find(
-                                    (book) => book.bookId === clickedBook.bookId
-                                  ) ? (
-                                    <span
-                                      onClick={() =>
-                                        deleteFavorite({
-                                          bookId: clickedBook.bookId,
-                                          sessionId:
-                                            localStorage.getItem("sessionId"),
-                                        })
-                                      }
-                                    >
-                                      즐겨 찾기 삭제
-                                    </span>
-                                  ) : (
-                                    <span
-                                      onClick={() =>
-                                        addFavorite({
-                                          book: clickedBook,
-                                          sessionId:
-                                            localStorage.getItem("sessionId"),
-                                        })
-                                      }
-                                    >
-                                      즐겨 찾기 추가
-                                    </span>
-                                  )}
+                                  {isLogin ? (
+                                    favoriteList?.find(
+                                      (book) =>
+                                        book.bookId === clickedBook.bookId
+                                    ) ? (
+                                      <span
+                                        onClick={() =>
+                                          deleteFavorite({
+                                            bookId: clickedBook.bookId,
+                                            sessionId:
+                                              localStorage.getItem("sessionId"),
+                                          })
+                                        }
+                                      >
+                                        즐겨 찾기 삭제
+                                      </span>
+                                    ) : (
+                                      <span
+                                        onClick={() =>
+                                          addFavorite({
+                                            book: clickedBook,
+                                            sessionId:
+                                              localStorage.getItem("sessionId"),
+                                          })
+                                        }
+                                      >
+                                        즐겨 찾기 추가
+                                      </span>
+                                    )
+                                  ) : null}
                                 </div>
                                 <RightAngle
                                   onClick={increaseDetailIdx}
