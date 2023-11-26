@@ -231,25 +231,26 @@ const Join = () => {
           {errors.userId && errors.userId.type === "pattern" && (
             <AlertMessage>{errors.userId.message}</AlertMessage>
           )}
-          {!verificationSuccess && (
-            <input
-              disabled={verificationSent}
-              type="submit"
-              value={`인증번호 발송`}
-              style={{
-                position: "absolute",
-                top: 95,
-                display: "flex",
-                justifyContent: "flex-end",
-                width: "80%",
-                marginRight: 10,
-                fontSize: "24px",
-                border: "none",
-                backgroundColor: "transparent",
-                color: "#E17100",
-              }}
-            />
-          )}
+          {!verificationSuccess ? (
+            !verificationSent ? (
+              <input
+                type="submit"
+                value={`인증번호 발송`}
+                style={{
+                  position: "absolute",
+                  top: 95,
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "80%",
+                  marginRight: 10,
+                  fontSize: "24px",
+                  border: "none",
+                  backgroundColor: "transparent",
+                  color: "#E17100",
+                }}
+              />
+            ) : null
+          ) : null}
 
           {verificationSent ? (
             !verificationSuccess ? (
