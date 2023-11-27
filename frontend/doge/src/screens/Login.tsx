@@ -99,40 +99,11 @@ const Login = () => {
   const [isLogin, setIsLogin] = useRecoilState(LoginState);
   const navigate = useNavigate();
   const {
-    mutate,
-    isLoading,
-    data: LoginData,
-  } = useMutation(fetchLogin, {
-    onSuccess: (data) => {
-      console.log("로그인 성공!");
-      console.log(data);
-      console.log(LoginData);
-      console.log(LoginData.sessionId);
-      console.log("여깅7ㅕ깅겨ㅣ여기ㅕ이겨ㅣ여기ㅣㅕ");
-      console.log("이거 확인", LoginData.token);
-      localStorage.setItem("sessionId", LoginData.sessionId);
-      setCookie("sessionId", LoginData.sessionId);
-      setIsLogin(true);
-      navigate(`/`);
-    },
-    onError: (error) => {
-      console.log(`로그인 실패 (사용자 입력 데이터 오류)`, error);
-    },
-  });
-  const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ILogin>({ mode: "onSubmit" });
   const onValid = async (data: ILogin) => {
-    /*axios
-      .post(`/user/login`, JSON.stringify(data), {
-        withCredentials: true,
-      })
-      .then(response => console.log("로그인 성공", response.data))
-      .catch(err => console.log(err));
-      */
-
     axios
       .post(
         `/api/user/login`,
@@ -145,18 +116,14 @@ const Login = () => {
         console.log(res.data);
         console.log(res.data.sessionId);
         localStorage.setItem("sessionId", res.data.sessionId);
+        console.log("이거 확인", res.data.token);
+        setCookie("sessionId", res.data.sessionId);
         setIsLogin(true);
         navigate(`/`);
       })
       .catch((err) => {
         console.log("로그인 실패", err);
       });
-
-    /*try {
-      mutate(data);
-    } catch (error) {
-      console.error("로그인 실패 onValid부분 문제", error);
-    }*/
   };
   return (
     <Wrapper>
