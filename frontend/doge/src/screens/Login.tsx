@@ -116,7 +116,6 @@ const Login = () => {
         console.log(res.data);
         console.log(res.data.sessionId);
         localStorage.setItem("sessionId", res.data.sessionId);
-        console.log("이거 확인", res.data.token);
         setCookie("sessionId", res.data.sessionId);
         setIsLogin(true);
         navigate(`/`);
