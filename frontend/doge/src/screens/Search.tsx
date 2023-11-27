@@ -276,10 +276,6 @@ export interface IFavorite {
   book: IBook;
   sessionId: any;
 }
-interface IDeleteFavorite {
-  bookId: number;
-  sessionId: any;
-}
 const offset = 5;
 
 const Search = () => {
@@ -325,27 +321,23 @@ const Search = () => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.post(
-        "/api/favorite/check",
-        { sessionId: localStorage.getItem("sessionId") },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("sessionId")}`,
-          },
-          withCredentials: true,
-        }
-      );
+      const { data } = await axios.get("/api/favorite/check", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("sessionId")}`,
+        },
+        withCredentials: true,
+      });
       setFavoriteList(data);
       console.log("사용자 즐겨찾기 목록", data);
     })();
   }, []);
 
-  const addFavorite = (favoriteData: IFavorite) => {
+  const addFavorite = (favoriteData: IBook) => {
     axios
       .post(
-        `/api/favorite/post?bookId=${favoriteData.book.bookId}`,
+        `/api/favorite/post`,
         {
-          sessionId: localStorage.getItem("sessionId"),
+          book: favoriteData,
         },
         {
           headers: {
@@ -355,16 +347,16 @@ const Search = () => {
         }
       )
       .then(res => {
-        setFavoriteList(prev => [...prev, favoriteData.book]);
+        setFavoriteList(prev => [...prev, favoriteData]);
         console.log("즐겨찾기 등록 후 즐겨찾기 목록", favoriteList);
       })
       .catch(err => console.log("즐겨찾기 등록 실패", err));
   };
-  const deleteFavorite = (deleteData: IDeleteFavorite) => {
+  const deleteFavorite = (deleteData: IBook) => {
     axios
       .post(
-        `/api/favorite/delete?bookId=${deleteData.bookId}`,
-        { sessionId: localStorage.getItem("sessionId") },
+        `/api/favorite/delete`,
+        { book: deleteData },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("sessionId")}`,
@@ -599,24 +591,14 @@ const Search = () => {
                                     ) ? (
                                       <span
                                         onClick={() =>
-                                          deleteFavorite({
-                                            bookId: clickedBook.bookId,
-                                            sessionId:
-                                              localStorage.getItem("sessionId"),
-                                          })
+                                          deleteFavorite(clickedBook)
                                         }
                                       >
                                         즐겨 찾기 삭제
                                       </span>
                                     ) : (
                                       <span
-                                        onClick={() =>
-                                          addFavorite({
-                                            book: clickedBook,
-                                            sessionId:
-                                              localStorage.getItem("sessionId"),
-                                          })
-                                        }
+                                        onClick={() => addFavorite(clickedBook)}
                                       >
                                         즐겨 찾기 추가
                                       </span>
