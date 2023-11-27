@@ -62,7 +62,6 @@ const Circle = styled(motion.span)`
   background-color: ${(props) => props.theme.white.lighter};
 `;
 const Header = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(["sessionId"]);
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useRecoilState(LoginState);
   const HomeMatch = useMatch("/");
@@ -81,7 +80,6 @@ const Header = () => {
         setIsLogin(false);
         console.log(localStorage.getItem("sessionId"));
         localStorage.removeItem("sessionId");
-        removeCookie("sessionId");
         console.log("로그아웃 성공!");
         navigate(`/`);
       })
