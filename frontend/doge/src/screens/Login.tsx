@@ -96,7 +96,6 @@ interface ILogin {
 
 const Login = () => {
   const [isLogin, setIsLogin] = useRecoilState(LoginState);
-  const [cookies, setCookie] = useCookies(["sessionId"]);
   const navigate = useNavigate();
   const {
     mutate,
@@ -109,7 +108,6 @@ const Login = () => {
       console.log(LoginData);
       console.log(LoginData.sessionId);
       localStorage.setItem("sessionId", LoginData.sessionId);
-      setCookie("sessionId", LoginData.sessionId);
       setIsLogin(true);
       navigate(`/`);
     },
