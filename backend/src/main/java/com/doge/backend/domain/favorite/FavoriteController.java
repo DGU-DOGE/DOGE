@@ -1,5 +1,6 @@
 package com.doge.backend.domain.favorite;
 
+import com.doge.backend.domain.book.Book;
 import com.doge.backend.domain.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,12 +25,12 @@ public class FavoriteController {
     }
 
     @PostMapping("/post")
-    public void post(@RequestBody Favorite favorite, HttpServletRequest request) {
-        memberService.post(favorite.getBook(), request);
+    public void post(@RequestBody Book book, HttpServletRequest request) {
+        memberService.post(book, request);
     }
 
     @PostMapping("/delete")
-    public void delete(@RequestBody Favorite favorite, HttpServletRequest request) {
-        memberService.favoriteDelete(favorite.getBook().getBookId(), request);
+    public void delete(@RequestBody Long bookId, HttpServletRequest request) {
+        memberService.favoriteDelete(bookId, request);
     }
 }
