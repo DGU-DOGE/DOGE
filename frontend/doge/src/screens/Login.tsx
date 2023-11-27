@@ -108,6 +108,7 @@ const Login = () => {
       console.log(data);
       console.log(LoginData);
       console.log(LoginData.sessionId);
+      console.log("여깅7ㅕ깅겨ㅣ여기ㅕ이겨ㅣ여기ㅣㅕ");
       console.log("이거 확인", LoginData.token);
       localStorage.setItem("sessionId", LoginData.sessionId);
       setCookie("sessionId", LoginData.sessionId);
