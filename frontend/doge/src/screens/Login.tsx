@@ -8,6 +8,7 @@ import { useRecoilState } from "recoil";
 import { LoginState } from "../stores/atoms";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { setCookie } from "../stores/Cookie";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -107,7 +108,9 @@ const Login = () => {
       console.log(data);
       console.log(LoginData);
       console.log(LoginData.sessionId);
+      console.log("이거 확인", LoginData.token);
       localStorage.setItem("sessionId", LoginData.sessionId);
+      setCookie("sessionId", LoginData.sessionId);
       setIsLogin(true);
       navigate(`/`);
     },
