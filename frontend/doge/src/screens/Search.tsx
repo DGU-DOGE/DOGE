@@ -40,7 +40,7 @@ const InfoWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   min-width: 800px;
-  background-color: ${(props) => props.theme.gray.lighter};
+  background-color: ${props => props.theme.gray.lighter};
   border-radius: 10px;
   position: relative;
 `;
@@ -58,8 +58,8 @@ const Input = styled.input`
   width: 95%;
   height: 70px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 28px;
@@ -96,7 +96,7 @@ const Slider = styled(motion.div)`
 `;
 const Book = styled(motion.div)`
   display: flex;
-  background-color: ${(props) => props.theme.gray.lightdark};
+  background-color: ${props => props.theme.gray.lightdark};
   width: 95%;
   height: 200px;
   margin: 20px 0px;
@@ -176,7 +176,7 @@ const DetailWrapper = styled(motion.div)`
   left: 0;
   right: 0;
   margin: 0 auto;
-  background-color: ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
   border-radius: 15px;
   overflow: hidden;
   display: flex;
@@ -186,7 +186,7 @@ const DetailWrapper = styled(motion.div)`
 const DetailInfo = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.gray.bright};
+  background-color: ${props => props.theme.gray.bright};
   width: 70%;
   max-width: 500px;
 
@@ -207,9 +207,9 @@ const DetailInfo = styled.div`
     display: flex;
     margin-bottom: 15px;
     span {
-      background-color: ${(props) => props.theme.orange};
+      background-color: ${props => props.theme.orange};
       font-size: 13px;
-      color: ${(props) => props.theme.white.lighter};
+      color: ${props => props.theme.white.lighter};
       width: 60px;
       text-align: center;
       padding: 3px;
@@ -253,7 +253,7 @@ const NoResult = styled.div`
 const AlertMessage = styled.span`
   margin-left: 23px;
   margin-bottom: 10px;
-  color: ${(props) => props.theme.orange};
+  color: ${props => props.theme.orange};
   font-size: 20px;
 `;
 const sliderVariants = {
@@ -317,7 +317,7 @@ const Search = () => {
   useEffect(() => {
     if (bookDetailMatch?.params.bookId && data) {
       setClickedBook(
-        data.find((book) => book.bookId + "" === bookDetailMatch.params.bookId)
+        data.find(book => book.bookId + "" === bookDetailMatch.params.bookId)
       );
     }
     setBookLoading(false);
@@ -343,40 +343,39 @@ const Search = () => {
   const addFavorite = (favoriteData: IFavorite) => {
     axios
       .post(
-        `/api/favorite/post`,
+        `/api/favorite/post?bookId=${favoriteData.book.bookId}`,
         {
-          book: favoriteData.book,
-          sessionId: favoriteData.sessionId,
+          sessionId: localStorage.getItem("sessionId"),
         },
         {
           withCredentials: true,
         }
       )
-      .then((res) => {
-        setFavoriteList((prev) => [...prev, favoriteData.book]);
+      .then(res => {
+        setFavoriteList(prev => [...prev, favoriteData.book]);
         console.log("즐겨찾기 등록 후 즐겨찾기 목록", favoriteList);
       })
-      .catch((err) => console.log("즐겨찾기 등록 실패", err));
+      .catch(err => console.log("즐겨찾기 등록 실패", err));
   };
   const deleteFavorite = (deleteData: IDeleteFavorite) => {
     axios
       .post(
-        `/api/favorite/delete`,
-        { bookId: deleteData.bookId, sessionId: deleteData.sessionId },
+        `/api/favorite/delete?bookId=${deleteData.bookId}`,
+        { sessionId: localStorage.getItem("sessionId") },
         {
           withCredentials: true,
         }
       )
-      .then((res) => {
-        setFavoriteList((prev) => {
+      .then(res => {
+        setFavoriteList(prev => {
           const newFavorite = prev.filter(
-            (book) => book.bookId !== deleteData.bookId
+            book => book.bookId !== deleteData.bookId
           );
           return newFavorite;
         });
         console.log("즐겨찾기 삭제 후 즐겨찾기 목록", favoriteList);
       })
-      .catch((err) => console.log("즐겨 찾기 실패!"));
+      .catch(err => console.log("즐겨 찾기 실패!"));
   };
 
   const {
@@ -392,31 +391,31 @@ const Search = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(true);
-    setIndex((prev) =>
+    setIndex(prev =>
       prev === Math.floor(data.length / offset) ? 0 : prev + 1
     );
   };
   const increaseDetailIdx = () => {
     setIsDetailNext(true);
-    setDetailIdx((prev) => (prev === 1 ? 0 : prev + 1));
+    setDetailIdx(prev => (prev === 1 ? 0 : prev + 1));
   };
   const decreaseIndex = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(false);
-    setIndex((prev) =>
+    setIndex(prev =>
       prev === 0 ? Math.floor(data.length / offset) : prev - 1
     );
   };
   const decreaseDetailIdx = () => {
     setIsDetailNext(false);
-    setDetailIdx((prev) => (prev === 0 ? 1 : prev - 1));
+    setDetailIdx(prev => (prev === 0 ? 1 : prev - 1));
   };
   const toggleLeaving = () => {
-    setLeaving((prev) => !prev);
+    setLeaving(prev => !prev);
   };
   const toggleDetailLeaving = () => {
-    setDetailLeaving((prev) => !prev);
+    setDetailLeaving(prev => !prev);
   };
   const onValid = (data: IForm) => {
     navigate(`/search?keyword=${data.keyword}`);
@@ -515,7 +514,7 @@ const Search = () => {
               >
                 {data!
                   .slice(index * offset, index * offset + offset)
-                  .map((book) => (
+                  .map(book => (
                     <Book
                       key={book.bookId}
                       layoutId={book.bookId + ""}
@@ -590,8 +589,7 @@ const Search = () => {
 
                                   {isLogin ? (
                                     favoriteList?.find(
-                                      (book) =>
-                                        book.bookId === clickedBook.bookId
+                                      book => book.bookId === clickedBook.bookId
                                     ) ? (
                                       <span
                                         onClick={() =>
@@ -632,7 +630,7 @@ const Search = () => {
                             )}
                           </DetailInfo>
                           <Bottom>
-                            {[0, 1].map((idx) => (
+                            {[0, 1].map(idx => (
                               <Circle
                                 key={idx}
                                 style={{
@@ -670,7 +668,7 @@ const Search = () => {
                             )}
                           </DetailInfo>
                           <Bottom>
-                            {[0, 1].map((idx) => (
+                            {[0, 1].map(idx => (
                               <Circle
                                 key={idx}
                                 style={{
