@@ -280,7 +280,6 @@ export interface IFavorite {
 const offset = 5;
 
 const Search = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(["sessionId"]);
   const isLogin = useRecoilValue(LoginState);
   const [searchParams, _] = useSearchParams();
   const keyword = searchParams.get("keyword");
@@ -325,7 +324,7 @@ const Search = () => {
     (async () => {
       const { data } = await axios.post(
         "/api/favorite/check",
-        { sessionId: cookies.sessionId },
+        { sessionId: localStorage.getItem("sessionId") },
         {
           headers: {
             sessionId: localStorage.getItem("sessionId"),
@@ -344,7 +343,7 @@ const Search = () => {
         `/api/favorite/post`,
         {
           book: favoriteData,
-          sessionId: cookies.sessionId,
+          sessionId: localStorage.getItem("sessionId"),
         },
         {
           headers: {
@@ -363,7 +362,7 @@ const Search = () => {
     axios
       .post(
         `/api/favorite/delete`,
-        { book: deleteData, sessionId: cookies.sessionId },
+        { book: deleteData, sessionId: localStorage.getItem("sessionId") },
         {
           headers: {
             sessionId: localStorage.getItem("sessionId"),
