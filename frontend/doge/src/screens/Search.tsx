@@ -599,28 +599,14 @@ const Search = () => {
                                     ) ? (
                                       <span
                                         onClick={() =>
-                                          deleteFavorite(
-                                            data.find(
-                                              (book) =>
-                                                book.bookId ===
-                                                clickedBook.bookId
-                                            )!
-                                          )
+                                          deleteFavorite(clickedBook)
                                         }
                                       >
                                         즐겨 찾기 삭제
                                       </span>
                                     ) : (
                                       <span
-                                        onClick={() =>
-                                          addFavorite(
-                                            data.find(
-                                              (book) =>
-                                                book.bookId ===
-                                                clickedBook.bookId
-                                            )!
-                                          )
-                                        }
+                                        onClick={() => addFavorite(clickedBook)}
                                       >
                                         즐겨 찾기 추가
                                       </span>
