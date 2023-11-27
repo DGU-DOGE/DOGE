@@ -7,6 +7,7 @@ import { fetchLogin } from "../apis/api";
 import { useRecoilState } from "recoil";
 import { LoginState } from "../stores/atoms";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -95,6 +96,7 @@ interface ILogin {
 
 const Login = () => {
   const [isLogin, setIsLogin] = useRecoilState(LoginState);
+  const [cookies, setCookie] = useCookies(["sessionId"]);
   const navigate = useNavigate();
   const {
     mutate,
@@ -107,13 +109,9 @@ const Login = () => {
       console.log(LoginData);
       console.log(LoginData.sessionId);
       localStorage.setItem("sessionId", LoginData.sessionId);
+      setCookie("sessionId", LoginData.sessionId);
       setIsLogin(true);
       navigate(`/`);
-      //로그인 성공 시 실행되는 부분
-      // 서버에서 받은 토큰을 저장하고 로그인 상태를 전역적으로 관리하여야 함.
-      //localStorage.setItem("accessToken", data.accessToken);
-      // atom.tsx의 Login상태 변경 하는 코드필요 ,, setIsLogin(true);
-      // 홈화면으로 이동하는 과정 navigate코드 쓸 필요있음  ,, navigate(`/`);
     },
     onError: (error) => {
       console.log(`로그인 실패 (사용자 입력 데이터 오류)`, error);
