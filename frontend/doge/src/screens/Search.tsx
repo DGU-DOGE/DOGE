@@ -21,6 +21,7 @@ import Loader from "./../components/Loader";
 import { useRecoilValue } from "recoil";
 import { LoginState } from "../stores/atoms";
 import { useCookies } from "react-cookie";
+import { getCookie } from "../stores/Cookie";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -327,7 +328,7 @@ const Search = () => {
         { sessionId: localStorage.getItem("sessionId") },
         {
           headers: {
-            sessionId: localStorage.getItem("sessionId"),
+            sessionId: await getCookie("sessionId"),
           },
           withCredentials: true,
         }
@@ -337,7 +338,7 @@ const Search = () => {
     })();
   }, []);
 
-  const addFavorite = (favoriteData: IBook) => {
+  const addFavorite = async (favoriteData: IBook) => {
     axios
       .post(
         `/api/favorite/post`,
@@ -347,7 +348,7 @@ const Search = () => {
         },
         {
           headers: {
-            sessionId: localStorage.getItem("sessionId"),
+            sessionId: await getCookie("sessionId"),
           },
           withCredentials: true,
         }
@@ -358,14 +359,14 @@ const Search = () => {
       })
       .catch((err) => console.log("즐겨찾기 등록 실패", err));
   };
-  const deleteFavorite = (deleteData: IBook) => {
+  const deleteFavorite = async (deleteData: IBook) => {
     axios
       .post(
         `/api/favorite/delete`,
         { book: deleteData, sessionId: localStorage.getItem("sessionId") },
         {
           headers: {
-            sessionId: localStorage.getItem("sessionId"),
+            sessionId: await getCookie("sessionId"),
           },
           withCredentials: true,
         }

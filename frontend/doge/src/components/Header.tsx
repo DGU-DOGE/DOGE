@@ -10,6 +10,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { LoginState } from "../stores/atoms";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { removeCookie } from "../stores/Cookie";
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -80,6 +81,7 @@ const Header = () => {
         setIsLogin(false);
         console.log(localStorage.getItem("sessionId"));
         localStorage.removeItem("sessionId");
+        removeCookie("sessionId");
         console.log("로그아웃 성공!");
         navigate(`/`);
       })
