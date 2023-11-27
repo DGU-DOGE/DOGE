@@ -327,6 +327,9 @@ const Search = () => {
         "/api/favorite/check",
         { sessionId: cookies.sessionId },
         {
+          headers: {
+            Authorization: `Bearer ${cookies.sessionId}`,
+          },
           withCredentials: true,
         }
       );
@@ -344,6 +347,9 @@ const Search = () => {
           sessionId: cookies.sessionId,
         },
         {
+          headers: {
+            Authorization: `Bearer ${cookies.sessionId}`,
+          },
           withCredentials: true,
         }
       )
@@ -359,6 +365,9 @@ const Search = () => {
         `/api/favorite/delete`,
         { book: deleteData, sessionId: cookies.sessionId },
         {
+          headers: {
+            Authorization: `Bearer ${cookies.sessionId}`,
+          },
           withCredentials: true,
         }
       )
