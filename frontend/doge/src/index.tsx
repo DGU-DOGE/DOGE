@@ -7,6 +7,7 @@ import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { theme } from "./theme";
 import router from "./routes/Router";
+import { CookiesProvider } from "react-cookie";
 
 const GlobalStyle = createGlobalStyle`
 @font-face {
@@ -64,7 +65,7 @@ table {
 }
 body{  
   font-family: 'Do Hyeon';
-  color: ${props => props.theme.black.darker};  
+  color: ${(props) => props.theme.black.darker};  
   line-height: 1.2;
 }
 a{
@@ -80,14 +81,16 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <RecoilRoot>
-      <QueryClientProvider client={client}>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <RouterProvider router={router} />
-        </ThemeProvider>
-      </QueryClientProvider>
-    </RecoilRoot>
+    <CookiesProvider>
+      <RecoilRoot>
+        <QueryClientProvider client={client}>
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <RouterProvider router={router} />
+          </ThemeProvider>
+        </QueryClientProvider>
+      </RecoilRoot>
+    </CookiesProvider>
   </React.StrictMode>
 );
 
