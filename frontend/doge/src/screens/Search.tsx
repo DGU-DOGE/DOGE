@@ -348,6 +348,9 @@ const Search = () => {
           sessionId: localStorage.getItem("sessionId"),
         },
         {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("sessionId")}`,
+          },
           withCredentials: true,
         }
       )
@@ -363,6 +366,9 @@ const Search = () => {
         `/api/favorite/delete?bookId=${deleteData.bookId}`,
         { sessionId: localStorage.getItem("sessionId") },
         {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("sessionId")}`,
+          },
           withCredentials: true,
         }
       )
