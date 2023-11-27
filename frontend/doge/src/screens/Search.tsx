@@ -328,7 +328,7 @@ const Search = () => {
         { sessionId: cookies.sessionId },
         {
           headers: {
-            Authorization: `Bearer ${cookies.sessionId}`,
+            sessionId: localStorage.getItem("sessionId"),
           },
           withCredentials: true,
         }
@@ -348,7 +348,7 @@ const Search = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${cookies.sessionId}`,
+            sessionId: localStorage.getItem("sessionId"),
           },
           withCredentials: true,
         }
@@ -366,7 +366,7 @@ const Search = () => {
         { book: deleteData, sessionId: cookies.sessionId },
         {
           headers: {
-            Authorization: `Bearer ${cookies.sessionId}`,
+            sessionId: localStorage.getItem("sessionId"),
           },
           withCredentials: true,
         }
