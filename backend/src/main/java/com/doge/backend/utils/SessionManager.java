@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Component
 public class SessionManager {
-    public static final String SESSION_COOKIE_NAME = "mySessionId";
+    public static final String SESSION_COOKIE_NAME = "sessionId";
     private final Map<String, Member> sessionStore = new HashMap<>();
 
     public String createSession(Member value, HttpServletResponse response) {
