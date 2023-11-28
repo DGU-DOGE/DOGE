@@ -324,10 +324,6 @@ const Search = () => {
   // 즐겨찾기 조회
   useEffect(() => {
     (async () => {
-      console.log(
-        "즐겨찾기 조회에 전달되는 세션ID",
-        localStorage.getItem("sessionId")
-      );
       const { data } = await axios.post(
         "/api/favorite/check",
         { sessionId: localStorage.getItem("sessionId") },
@@ -338,17 +334,15 @@ const Search = () => {
           withCredentials: true,
         }
       );
-      setFavoriteList(data);
-      console.log("사용자 즐겨찾기 목록", data);
+      setFavoriteList(data); //data.book
+      console.log(
+        "백에서 가져온 사용자 즐겨찾기 목록 (책 객체가 있는 배열의 형태여야함)",
+        data
+      ); // data.book
     })();
   }, []);
   // 즐겨찾기 등록
   const addFavorite = async (favoriteData: IBook) => {
-    console.log("즐겨찾기 등록에 전달되는 bookId", favoriteData.bookId);
-    console.log(
-      "즐겨찾기 등록에 전달되는 세션ID",
-      localStorage.getItem("sessionId")
-    );
     axios
       .post(
         `/api/favorite/post`,
@@ -370,11 +364,6 @@ const Search = () => {
   };
   // 즐겨찾기 삭제
   const deleteFavorite = async (deleteData: IBook) => {
-    console.log("즐겨찾기 삭제에 전달되는 bookId", deleteData.bookId);
-    console.log(
-      "즐겨찾기 삭제에 전달되는 세션Id",
-      localStorage.getItem("sessionId")
-    );
     axios
       .post(
         `/api/favorite/delete`,
