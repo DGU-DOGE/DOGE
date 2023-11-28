@@ -323,24 +323,27 @@ const Search = () => {
 
   // 즐겨찾기 조회
   useEffect(() => {
-    (async () => {
-      const { data } = await axios.post(
-        "/api/favorite/check",
-        { sessionId: localStorage.getItem("sessionId") },
-        {
-          headers: {
-            sessionId: await getCookie("sessionId"),
-          },
-          withCredentials: true,
-        }
-      );
-      setFavoriteList(data); //data.book
-      console.log(
-        "백에서 가져온 사용자 즐겨찾기 목록 (책 객체가 있는 배열의 형태여야함)",
-        data
-      ); // data.book
-    })();
+    if (isLogin) {
+      (async () => {
+        const { data } = await axios.post(
+          "/api/favorite/check",
+          { sessionId: localStorage.getItem("sessionId") },
+          {
+            headers: {
+              sessionId: await getCookie("sessionId"),
+            },
+            withCredentials: true,
+          }
+        );
+        setFavoriteList(data); //data.book
+        console.log(
+          "백에서 가져온 사용자 즐겨찾기 목록 (책 객체가 있는 배열의 형태여야함)",
+          data
+        ); // data.book
+      })();
+    }
   }, []);
+
   // 즐겨찾기 등록
   const addFavorite = async (favoriteData: IBook) => {
     axios
@@ -382,9 +385,9 @@ const Search = () => {
           const newFavorite = prev.filter(
             book => book.bookId !== deleteData.bookId
           );
+          console.log("즐겨찾기 삭제 후 즐겨찾기 목록", newFavorite);
           return newFavorite;
         });
-        console.log("즐겨찾기 삭제 후 즐겨찾기 목록", favoriteList);
       })
       .catch(err => console.log("즐겨 찾기 실패!"));
   };

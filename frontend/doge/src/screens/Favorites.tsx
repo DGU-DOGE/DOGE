@@ -189,6 +189,8 @@ const bookVariants = {
 const Favorites = () => {
   const navigate = useNavigate();
   const { scrollY } = useScroll();
+  const [clickedBook, setClickedBook] = useState<IBook>();
+  const [bookLoading, setBookLoading] = useState(true);
   const bookDetailMatch = useMatch(`/favorites/book-detail/:bookId`);
   const [detailIdx, setDetailIdx] = useState(0);
   const [isdetailNext, setIsDetailNext] = useState(true);
@@ -211,14 +213,18 @@ const Favorites = () => {
       setFavoriteList(data);
       console.log("백에서 받아온 사용자 즐겨찾기 목록", data);
     })();
-  }, []);
+  }, [favoriteList]);
 
-  const clickedBook =
-    bookDetailMatch?.params.bookId &&
-    favoriteList &&
-    favoriteList.find(
-      book => book.bookId + "" === bookDetailMatch.params.bookId
-    );
+  useEffect(() => {
+    if (bookDetailMatch?.params.bookId && favoriteList) {
+      setClickedBook(
+        favoriteList.find(
+          book => book.bookId + "" === bookDetailMatch.params.bookId
+        )
+      );
+    }
+    setBookLoading(false);
+  }, [bookDetailMatch]);
 
   const increaseDetailIdx = () => {
     setIsDetailNext(true);
@@ -306,6 +312,7 @@ const Favorites = () => {
                         <>
                           <div style={{ marginTop: 250 }}>
                             <BookImg
+                              src={clickedBook?.photoLink}
                               style={{
                                 width: 450,
                                 height: 450,
