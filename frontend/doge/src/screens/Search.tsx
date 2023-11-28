@@ -353,8 +353,7 @@ const Search = () => {
       .post(
         `/api/favorite/post`,
         {
-          book: favoriteData,
-          sessionId: localStorage.getItem("sessionId"),
+          bookId: favoriteData.bookId,
         },
         {
           headers: {
@@ -379,7 +378,9 @@ const Search = () => {
     axios
       .post(
         `/api/favorite/delete`,
-        { book: deleteData, sessionId: localStorage.getItem("sessionId") },
+        {
+          bookId: deleteData.bookId,
+        },
         {
           headers: {
             sessionId: await getCookie("sessionId"),
