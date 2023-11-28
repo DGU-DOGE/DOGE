@@ -51,7 +51,7 @@ const DeleteWrapper = styled.div`
     }
   }
   p {
-    font-size: 20px;
+    font-size: 24px;
     margin-top: 20px;
     margin-left: 100px;
   }
