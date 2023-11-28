@@ -112,14 +112,13 @@ const FindPassword = () => {
     formState: { errors },
     setError,
     setValue,
-    getValues,
   } = useForm<IJoin>({ mode: "onSubmit" });
   // 인증번호 발송에 대한 함수
   const { mutate: sendVerificationCode } = useMutation(
     (userId: string) => fetchSendCode(userId),
     {
       onSuccess: () => {
-        //인증번호가 발송되었습니다 라는 메세지 출력도 해주면 좋을 것 같음
+        console.log("인증번호 발송!");
         setVerificationSent(true);
         startTimer();
       },
@@ -133,9 +132,16 @@ const FindPassword = () => {
     (data: { userId: string; verifyNumber: string }) => fetchConfirmCode(data),
     {
       onSuccess: () => {
-        setVerificationSuccess(true);
         setValue("userPassword", "");
-        console.log("인증번호 인증 성공!");
+        if (timer > 0) {
+          setVerificationSuccess(true);
+          console.log("인증번호 인증 성공!");
+        } else {
+          console.log("인증번호 실패!");
+          setVerificationSuccess(false);
+          alert(`인증실패`);
+          navigate(`/find-password`);
+        }
       },
       onError: (error) => {
         console.log("인증번호 인증 실패", error);
@@ -173,6 +179,7 @@ const FindPassword = () => {
         if (!verificationSuccess) {
           verifyCode({ userId: data.userId, verifyNumber: data.verifyNumber });
         } else {
+          //changePassword({ userId: data.userId, userPassword: data.userPassword });
           axios
             .patch(
               "/api/user/change-password",
@@ -181,16 +188,9 @@ const FindPassword = () => {
             )
             .then((res) => {
               console.log("비밀번호 변경 성공!!");
-              console.log(res);
               navigate("/login");
             })
             .catch((err) => console.log("비밀번호 변경 실패!!", err));
-          /*
-          changePassword({
-            userId: data.userId,
-            userPassword: data.userPassword,
-          });
-          */
         }
       }
     } catch (error) {
@@ -202,15 +202,8 @@ const FindPassword = () => {
     const intervalId = setInterval(() => {
       setTimer((prevTimer) => prevTimer - 1);
     }, 1000);
-
-    // 3분 후에 타이머 중지
     setTimeout(() => {
       clearInterval(intervalId);
-      setTimer(0);
-      setVerificationSent(false);
-      setVerificationSuccess(false); // 타이머가 종료되면 verification 상태 초기화
-      alert(`인증실패`);
-      navigate(`/find-password`);
     }, 180000);
   };
   return (
@@ -248,24 +241,26 @@ const FindPassword = () => {
           {errors.userId && errors.userId.type === "pattern" && (
             <AlertMessage>{errors.userId.message}</AlertMessage>
           )}
-          {!verificationSuccess && (
-            <input
-              type="submit"
-              value={`인증번호 발송`}
-              style={{
-                position: "absolute",
-                top: 95,
-                display: "flex",
-                justifyContent: "flex-end",
-                width: "80%",
-                marginRight: 10,
-                fontSize: "24px",
-                border: "none",
-                backgroundColor: "transparent",
-                color: "#E17100",
-              }}
-            />
-          )}
+          {!verificationSuccess ? (
+            !verificationSent ? (
+              <input
+                type="submit"
+                value={`인증번호 발송`}
+                style={{
+                  position: "absolute",
+                  top: 95,
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "80%",
+                  marginRight: 10,
+                  fontSize: "24px",
+                  border: "none",
+                  backgroundColor: "transparent",
+                  color: "#E17100",
+                }}
+              />
+            ) : null
+          ) : null}
 
           {verificationSent ? (
             !verificationSuccess ? (

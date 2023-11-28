@@ -1,5 +1,6 @@
-package com.doge.backend.domain.member;
+package com.doge.backend.utils;
 
+import com.doge.backend.domain.member.Member;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
@@ -12,7 +13,7 @@ import java.util.UUID;
 
 @Component
 public class SessionManager {
-    public static final String SESSION_COOKIE_NAME = "mySessionId";
+    public static final String SESSION_COOKIE_NAME = "sessionId";
     private final Map<String, Member> sessionStore = new HashMap<>();
 
     public String createSession(Member value, HttpServletResponse response) {
@@ -26,7 +27,7 @@ public class SessionManager {
         return sessionId;
     }
 
-    public Object getSession(HttpServletRequest request) {
+    public Member getSession(HttpServletRequest request) {
         Cookie cookie = findCookie(request, SESSION_COOKIE_NAME);
         if (cookie == null) {
             return null;

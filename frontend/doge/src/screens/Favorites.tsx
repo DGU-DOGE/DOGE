@@ -1,13 +1,235 @@
 import { ReactComponent as LeftAngle } from "../assets/imgs/angle-left-solid.svg";
 import { ReactComponent as RightAngle } from "../assets/imgs/angle-right-solid.svg";
 import { ReactComponent as CancelBtn } from "../assets/imgs/xmark-solid.svg";
-import styled from "styled-components";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
-import { useLocation, useMatch, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import Loader from "../components/Loader";
+import { useMatch, useNavigate } from "react-router-dom";
+import { IBook, fetchUserData } from "../apis/api";
+import { getCookie } from "../stores/Cookie";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { fetchUserData } from "../apis/api";
+import styled from "styled-components";
+import axios from "axios";
+
+const Favorites = () => {
+  const navigate = useNavigate();
+  const { scrollY } = useScroll();
+  const [clickedBook, setClickedBook] = useState<IBook>();
+  const [bookLoading, setBookLoading] = useState(true);
+  const bookDetailMatch = useMatch(`/favorites/book-detail/:bookId`);
+  const [detailIdx, setDetailIdx] = useState(0);
+  const [isdetailNext, setIsDetailNext] = useState(true);
+  const [detailLeaving, setDetailLeaving] = useState(false);
+  const [favoriteList, setFavoriteList] = useState<IBook[]>([]);
+
+  // 즐겨찾기 조회
+  useEffect(() => {
+    (async () => {
+      const { data } = await axios.post(
+        "/api/favorite/check",
+        { sessionId: localStorage.getItem("sessionId") },
+        {
+          headers: {
+            sessionId: await getCookie("sessionId"),
+          },
+          withCredentials: true,
+        }
+      );
+      setFavoriteList(data);
+      console.log("백에서 받아온 사용자 즐겨찾기 목록", data);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (bookDetailMatch?.params.bookId && favoriteList) {
+      setClickedBook(
+        favoriteList.find(
+          (book) => book.bookId + "" === bookDetailMatch.params.bookId
+        )
+      );
+    }
+    setBookLoading(false);
+  }, [bookDetailMatch]);
+
+  const increaseDetailIdx = () => {
+    setIsDetailNext(true);
+    setDetailIdx((prev) => (prev === 1 ? 0 : prev + 1));
+  };
+  const decreaseDetailIdx = () => {
+    setIsDetailNext(false);
+    setDetailIdx((prev) => (prev === 0 ? 1 : prev - 1));
+  };
+  const toggleDetailLeaving = () => {
+    setDetailLeaving((prev) => !prev);
+  };
+  const onBookClick = (bookId: number) => {
+    navigate(`/favorites/book-detail/${bookId}`);
+  };
+  const onOverlayClick = () => {
+    setDetailIdx(0);
+    navigate(-1);
+  };
+
+  return (
+    <Wrapper>
+      {favoriteList.length === 0 ? (
+        <>
+          <Banner>
+            <Title>즐겨찾기</Title>
+          </Banner>
+          <NoResult>
+            <h1>즐겨찾기한 도서가 없습니다</h1>
+          </NoResult>
+        </>
+      ) : (
+        <>
+          <Banner>
+            <Title>즐겨찾기</Title>
+          </Banner>
+          <InfoWrapper>
+            <AnimatePresence>
+              <Slider key={0}>
+                {favoriteList.slice(0, 5).map((book) => (
+                  <Book
+                    key={book.bookId}
+                    layoutId={book.bookId + ""}
+                    variants={bookVariants}
+                    whileHover="hover"
+                    onClick={() => onBookClick(book.bookId!)}
+                  >
+                    <BookImg src={book.photoLink} />
+                    <BookInfo>
+                      <h1>{book.bookName}</h1>
+                      <h1>도서 위치 정보</h1>
+                      <h1>
+                        중앙도서관/{book.floor}/{book.shelfName}
+                      </h1>
+                    </BookInfo>
+                  </Book>
+                ))}
+              </Slider>
+            </AnimatePresence>
+            <AnimatePresence
+              onExitComplete={toggleDetailLeaving}
+              initial={false}
+            >
+              {bookDetailMatch && (
+                <>
+                  <Overlay
+                    onClick={onOverlayClick}
+                    animate={{ opacity: 1, transition: { type: "tween" } }}
+                    exit={{
+                      opacity: 0,
+                    }}
+                  />
+                  <DetailWrapper
+                    layoutId={bookDetailMatch.params.bookId + ""}
+                    style={{ top: scrollY.get() + 20 }}
+                  >
+                    <Slider key={detailIdx}>
+                      <CancelBtn
+                        onClick={() => {
+                          setDetailIdx(0);
+                          navigate(-1);
+                        }}
+                      />
+                      {detailIdx === 0 ? (
+                        <>
+                          <div style={{ marginTop: 250 }}>
+                            <BookImg
+                              src={clickedBook?.photoLink}
+                              style={{
+                                width: 250,
+                                height: 250,
+                                marginTop: 50,
+                              }}
+                            />
+                          </div>
+                          <DetailInfo>
+                            {clickedBook && (
+                              <>
+                                <h1>{clickedBook.bookName}</h1>
+                                <h1>저자명 : {clickedBook.author}</h1>
+                                <h1>발행사항 : {clickedBook.publisher}</h1>
+                                <h1>청구기호 : {clickedBook.callNumber}</h1>
+                                <span onClick={increaseDetailIdx}>
+                                  지도 보기
+                                </span>
+                                <RightAngle
+                                  onClick={increaseDetailIdx}
+                                  style={{
+                                    position: "absolute",
+                                    width: 70,
+                                    height: 70,
+                                    top: "50%",
+                                  }}
+                                />
+                              </>
+                            )}
+                          </DetailInfo>
+                          <Bottom>
+                            {[0, 1].map((idx) => (
+                              <Circle
+                                key={idx}
+                                style={{
+                                  backgroundColor:
+                                    idx === detailIdx ? "#898585" : "#C2C0C0",
+                                }}
+                              />
+                            ))}
+                          </Bottom>
+                        </>
+                      ) : (
+                        <>
+                          <MapLocation></MapLocation>
+                          <DetailInfo>
+                            {clickedBook && (
+                              <>
+                                <h1>도서관 {clickedBook.floor}</h1>
+                                <h1>책장 이름 : {clickedBook.shelfName}</h1>
+                                <h1>
+                                  표시된 서가에서 : {clickedBook.bookRow}층,
+                                  왼쪽에서 {clickedBook.bookCell}번째에
+                                  존재합니다
+                                </h1>
+                                <LeftAngle
+                                  onClick={decreaseDetailIdx}
+                                  style={{
+                                    position: "absolute",
+                                    width: 70,
+                                    height: 70,
+                                    left: 0,
+                                    top: "50%",
+                                  }}
+                                />
+                              </>
+                            )}
+                          </DetailInfo>
+                          <Bottom>
+                            {[0, 1].map((idx) => (
+                              <Circle
+                                key={idx}
+                                style={{
+                                  backgroundColor:
+                                    idx === detailIdx ? "#898585" : "#C2C0C0",
+                                }}
+                              />
+                            ))}
+                          </Bottom>
+                        </>
+                      )}
+                    </Slider>
+                  </DetailWrapper>
+                </>
+              )}
+            </AnimatePresence>
+          </InfoWrapper>
+        </>
+      )}
+    </Wrapper>
+  );
+};
+
+export default Favorites;
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -71,8 +293,7 @@ const Book = styled(motion.div)`
   }
   cursor: pointer;
 `;
-const BookImg = styled.div`
-  background-color: red;
+const BookImg = styled.img`
   background-size: cover;
   background-position: center center;
   min-width: 180px;
@@ -184,224 +405,3 @@ const bookVariants = {
   initial: { scale: 1 },
   hover: { scale: 1.03 },
 };
-
-const Favorites = () => {
-  const navigate = useNavigate();
-  const { scrollY } = useScroll();
-  const bookDetailMatch = useMatch(`/favorites/book-detail/:bookId`);
-  const [detailIdx, setDetailIdx] = useState(0);
-  const [isdetailNext, setIsDetailNext] = useState(true);
-  const [detailLeaving, setDetailLeaving] = useState(false);
-  //const {data, isLoading} = useQuery(["favorites"], fetchUserData);
-  const data = [
-    {
-      id: 100,
-      bookName: "국부론",
-      language: "한국어",
-      isbn: 0,
-      author: "저자0",
-      company: "com0",
-      bookImg: "",
-      floor: "지하1층",
-      shelfname: "일반도서",
-      loaction: { shelffloor: 0, shelfleft: 0 },
-    },
-    {
-      id: 101,
-      bookName: "공산당 선언",
-      language: "한국어",
-      isbn: 1,
-      author: "저자1",
-      company: "com1",
-      bookImg: "",
-      floor: "1층",
-      shelfname: "책장 이름1",
-      loaction: { shelffloor: 1, shelfleft: 1 },
-    },
-  ];
-  const clickedBook =
-    bookDetailMatch?.params.bookId &&
-    data.find((book) => book.id + "" === bookDetailMatch.params.bookId);
-
-  const increaseDetailIdx = () => {
-    setIsDetailNext(true);
-    setDetailIdx((prev) => (prev === 1 ? 0 : prev + 1));
-  };
-  const decreaseDetailIdx = () => {
-    setIsDetailNext(false);
-    setDetailIdx((prev) => (prev === 0 ? 1 : prev - 1));
-  };
-  const toggleDetailLeaving = () => {
-    setDetailLeaving((prev) => !prev);
-  };
-  const onBookClick = (bookId: number) => {
-    navigate(`/favorites/book-detail/${bookId}`);
-  };
-  const onOverlayClick = () => {
-    setDetailIdx(0);
-    navigate(-1);
-  };
-
-  // isLoading인 경우 Loader를, 아닌 경우에는 data의 개수에 따라 다른 컴포넌트를 출력한다.
-  return (
-    <Wrapper>
-      {data.length === 0 ? (
-        <>
-          <Banner>
-            <Title>즐겨찾기</Title>
-          </Banner>
-          <NoResult>
-            <h1>즐겨찾기한 도서가 없습니다</h1>
-          </NoResult>
-        </>
-      ) : (
-        <>
-          <Banner>
-            <Title>즐겨찾기</Title>
-          </Banner>
-          <InfoWrapper>
-            <AnimatePresence>
-              <Slider key={0}>
-                {data.slice(0, 5).map((book) => (
-                  <Book
-                    key={book.id}
-                    layoutId={book.id + ""}
-                    variants={bookVariants}
-                    whileHover="hover"
-                    onClick={() => onBookClick(book.id)}
-                  >
-                    <BookImg />
-                    <BookInfo>
-                      <h1>{book.bookName}</h1>
-                      <h1>도서 위치 정보</h1>
-                      <h1>
-                        중앙도서관/{book.floor}/{book.shelfname}
-                      </h1>
-                    </BookInfo>
-                  </Book>
-                ))}
-              </Slider>
-            </AnimatePresence>
-            <AnimatePresence
-              onExitComplete={toggleDetailLeaving}
-              initial={false}
-            >
-              {bookDetailMatch && (
-                <>
-                  <Overlay
-                    onClick={onOverlayClick}
-                    animate={{ opacity: 1, transition: { type: "tween" } }}
-                    exit={{
-                      opacity: 0,
-                    }}
-                  />
-                  <DetailWrapper
-                    layoutId={bookDetailMatch.params.bookId + ""}
-                    style={{ top: scrollY.get() + 20 }}
-                  >
-                    <Slider key={detailIdx}>
-                      <CancelBtn
-                        onClick={() => {
-                          setDetailIdx(0);
-                          navigate(-1);
-                        }}
-                      />
-                      {detailIdx === 0 ? (
-                        <>
-                          <div style={{ marginTop: 250 }}>
-                            <BookImg
-                              style={{
-                                width: 450,
-                                height: 450,
-                                marginTop: 50,
-                              }}
-                            />
-                          </div>
-                          <DetailInfo>
-                            {clickedBook && (
-                              <>
-                                <h1>{clickedBook.bookName}</h1>
-                                <h1>저자명 : {clickedBook.author}</h1>
-                                <h1>발행사항 : {clickedBook.company}</h1>
-                                <h1>ISBN : {clickedBook.isbn}</h1>
-                                <h1>언어 : {clickedBook.language}</h1>
-                                <span onClick={increaseDetailIdx}>
-                                  지도 보기
-                                </span>
-                                <RightAngle
-                                  onClick={increaseDetailIdx}
-                                  style={{
-                                    position: "absolute",
-                                    width: 70,
-                                    height: 70,
-                                    top: "50%",
-                                  }}
-                                />
-                              </>
-                            )}
-                          </DetailInfo>
-                          <Bottom>
-                            {[0, 1].map((idx) => (
-                              <Circle
-                                key={idx}
-                                style={{
-                                  backgroundColor:
-                                    idx === detailIdx ? "#898585" : "#C2C0C0",
-                                }}
-                              />
-                            ))}
-                          </Bottom>
-                        </>
-                      ) : (
-                        <>
-                          <MapLocation></MapLocation>
-                          <DetailInfo>
-                            {clickedBook && (
-                              <>
-                                <h1>도서관 {clickedBook.floor}</h1>
-                                <h1>책장 이름 : {clickedBook.shelfname}</h1>
-                                <h1>
-                                  표시된 서가에서 :{" "}
-                                  {clickedBook.loaction.shelffloor}층, 왼쪽에서{" "}
-                                  {clickedBook.loaction.shelfleft}번째에
-                                  존재합니다
-                                </h1>
-                                <LeftAngle
-                                  onClick={decreaseDetailIdx}
-                                  style={{
-                                    position: "absolute",
-                                    width: 70,
-                                    height: 70,
-                                    left: 0,
-                                    top: "50%",
-                                  }}
-                                />
-                              </>
-                            )}
-                          </DetailInfo>
-                          <Bottom>
-                            {[0, 1].map((idx) => (
-                              <Circle
-                                key={idx}
-                                style={{
-                                  backgroundColor:
-                                    idx === detailIdx ? "#898585" : "#C2C0C0",
-                                }}
-                              />
-                            ))}
-                          </Bottom>
-                        </>
-                      )}
-                    </Slider>
-                  </DetailWrapper>
-                </>
-              )}
-            </AnimatePresence>
-          </InfoWrapper>
-        </>
-      )}
-    </Wrapper>
-  );
-};
-
-export default Favorites;

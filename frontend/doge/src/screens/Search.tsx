@@ -8,8 +8,7 @@ import { useMatch, useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
-import { useState } from "react";
-import Loader from "../components/Loader";
+import { useEffect, useState } from "react";
 import {
   IBook,
   fetchAddFavorite,
@@ -17,6 +16,12 @@ import {
   fetchUserData,
 } from "../apis/api";
 import { useMutation, useQuery } from "react-query";
+import axios from "axios";
+import Loader from "./../components/Loader";
+import { useRecoilValue } from "recoil";
+import { LoginState } from "../stores/atoms";
+import { useCookies } from "react-cookie";
+import { getCookie } from "../stores/Cookie";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -104,8 +109,7 @@ const Book = styled(motion.div)`
   }
   cursor: pointer;
 `;
-const BookImg = styled.div`
-  background-color: red;
+const BookImg = styled.img`
   background-size: cover;
   background-position: center center;
   min-width: 180px;
@@ -270,37 +274,21 @@ const bookVariants = {
 interface IForm {
   keyword: string;
 }
-interface IFavorite {
-  userId: string;
+export interface IFavorite {
   book: IBook;
+  sessionId: any;
 }
 const offset = 5;
 
 const Search = () => {
+  const isLogin = useRecoilValue(LoginState);
   const [searchParams, _] = useSearchParams();
-  const { isLoading: userDataLoading, data: userData } = useQuery(
-    ["userInfo"],
-    fetchUserData,
-    {
-      onSuccess: () => {
-        console.log("사용자 정보 가져오기 성공");
-      },
-      onError: () => {
-        console.log("사용자 정보 가져오기 실패");
-      },
-    }
-  );
-  const { mutate: addFavorite } = useMutation(
-    (favoriteData: IFavorite) => fetchAddFavorite(favoriteData),
-    {
-      onSuccess: () => {
-        console.log("즐겨찾기 등록 성공");
-      },
-      onError: error => {
-        console.log(`즐겨찾기 등록 실패`, error);
-      },
-    }
-  );
+  const keyword = searchParams.get("keyword");
+  const [bookLoading, setBookLoading] = useState(true);
+  const [data, setData] = useState<IBook[]>([]);
+  const [clickedBook, setClickedBook] = useState<IBook>();
+  const [favoriteList, setFavoriteList] = useState<IBook[]>([]);
+
   const navigate = useNavigate();
   const bookDetailMatch = useMatch(`/search/book-detail/:bookId`);
   const [index, setIndex] = useState(0);
@@ -310,102 +298,106 @@ const Search = () => {
   const [leaving, setLeaving] = useState(false);
   const [detailLeaving, setDetailLeaving] = useState(false);
   const { scrollY } = useScroll();
+
+  useEffect(() => {
+    (async () => {
+      if (keyword) {
+        const { data: searchResult } = await axios.get(
+          `/search?keyword=${keyword}`,
+          { withCredentials: true }
+        );
+        setData(searchResult);
+        setBookLoading(false);
+      }
+    })();
+  }, [keyword]);
+
+  useEffect(() => {
+    if (bookDetailMatch?.params.bookId && data) {
+      setClickedBook(
+        data.find(book => book.bookId + "" === bookDetailMatch.params.bookId)
+      );
+    }
+    setBookLoading(false);
+  }, [bookDetailMatch]);
+
+  // 즐겨찾기 조회
+  useEffect(() => {
+    if (isLogin) {
+      (async () => {
+        const { data } = await axios.post(
+          "/api/favorite/check",
+          { sessionId: localStorage.getItem("sessionId") },
+          {
+            headers: {
+              sessionId: await getCookie("sessionId"),
+            },
+            withCredentials: true,
+          }
+        );
+        setFavoriteList(data); //data.book
+        console.log(
+          "백에서 가져온 사용자 즐겨찾기 목록 (책 객체가 있는 배열의 형태여야함)",
+          data
+        ); // data.book
+      })();
+    }
+  }, []);
+
+  // 즐겨찾기 등록
+  const addFavorite = async (favoriteData: IBook) => {
+    axios
+      .post(
+        `/api/favorite/post`,
+        {
+          bookId: favoriteData.bookId,
+        },
+        {
+          headers: {
+            sessionId: await getCookie("sessionId"),
+          },
+          withCredentials: true,
+        }
+      )
+      .then(res => {
+        setFavoriteList(prev => [...prev, favoriteData]);
+        console.log("즐겨찾기 등록 후 즐겨찾기 목록", favoriteList);
+      })
+      .catch(err => console.log("즐겨찾기 등록 실패", err));
+  };
+  // 즐겨찾기 삭제
+  const deleteFavorite = async (deleteData: IBook) => {
+    axios
+      .post(
+        `/api/favorite/delete`,
+        {
+          bookId: deleteData.bookId,
+        },
+        {
+          headers: {
+            sessionId: await getCookie("sessionId"),
+          },
+          withCredentials: true,
+        }
+      )
+      .then(res => {
+        setFavoriteList(prev => {
+          const newFavorite = prev.filter(
+            book => book.bookId !== deleteData.bookId
+          );
+          console.log("즐겨찾기 삭제 후 즐겨찾기 목록", newFavorite);
+          return newFavorite;
+        });
+      })
+      .catch(err => console.log("즐겨 찾기 실패!"));
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IForm>({ mode: "onSubmit" });
-  // const {isLoading, data, error} = useQuery(["searchResult", ()=>fetchSearch(searchParams.get("keyword") ?? "")])
-  //useQuery로 검색결과 받아오는 코드 작성 필요!!
-  const data = [
-    {
-      id: 100,
-      bookName: "국부론",
-      language: "한국어",
-      isbn: "",
-      author: "저자0",
-      company: "com0",
-      bookImg: "",
-      floor: "지하1층",
-      shelfname: "일반도서",
-      loaction: { shelffloor: 0, shelfleft: 0 },
-    },
-    {
-      id: 101,
-      bookName: "공산당 선언",
-      language: "한국어",
-      isbn: "",
-      author: "저자1",
-      company: "com1",
-      bookImg: "",
-      floor: "1층",
-      shelfname: "책장 이름1",
-      loaction: { shelffloor: 1, shelfleft: 1 },
-    },
-    {
-      id: 102,
-      bookName: "책2",
-      language: "한국어",
-      isbn: 2,
-      author: "저자2",
-      company: "com2",
-      bookImg: "",
-      floor: "2층",
-      shelfname: "책장 이름2",
-      loaction: { shelffloor: 2, shelfleft: 2 },
-    },
-    {
-      id: 103,
-      bookName: "책3",
-      language: "한국어",
-      isbn: 3,
-      author: "저자3",
-      company: "com3",
-      bookImg: "",
-      floor: "3층",
-      shelfname: "책장 이름3",
-      loaction: { shelffloor: 3, shelfleft: 3 },
-    },
-    {
-      id: 104,
-      bookName: "책4",
-      language: "한국어",
-      isbn: 4,
-      author: "저자4",
-      company: "com4",
-      bookImg: "",
-      floor: "4층",
-      shelfname: "책장 이름4",
-      loaction: { shelffloor: 4, shelfleft: 4 },
-    },
-    {
-      id: 105,
-      bookName: "책5",
-      language: "한국어",
-      isbn: 5,
-      author: "저자5",
-      company: "com5",
-      bookImg: "",
-      floor: "5층",
-      shelfname: "책장 이름5",
-      loaction: { shelffloor: 5, shelfleft: 5 },
-    },
-    {
-      id: 106,
-      bookName: "책6",
-      language: "한국어",
-      isbn: 6,
-      author: "저자6",
-      company: "com6",
-      bookImg: "",
-      floor: "6층",
-      shelfname: "책장 이름6",
-      loaction: { shelffloor: 6, shelfleft: 6 },
-    },
-  ];
-  const clickedBook =
-    bookDetailMatch?.params.bookId &&
-    data.find(book => book.id + "" === bookDetailMatch.params.bookId);
+
   const onBookClick = (bookId: number) => {
     navigate(`/search/book-detail/${bookId}`);
   };
@@ -447,8 +439,9 @@ const Search = () => {
     navigate(-1);
   };
 
-  // 추후에 isLoading인 경우에는 Loader컴포넌트 렌더링, 아닌 경우에는 data의 length에 따라 다른 컴포넌트 렌더링
-  return (
+  return bookLoading ? (
+    <Loader />
+  ) : (
     <Wrapper>
       {data.length === 0 ? (
         <>
@@ -533,22 +526,22 @@ const Search = () => {
                 exit="exit"
                 transition={{ type: "tween", duration: 0.2 }}
               >
-                {data
+                {data!
                   .slice(index * offset, index * offset + offset)
                   .map(book => (
                     <Book
-                      key={book.id}
-                      layoutId={book.id + ""}
+                      key={book.bookId}
+                      layoutId={book.bookId + ""}
                       variants={bookVariants}
                       whileHover="hover"
-                      onClick={() => onBookClick(book.id)}
+                      onClick={() => onBookClick(book.bookId)}
                     >
-                      <BookImg />
+                      <BookImg src={book.photoLink} />
                       <BookInfo>
                         <h1>{book.bookName}</h1>
                         <h1>도서 위치 정보</h1>
                         <h1>
-                          중앙도서관/{book.floor}/{book.shelfname}
+                          중앙도서관/{book.floor}/{book.shelfName}
                         </h1>
                       </BookInfo>
                     </Book>
@@ -588,6 +581,7 @@ const Search = () => {
                         <>
                           <div style={{ marginTop: 250 }}>
                             <BookImg
+                              src={clickedBook?.photoLink}
                               style={{
                                 width: 250,
                                 height: 250,
@@ -600,14 +594,32 @@ const Search = () => {
                               <>
                                 <h1>{clickedBook.bookName}</h1>
                                 <h1>저자명 : {clickedBook.author}</h1>
-                                <h1>발행사항 : {clickedBook.company}</h1>
-                                <h1>ISBN : {clickedBook.isbn}</h1>
-                                <h1>언어 : {clickedBook.language}</h1>
+                                <h1>발행사항 : {clickedBook.publisher}</h1>
+                                <h1>청구기호 : {clickedBook.callNumber}</h1>
                                 <div>
                                   <span onClick={increaseDetailIdx}>
                                     지도 보기
                                   </span>
-                                  <span>즐겨 찾기 추가</span>
+
+                                  {isLogin ? (
+                                    favoriteList?.find(
+                                      book => book.bookId === clickedBook.bookId
+                                    ) ? (
+                                      <span
+                                        onClick={() =>
+                                          deleteFavorite(clickedBook)
+                                        }
+                                      >
+                                        즐겨 찾기 삭제
+                                      </span>
+                                    ) : (
+                                      <span
+                                        onClick={() => addFavorite(clickedBook)}
+                                      >
+                                        즐겨 찾기 추가
+                                      </span>
+                                    )
+                                  ) : null}
                                 </div>
                                 <RightAngle
                                   onClick={increaseDetailIdx}
@@ -640,11 +652,10 @@ const Search = () => {
                             {clickedBook && (
                               <>
                                 <h1>도서관 {clickedBook.floor}</h1>
-                                <h1>책장 이름 : {clickedBook.shelfname}</h1>
+                                <h1>책장 이름 : {clickedBook.shelfName}</h1>
                                 <h1>
-                                  표시된 서가에서 :{" "}
-                                  {clickedBook.loaction.shelffloor}층, 왼쪽에서{" "}
-                                  {clickedBook.loaction.shelfleft}번째에
+                                  표시된 서가에서 : {clickedBook.bookRow}층,
+                                  왼쪽에서 {clickedBook.bookCell}번째에
                                   존재합니다
                                 </h1>
                                 <LeftAngle

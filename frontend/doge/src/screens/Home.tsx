@@ -46,7 +46,7 @@ const Title = styled.div`
     font-size: 68px;
   }
   span {
-    color: ${(props) => props.theme.orange};
+    color: ${props => props.theme.orange};
   }
 `;
 const InfoWrapper = styled.div`
@@ -54,7 +54,7 @@ const InfoWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   min-width: 800px;
-  background-color: ${(props) => props.theme.gray.lighter};
+  background-color: ${props => props.theme.gray.lighter};
   border-radius: 10px;
 `;
 const Search = styled.form`
@@ -70,8 +70,8 @@ const Input = styled.input`
   width: 95%;
   height: 70px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 28px;
@@ -87,7 +87,7 @@ const SearchBtn = styled.div`
 const AlertMessage = styled.span`
   margin-left: 23px;
   margin-bottom: 10px;
-  color: ${(props) => props.theme.orange};
+  color: ${props => props.theme.orange};
   font-size: 20px;
 `;
 const MapWrapper = styled.div`
@@ -131,7 +131,7 @@ const DetailMap = styled(motion.div)`
   left: 0;
   right: 0;
   margin: 0 auto;
-  background-color: ${(props) => props.theme.gray.darker};
+  background-color: ${props => props.theme.gray.darker};
   border-radius: 15px;
   overflow: hidden;
   display: flex;
@@ -159,13 +159,6 @@ interface IForm {
 }
 
 const Home = () => {
-  const dummydata = { email: "1234", password: "123456" };
-  useEffect(() => {
-    axios
-      .post(`/test/doge`, dummydata, { withCredentials: true })
-      .then((res) => console.log("도지 post 테스트 성공", res))
-      .catch((err) => console.log("도지 post 요청 실패", err));
-  }, []);
   const navigate = useNavigate();
   const { scrollY } = useScroll();
   const detailMapMatch = useMatch(`/map-detail/:mapId`);
@@ -182,16 +175,16 @@ const Home = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(true);
-    setIndex((prev) => (prev === 3 ? 0 : prev + 1));
+    setIndex(prev => (prev === 3 ? 0 : prev + 1));
   };
   const decreaseIndex = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(false);
-    setIndex((prev) => (prev === 0 ? 3 : prev - 1));
+    setIndex(prev => (prev === 0 ? 3 : prev - 1));
   };
   const toggleLeaving = () => {
-    setLeaving((prev) => !prev);
+    setLeaving(prev => !prev);
   };
   const onOverlayClick = () => {
     navigate(-1);
@@ -307,7 +300,7 @@ const Home = () => {
           ) : null}
         </AnimatePresence>
         <Bottom>
-          {[0, 1, 2, 3].map((idx) => (
+          {[0, 1, 2, 3].map(idx => (
             <Circle
               key={idx}
               style={{ backgroundColor: idx === index ? "#898585" : "#D9D9D9" }}

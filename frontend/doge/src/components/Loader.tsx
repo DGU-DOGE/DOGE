@@ -1,6 +1,16 @@
-import React from "react";
 import styled from "styled-components";
 import SpinnerGif from "../assets/gifs/spinner.gif";
+
+const Loader = () => {
+  return (
+    <Background>
+      <LoadingText>잠시만 기다려 주세요.</LoadingText>
+      <img src={SpinnerGif} alt="로딩중" width="7%" />
+    </Background>
+  );
+};
+
+export default Loader;
 
 export const Background = styled.div`
   position: fixed;
@@ -22,13 +32,3 @@ export const LoadingText = styled.div`
   color: black;
   margin-bottom: 30px;
 `;
-const Loader = () => {
-  return (
-    <Background>
-      <LoadingText>잠시만 기다려 주세요.</LoadingText>
-      <img src={SpinnerGif} alt="로딩중" width="7%" />
-    </Background>
-  );
-};
-
-export default Loader;

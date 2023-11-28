@@ -35,7 +35,7 @@ const Title = styled.div`
     font-size: 68px;
   }
   span {
-    color: ${(props) => props.theme.orange};
+    color: ${props => props.theme.orange};
   }
 `;
 const JoinWrapper = styled.div`
@@ -53,8 +53,8 @@ const JoinForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${(props) => props.theme.orange};
-    color: ${(props) => props.theme.white.lighter};
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.lighter};
     font-size: 30px;
   }
   padding-top: 70px;
@@ -63,8 +63,8 @@ const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
@@ -73,7 +73,7 @@ const AlertMessage = styled.span`
   width: 80%;
   margin-left: 23px;
   margin-bottom: 10px;
-  color: ${(props) => props.theme.orange};
+  color: ${props => props.theme.orange};
   font-size: 20px;
 `;
 const Timer = styled.div`
@@ -95,30 +95,28 @@ interface IJoin {
 }
 
 const Join = () => {
-  const [timerId, setTimerId] = useState<any>(null);
   const navigate = useNavigate();
   const [timer, setTimer] = useState(0);
   const [verificationSent, setVerificationSent] = useState(false);
   const [verificationSuccess, setVerificationSuccess] = useState(false);
-
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
     setValue,
-    getValues,
   } = useForm<IJoin>({ mode: "onSubmit" });
+
   // 인증번호 발송에 대한 함수
   const { mutate: sendVerificationCode } = useMutation(
     (userId: string) => fetchSendCode(userId),
     {
       onSuccess: () => {
-        //인증번호가 발송되었습니다 라는 메세지 출력도 해주면 좋을 것 같음
+        console.log("인증번호 발송!");
         setVerificationSent(true);
         startTimer();
       },
-      onError: (error) => {
+      onError: error => {
         console.error("인증번호 발송 실패", error);
       },
     }
@@ -128,11 +126,18 @@ const Join = () => {
     (data: { userId: string; verifyNumber: string }) => fetchConfirmCode(data),
     {
       onSuccess: () => {
-        setVerificationSuccess(true);
         setValue("userPassword", "");
-        console.log("인증번호 인증 성공!");
+        if (timer > 0) {
+          setVerificationSuccess(true);
+          console.log("인증번호 인증 성공!");
+        } else {
+          console.log("인증번호 실패!");
+          setVerificationSuccess(false);
+          alert(`인증실패`);
+          navigate(`/join`);
+        }
       },
-      onError: (error) => {
+      onError: error => {
         console.log("인증번호 인증 실패", error);
       },
     }
@@ -145,7 +150,7 @@ const Join = () => {
         console.log("회원가입 성공!");
         navigate(`/login`);
       },
-      onError: (error) => {
+      onError: error => {
         console.log("회원가입 실패!", error);
       },
     }
@@ -178,22 +183,12 @@ const Join = () => {
     }
   };
   const startTimer = () => {
-    setTimer(180); // 3분을 초 단위로 설정
+    setTimer(180);
     const intervalId = setInterval(() => {
-      setTimer((prevTimer) => prevTimer - 1);
+      setTimer(prevTimer => prevTimer - 1);
     }, 1000);
-
-    // 3분 후에 타이머 중지
     setTimeout(() => {
-      if (verificationSent && verificationSuccess) {
-        clearInterval(intervalId);
-        setTimer(0);
-      } else {
-        setVerificationSent(false);
-        setVerificationSuccess(false); // 타이머가 종료되면 verification 상태 초기화
-        alert(`인증실패`);
-        navigate(`/join`);
-      }
+      clearInterval(intervalId);
     }, 180000);
   };
   return (
@@ -231,25 +226,26 @@ const Join = () => {
           {errors.userId && errors.userId.type === "pattern" && (
             <AlertMessage>{errors.userId.message}</AlertMessage>
           )}
-          {!verificationSuccess && (
-            <input
-              disabled={verificationSent}
-              type="submit"
-              value={`인증번호 발송`}
-              style={{
-                position: "absolute",
-                top: 95,
-                display: "flex",
-                justifyContent: "flex-end",
-                width: "80%",
-                marginRight: 10,
-                fontSize: "24px",
-                border: "none",
-                backgroundColor: "transparent",
-                color: "#E17100",
-              }}
-            />
-          )}
+          {!verificationSuccess ? (
+            !verificationSent ? (
+              <input
+                type="submit"
+                value={`인증번호 발송`}
+                style={{
+                  position: "absolute",
+                  top: 95,
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "80%",
+                  marginRight: 10,
+                  fontSize: "24px",
+                  border: "none",
+                  backgroundColor: "transparent",
+                  color: "#E17100",
+                }}
+              />
+            ) : null
+          ) : null}
 
           {verificationSent ? (
             !verificationSuccess ? (
