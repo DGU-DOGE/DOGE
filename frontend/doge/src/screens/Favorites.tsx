@@ -213,7 +213,7 @@ const Favorites = () => {
       setFavoriteList(data);
       console.log("백에서 받아온 사용자 즐겨찾기 목록", data);
     })();
-  }, [favoriteList]);
+  }, []);
 
   useEffect(() => {
     if (bookDetailMatch?.params.bookId && favoriteList) {
