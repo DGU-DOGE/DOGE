@@ -86,7 +86,7 @@ const UserInfo = () => {
     navigate("/favorites");
   };
   const handleDeleteUser = () => {
-    navigate(`delete-account`);
+    navigate(`/delete-account`);
   };
 
   return (
