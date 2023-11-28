@@ -31,7 +31,7 @@ const Title = styled.div`
     font-size: 68px;
   }
   span {
-    color: ${(props) => props.theme.orange};
+    color: ${props => props.theme.orange};
   }
 `;
 const InfoWrapper = styled.div`
@@ -44,8 +44,8 @@ const InfoWrapper = styled.div`
     margin: 80px;
   }
   input[type="button"] {
-    background-color: ${(props) => props.theme.orange};
-    color: ${(props) => props.theme.white.darker};
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.darker};
     cursor: pointer;
   }
 `;
@@ -53,8 +53,8 @@ const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${(props) => props.theme.yellow};
-  border: 1px solid ${(props) => props.theme.yellow};
+  background-color: ${props => props.theme.yellow};
+  border: 1px solid ${props => props.theme.yellow};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
@@ -73,14 +73,14 @@ const UserInfo = () => {
   };
   const handleDeleteUser = (event: React.MouseEvent<HTMLInputElement>) => {
     axios
-      .delete(``, { headers: {}, withCredentials: true }) //Authorization 필요
+      .delete(``, { withCredentials: true }) //Authorization 필요
       .then(() => {
         //atoms.tsx참고해서 userLogin상태 false로 처리
         //localStorage.removeItem("accessToken");
         //alert("회원 탈퇴 완료");
         navigate("/");
       })
-      .catch((err) => console.log("회원 탈퇴 실패", err));
+      .catch(err => console.log("회원 탈퇴 실패", err));
   };
   return (
     <>
@@ -102,7 +102,7 @@ const UserInfo = () => {
         <Input
           value={userEmail}
           readOnly
-          onClick={(event) => {
+          onClick={event => {
             event.currentTarget.blur();
           }}
         />

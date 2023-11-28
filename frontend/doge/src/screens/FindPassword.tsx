@@ -41,7 +41,7 @@ const Title = styled.div`
     font-size: 68px;
   }
   span {
-    color: ${(props) => props.theme.orange};
+    color: ${props => props.theme.orange};
   }
 `;
 const JoinWrapper = styled.div`
@@ -59,8 +59,8 @@ const JoinForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${(props) => props.theme.orange};
-    color: ${(props) => props.theme.white.lighter};
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.lighter};
     font-size: 30px;
   }
   padding-top: 70px;
@@ -69,8 +69,8 @@ const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
@@ -79,7 +79,7 @@ const AlertMessage = styled.span`
   width: 80%;
   margin-left: 23px;
   margin-bottom: 10px;
-  color: ${(props) => props.theme.orange};
+  color: ${props => props.theme.orange};
   font-size: 20px;
 `;
 const Timer = styled.div`
@@ -112,18 +112,17 @@ const FindPassword = () => {
     formState: { errors },
     setError,
     setValue,
-    getValues,
   } = useForm<IJoin>({ mode: "onSubmit" });
   // 인증번호 발송에 대한 함수
   const { mutate: sendVerificationCode } = useMutation(
     (userId: string) => fetchSendCode(userId),
     {
       onSuccess: () => {
-        //인증번호가 발송되었습니다 라는 메세지 출력도 해주면 좋을 것 같음
+        console.log("인증번호 발송!");
         setVerificationSent(true);
         startTimer();
       },
-      onError: (error) => {
+      onError: error => {
         console.error("인증번호 발송 실패", error);
       },
     }
@@ -138,13 +137,13 @@ const FindPassword = () => {
           setVerificationSuccess(true);
           console.log("인증번호 인증 성공!");
         } else {
+          console.log("인증번호 실패!");
           setVerificationSuccess(false);
           alert(`인증실패`);
           navigate(`/find-password`);
-          console.log("인증번호 실패!");
         }
       },
-      onError: (error) => {
+      onError: error => {
         console.log("인증번호 인증 실패", error);
       },
     }
@@ -158,7 +157,7 @@ const FindPassword = () => {
         console.log("비밀번호 변경 성공!");
         navigate(`/login`);
       },
-      onError: (error) => {
+      onError: error => {
         console.log("비밀번호 변경 실패!", error);
       },
     }
@@ -180,24 +179,18 @@ const FindPassword = () => {
         if (!verificationSuccess) {
           verifyCode({ userId: data.userId, verifyNumber: data.verifyNumber });
         } else {
+          //changePassword({ userId: data.userId, userPassword: data.userPassword });
           axios
             .patch(
               "/api/user/change-password",
               { email: data.userId, password: data.userPassword },
               { withCredentials: true }
             )
-            .then((res) => {
+            .then(res => {
               console.log("비밀번호 변경 성공!!");
-              console.log(res);
               navigate("/login");
             })
-            .catch((err) => console.log("비밀번호 변경 실패!!", err));
-          /*
-          changePassword({
-            userId: data.userId,
-            userPassword: data.userPassword,
-          });
-          */
+            .catch(err => console.log("비밀번호 변경 실패!!", err));
         }
       }
     } catch (error) {
@@ -207,7 +200,7 @@ const FindPassword = () => {
   const startTimer = () => {
     setTimer(180); // 3분을 초 단위로 설정
     const intervalId = setInterval(() => {
-      setTimer((prevTimer) => prevTimer - 1);
+      setTimer(prevTimer => prevTimer - 1);
     }, 1000);
   };
   return (

@@ -28,7 +28,7 @@ const InfoWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   min-width: 800px;
-  background-color: ${(props) => props.theme.gray.lighter};
+  background-color: ${props => props.theme.gray.lighter};
   border-radius: 10px;
   position: relative;
 `;
@@ -60,7 +60,7 @@ const Slider = styled(motion.div)`
 `;
 const Book = styled(motion.div)`
   display: flex;
-  background-color: ${(props) => props.theme.gray.lightdark};
+  background-color: ${props => props.theme.gray.lightdark};
   width: 95%;
   height: 200px;
   margin: 20px 0px;
@@ -115,7 +115,7 @@ const DetailWrapper = styled(motion.div)`
   left: 0;
   right: 0;
   margin: 0 auto;
-  background-color: ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
   border-radius: 15px;
   overflow: hidden;
   display: flex;
@@ -125,7 +125,7 @@ const DetailWrapper = styled(motion.div)`
 const DetailInfo = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.gray.bright};
+  background-color: ${props => props.theme.gray.bright};
   width: 70%;
   max-width: 500px;
 
@@ -143,9 +143,9 @@ const DetailInfo = styled.div`
     margin-top: 20px;
   }
   span {
-    background-color: ${(props) => props.theme.orange};
+    background-color: ${props => props.theme.orange};
     font-size: 12px;
-    color: ${(props) => props.theme.white.lighter};
+    color: ${props => props.theme.white.lighter};
     width: 60px;
     text-align: center;
     padding: 3px;
@@ -192,47 +192,47 @@ const Favorites = () => {
   const [detailIdx, setDetailIdx] = useState(0);
   const [isdetailNext, setIsDetailNext] = useState(true);
   const [detailLeaving, setDetailLeaving] = useState(false);
-  //const {data, isLoading} = useQuery(["favorites"], fetchUserData);
   const data = [
     {
-      id: 100,
+      bookId: 100,
+      callNumber: "123124214",
       bookName: "국부론",
-      language: "한국어",
-      isbn: 0,
       author: "저자0",
-      company: "com0",
-      bookImg: "",
+      publisher: "com0",
+      photoLink: "",
       floor: "지하1층",
-      shelfname: "일반도서",
-      loaction: { shelffloor: 0, shelfleft: 0 },
+      shelfName: "일반도서",
+      bookRow: 1,
+      bookCell: 2,
     },
     {
-      id: 101,
+      boookId: 101,
+      callNumber: "23425435",
       bookName: "공산당 선언",
-      language: "한국어",
-      isbn: 1,
       author: "저자1",
-      company: "com1",
-      bookImg: "",
+      publisher: "com1",
+      photoLink: "",
       floor: "1층",
       shelfname: "책장 이름1",
-      loaction: { shelffloor: 1, shelfleft: 1 },
+      bookRow: 1,
+      bookCell: 1,
     },
   ];
   const clickedBook =
     bookDetailMatch?.params.bookId &&
-    data.find((book) => book.id + "" === bookDetailMatch.params.bookId);
+    data &&
+    data.find(book => book.bookId + "" === bookDetailMatch.params.bookId);
 
   const increaseDetailIdx = () => {
     setIsDetailNext(true);
-    setDetailIdx((prev) => (prev === 1 ? 0 : prev + 1));
+    setDetailIdx(prev => (prev === 1 ? 0 : prev + 1));
   };
   const decreaseDetailIdx = () => {
     setIsDetailNext(false);
-    setDetailIdx((prev) => (prev === 0 ? 1 : prev - 1));
+    setDetailIdx(prev => (prev === 0 ? 1 : prev - 1));
   };
   const toggleDetailLeaving = () => {
-    setDetailLeaving((prev) => !prev);
+    setDetailLeaving(prev => !prev);
   };
   const onBookClick = (bookId: number) => {
     navigate(`/favorites/book-detail/${bookId}`);
@@ -242,7 +242,6 @@ const Favorites = () => {
     navigate(-1);
   };
 
-  // isLoading인 경우 Loader를, 아닌 경우에는 data의 개수에 따라 다른 컴포넌트를 출력한다.
   return (
     <Wrapper>
       {data.length === 0 ? (
@@ -262,20 +261,20 @@ const Favorites = () => {
           <InfoWrapper>
             <AnimatePresence>
               <Slider key={0}>
-                {data.slice(0, 5).map((book) => (
+                {data.slice(0, 5).map(book => (
                   <Book
-                    key={book.id}
-                    layoutId={book.id + ""}
+                    key={book.bookId}
+                    layoutId={book.bookId + ""}
                     variants={bookVariants}
                     whileHover="hover"
-                    onClick={() => onBookClick(book.id)}
+                    onClick={() => onBookClick(book.bookId!)}
                   >
                     <BookImg />
                     <BookInfo>
                       <h1>{book.bookName}</h1>
                       <h1>도서 위치 정보</h1>
                       <h1>
-                        중앙도서관/{book.floor}/{book.shelfname}
+                        중앙도서관/{book.floor}/{book.shelfName}
                       </h1>
                     </BookInfo>
                   </Book>
@@ -322,9 +321,8 @@ const Favorites = () => {
                               <>
                                 <h1>{clickedBook.bookName}</h1>
                                 <h1>저자명 : {clickedBook.author}</h1>
-                                <h1>발행사항 : {clickedBook.company}</h1>
-                                <h1>ISBN : {clickedBook.isbn}</h1>
-                                <h1>언어 : {clickedBook.language}</h1>
+                                <h1>발행사항 : {clickedBook.publisher}</h1>
+                                <h1>청구기호 : {clickedBook.callNumber}</h1>
                                 <span onClick={increaseDetailIdx}>
                                   지도 보기
                                 </span>
@@ -341,7 +339,7 @@ const Favorites = () => {
                             )}
                           </DetailInfo>
                           <Bottom>
-                            {[0, 1].map((idx) => (
+                            {[0, 1].map(idx => (
                               <Circle
                                 key={idx}
                                 style={{
@@ -361,9 +359,8 @@ const Favorites = () => {
                                 <h1>도서관 {clickedBook.floor}</h1>
                                 <h1>책장 이름 : {clickedBook.shelfname}</h1>
                                 <h1>
-                                  표시된 서가에서 :{" "}
-                                  {clickedBook.loaction.shelffloor}층, 왼쪽에서{" "}
-                                  {clickedBook.loaction.shelfleft}번째에
+                                  표시된 서가에서 : {clickedBook.bookRow}층,
+                                  왼쪽에서 {clickedBook.bookCell}번째에
                                   존재합니다
                                 </h1>
                                 <LeftAngle
@@ -380,7 +377,7 @@ const Favorites = () => {
                             )}
                           </DetailInfo>
                           <Bottom>
-                            {[0, 1].map((idx) => (
+                            {[0, 1].map(idx => (
                               <Circle
                                 key={idx}
                                 style={{
