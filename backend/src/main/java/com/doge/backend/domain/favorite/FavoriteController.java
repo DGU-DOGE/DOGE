@@ -19,17 +19,17 @@ public class FavoriteController {
     private final FavoriteService favoriteService;
 
     @PostMapping("/check")
-    public List<Favorite> check(HttpServletRequest request) {
+    public List<Book> check(HttpServletRequest request) {
         return favoriteService.check(request);
     }
 
     @PostMapping("/post")
     public void post(@RequestBody Book book, HttpServletRequest request) {
-        favoriteService.post(book, request);
+        favoriteService.post(book.getBookId(), request);
     }
 
     @PostMapping("/delete")
-    public void delete(@RequestBody Long bookId, HttpServletRequest request) {
-        favoriteService.delete(bookId, request);
+    public void delete(@RequestBody Book book, HttpServletRequest request) {
+        favoriteService.delete(book.getBookId(), request);
     }
 }
