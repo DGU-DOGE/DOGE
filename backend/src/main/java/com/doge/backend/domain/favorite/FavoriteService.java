@@ -17,13 +17,7 @@ public class FavoriteService {
     private final SessionManager sessionManager;
 
     public List<Favorite> check(HttpServletRequest request) {
-        List<Favorite> favorites;
-        try {
-            favorites = favoriteRepository.findAllByMember_MemberId(sessionManager.getSession(request).getMemberId());
-        } catch (NullPointerException e) {
-            return new ArrayList<>();
-        }
-        return favorites;
+        return favoriteRepository.findAllByMember_MemberId(sessionManager.getSession(request).getMemberId());
     }
 
     public void post(Book book, HttpServletRequest request) {
