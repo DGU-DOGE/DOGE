@@ -76,6 +76,7 @@ const UserInfo = () => {
         })
         .then(res => {
           console.log("사용자 email 받아오기 성공!");
+          console.log("백엔드로 부터 받은 값", res);
           setUserEmail(res.data);
         })
         .catch(err => console.log("사용자 email 받아오기 실패!"));
