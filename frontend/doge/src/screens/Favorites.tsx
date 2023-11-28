@@ -314,8 +314,8 @@ const Favorites = () => {
                             <BookImg
                               src={clickedBook?.photoLink}
                               style={{
-                                width: 450,
-                                height: 450,
+                                width: 250,
+                                height: 250,
                                 marginTop: 50,
                               }}
                             />
