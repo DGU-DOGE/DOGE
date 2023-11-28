@@ -73,8 +73,7 @@ const Book = styled(motion.div)`
   }
   cursor: pointer;
 `;
-const BookImg = styled.div`
-  background-color: red;
+const BookImg = styled.img`
   background-size: cover;
   background-position: center center;
   min-width: 180px;
@@ -199,10 +198,6 @@ const Favorites = () => {
   // 즐겨찾기 조회
   useEffect(() => {
     (async () => {
-      console.log(
-        "즐겨찾기 조회에 전달되는 세션ID",
-        localStorage.getItem("sessionId")
-      );
       const { data } = await axios.post(
         "/api/favorite/check",
         { sessionId: localStorage.getItem("sessionId") },
@@ -271,7 +266,7 @@ const Favorites = () => {
                     whileHover="hover"
                     onClick={() => onBookClick(book.bookId!)}
                   >
-                    <BookImg />
+                    <BookImg src={book.photoLink} />
                     <BookInfo>
                       <h1>{book.bookName}</h1>
                       <h1>도서 위치 정보</h1>
