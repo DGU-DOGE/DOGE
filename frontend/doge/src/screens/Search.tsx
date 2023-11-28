@@ -344,7 +344,7 @@ const Search = () => {
   }, []);
   // 즐겨찾기 등록
   const addFavorite = async (favoriteData: IBook) => {
-    console.log("즐겨찾기 등록에 전달되는 book", favoriteData);
+    console.log("즐겨찾기 등록에 전달되는 bookId", favoriteData.bookId);
     console.log(
       "즐겨찾기 등록에 전달되는 세션ID",
       localStorage.getItem("sessionId")
@@ -370,7 +370,7 @@ const Search = () => {
   };
   // 즐겨찾기 삭제
   const deleteFavorite = async (deleteData: IBook) => {
-    console.log("즐겨찾기 삭제에 전달되는 book", deleteData);
+    console.log("즐겨찾기 삭제에 전달되는 bookId", deleteData.bookId);
     console.log(
       "즐겨찾기 삭제에 전달되는 세션Id",
       localStorage.getItem("sessionId")
