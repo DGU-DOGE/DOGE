@@ -1,6 +1,11 @@
-import { useLocation } from "react-router-dom";
 import { ReactComponent as ElephantLogo } from "../assets/imgs/dgu-elephant.svg";
 import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import { LoginState } from "../stores/atoms";
+import { removeCookie } from "../stores/Cookie";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -30,14 +35,52 @@ const Title = styled.div`
     font-size: 68px;
   }
   span {
-    color: ${(props) => props.theme.orange};
+    color: ${props => props.theme.orange};
+  }
+`;
+const DeleteWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  h1 {
+    font-size: 50px;
+    margin-left: 100px;
+    margin-top: 100px;
+    span {
+      color: ${props => props.theme.red};
+    }
+  }
+  p {
+    font-size: 24px;
+    margin-top: 20px;
+    margin-left: 100px;
   }
 `;
 
+interface IDelete {
+  password: string;
+}
 const DeleteAccount = () => {
-  const location = useLocation();
-  const userId = location.state?.email;
-  // 유저 탈퇴에 관한 fetchFn이랑 연결필요
+  const [isLogin, setIsLogin] = useRecoilState(LoginState);
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onValid = (data: IDelete) => {
+    axios
+      .post(`/api/user/delete`)
+      .then(res => {
+        console.log("회원 탈퇴 성공");
+        setIsLogin(false);
+        localStorage.removeItem("sessionId");
+        removeCookie("sessionId");
+        navigate(`/`);
+      })
+      .catch(err => console.log("회원탈퇴 실패", err));
+  };
   return (
     <>
       <Wrapper>
@@ -53,6 +96,13 @@ const DeleteAccount = () => {
             <ElephantLogo />
           </BannerLogo>
         </Banner>
+        <DeleteWrapper>
+          <h1>
+            정말 도지를
+            <br /> <span>탈퇴</span>하시나요
+          </h1>
+          <p>탈퇴를 원하시면 사용중인 비밀번호를 입력해주세요</p>
+        </DeleteWrapper>
       </Wrapper>
     </>
   );
