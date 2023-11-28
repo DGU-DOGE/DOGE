@@ -4,10 +4,12 @@ import { ReactComponent as CancelBtn } from "../assets/imgs/xmark-solid.svg";
 import styled from "styled-components";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useLocation, useMatch, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import { useQuery } from "react-query";
-import { fetchUserData } from "../apis/api";
+import { IBook, fetchUserData } from "../apis/api";
+import axios from "axios";
+import { getCookie } from "../stores/Cookie";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -192,36 +194,36 @@ const Favorites = () => {
   const [detailIdx, setDetailIdx] = useState(0);
   const [isdetailNext, setIsDetailNext] = useState(true);
   const [detailLeaving, setDetailLeaving] = useState(false);
-  const data = [
-    {
-      bookId: 100,
-      callNumber: "123124214",
-      bookName: "국부론",
-      author: "저자0",
-      publisher: "com0",
-      photoLink: "",
-      floor: "지하1층",
-      shelfName: "일반도서",
-      bookRow: 1,
-      bookCell: 2,
-    },
-    {
-      boookId: 101,
-      callNumber: "23425435",
-      bookName: "공산당 선언",
-      author: "저자1",
-      publisher: "com1",
-      photoLink: "",
-      floor: "1층",
-      shelfname: "책장 이름1",
-      bookRow: 1,
-      bookCell: 1,
-    },
-  ];
+  const [favoriteList, setFavoriteList] = useState<IBook[]>([]);
+
+  // 즐겨찾기 조회
+  useEffect(() => {
+    (async () => {
+      console.log(
+        "즐겨찾기 조회에 전달되는 세션ID",
+        localStorage.getItem("sessionId")
+      );
+      const { data } = await axios.post(
+        "/api/favorite/check",
+        { sessionId: localStorage.getItem("sessionId") },
+        {
+          headers: {
+            sessionId: await getCookie("sessionId"),
+          },
+          withCredentials: true,
+        }
+      );
+      setFavoriteList(data);
+      console.log("백에서 받아온 사용자 즐겨찾기 목록", data);
+    })();
+  }, []);
+
   const clickedBook =
     bookDetailMatch?.params.bookId &&
-    data &&
-    data.find(book => book.bookId + "" === bookDetailMatch.params.bookId);
+    favoriteList &&
+    favoriteList.find(
+      book => book.bookId + "" === bookDetailMatch.params.bookId
+    );
 
   const increaseDetailIdx = () => {
     setIsDetailNext(true);
@@ -244,7 +246,7 @@ const Favorites = () => {
 
   return (
     <Wrapper>
-      {data.length === 0 ? (
+      {favoriteList.length === 0 ? (
         <>
           <Banner>
             <Title>즐겨찾기</Title>
@@ -261,7 +263,7 @@ const Favorites = () => {
           <InfoWrapper>
             <AnimatePresence>
               <Slider key={0}>
-                {data.slice(0, 5).map(book => (
+                {favoriteList.slice(0, 5).map(book => (
                   <Book
                     key={book.bookId}
                     layoutId={book.bookId + ""}
@@ -357,7 +359,7 @@ const Favorites = () => {
                             {clickedBook && (
                               <>
                                 <h1>도서관 {clickedBook.floor}</h1>
-                                <h1>책장 이름 : {clickedBook.shelfname}</h1>
+                                <h1>책장 이름 : {clickedBook.shelfName}</h1>
                                 <h1>
                                   표시된 서가에서 : {clickedBook.bookRow}층,
                                   왼쪽에서 {clickedBook.bookCell}번째에
