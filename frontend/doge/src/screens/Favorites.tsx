@@ -73,8 +73,7 @@ const Book = styled(motion.div)`
   }
   cursor: pointer;
 `;
-const BookImg = styled.div`
-  background-color: red;
+const BookImg = styled.img`
   background-size: cover;
   background-position: center center;
   min-width: 180px;
@@ -190,6 +189,8 @@ const bookVariants = {
 const Favorites = () => {
   const navigate = useNavigate();
   const { scrollY } = useScroll();
+  const [clickedBook, setClickedBook] = useState<IBook>();
+  const [bookLoading, setBookLoading] = useState(true);
   const bookDetailMatch = useMatch(`/favorites/book-detail/:bookId`);
   const [detailIdx, setDetailIdx] = useState(0);
   const [isdetailNext, setIsDetailNext] = useState(true);
@@ -199,10 +200,6 @@ const Favorites = () => {
   // 즐겨찾기 조회
   useEffect(() => {
     (async () => {
-      console.log(
-        "즐겨찾기 조회에 전달되는 세션ID",
-        localStorage.getItem("sessionId")
-      );
       const { data } = await axios.post(
         "/api/favorite/check",
         { sessionId: localStorage.getItem("sessionId") },
@@ -216,14 +213,18 @@ const Favorites = () => {
       setFavoriteList(data);
       console.log("백에서 받아온 사용자 즐겨찾기 목록", data);
     })();
-  }, []);
+  }, [favoriteList]);
 
-  const clickedBook =
-    bookDetailMatch?.params.bookId &&
-    favoriteList &&
-    favoriteList.find(
-      book => book.bookId + "" === bookDetailMatch.params.bookId
-    );
+  useEffect(() => {
+    if (bookDetailMatch?.params.bookId && favoriteList) {
+      setClickedBook(
+        favoriteList.find(
+          book => book.bookId + "" === bookDetailMatch.params.bookId
+        )
+      );
+    }
+    setBookLoading(false);
+  }, [bookDetailMatch]);
 
   const increaseDetailIdx = () => {
     setIsDetailNext(true);
@@ -271,7 +272,7 @@ const Favorites = () => {
                     whileHover="hover"
                     onClick={() => onBookClick(book.bookId!)}
                   >
-                    <BookImg />
+                    <BookImg src={book.photoLink} />
                     <BookInfo>
                       <h1>{book.bookName}</h1>
                       <h1>도서 위치 정보</h1>
@@ -311,6 +312,7 @@ const Favorites = () => {
                         <>
                           <div style={{ marginTop: 250 }}>
                             <BookImg
+                              src={clickedBook?.photoLink}
                               style={{
                                 width: 450,
                                 height: 450,
