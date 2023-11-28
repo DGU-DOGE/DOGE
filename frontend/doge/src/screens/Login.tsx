@@ -112,7 +112,6 @@ const Login = () => {
       )
       .then(res => {
         console.log("로그인 성공!!!");
-        console.log("로그인 성공 후 받은 세션ID", res.data.sessionId);
         localStorage.setItem("sessionId", res.data.sessionId);
         setCookie("sessionId", res.data.sessionId);
         setIsLogin(true);
