@@ -35,4 +35,20 @@ public class Book {
 
     @Column
     private String photoLink;
+
+
+    @Column
+    private String floor;
+
+    @Column
+    private String shelfName;
+
+    @Column
+    private int shelfCount;
+
+    @Column
+    private int bookRow;
+
+    @Column
+    private int bookCell;
 }

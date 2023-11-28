@@ -1,5 +1,6 @@
 package com.doge.backend.domain.member;
 
+import com.doge.backend.utils.SessionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
+    private final SessionManager sessionManager;
 
     @PostMapping("/join")
     public void join(@RequestBody Member req) {
@@ -41,5 +43,15 @@ public class MemberController {
     @PatchMapping("/change-password")
     public void changePassword(@RequestBody Member req) {
         memberService.changePassword(req);
+    }
+
+    @PostMapping("/check")
+    public Map<String, String> check(HttpServletRequest request) {
+        return memberService.check(sessionManager.getSession(request));
+    }
+
+    @PostMapping("/delete")
+    public void delete(@RequestBody Member password, HttpServletRequest request) {
+        memberService.delete(password.getPassword(), request);
     }
 }
