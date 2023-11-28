@@ -3,8 +3,6 @@ import { IFavorite } from "../screens/Search";
 import { IDelete } from "../screens/DeleteAccount";
 import { getCookie } from "../stores/Cookie";
 
-// 로그인이 되었다면, 즐겨찾기나 다른 fetch요청시에 headers속성에 accessToken값을 넣어주어야 하므로,
-// 해당 값을 참고하여 필요한 부분에 설정해 주는 과정이 필요하다.
 export interface IUserData {
   userId: string;
   userPassword: string;
@@ -43,20 +41,14 @@ export const fetchJoin = async (userData: IUserData) => {
   return data;
 };
 export const fetchSearch = async (keyword: string | null) => {
-  // 로그인이 되었는지를 확인하고 로그인이 되었을 경우에
-  // locaStorage에 저장된 accessToken을 가져와서 axios.get요청에 Authenication으로 넣기
-  // + withCredentials: true설정해주기
   const { data } = await axios.get(`/search?keyword=${keyword}`, {
     withCredentials: true,
   }); // get url뒤에 keyword붙여서 요청할 것
   return data;
 };
 
-//사용자의 정보 (email, 즐겨찾기 목록 등)를 받아오는 함수
+//사용자의 정보 (email)를 받아오는 함수
 export const fetchUserData = async () => {
-  // 로그인이 되었는지를 확인하고 로그인이 되었을 경우에
-  // locaStorage에 저장된 accessToken을 가져와서 axios.get요청에 Authenication으로 넣기
-  // + withCredentials: true설정해주기
   const { data } = await axios.get(``);
   return data;
 };
@@ -112,6 +104,7 @@ export const fetchChangePassword = async (userData: IUserData) => {
   return data;
 };
 
+// 회원 탈퇴 함수
 export const fetchDeleteUser = async (userData: IDelete) => {
   const { data } = await axios.post(
     `/api/user/delete`,
@@ -123,5 +116,13 @@ export const fetchDeleteUser = async (userData: IDelete) => {
       withCredentials: true,
     }
   );
+  return data;
+};
+
+// 사용자 로그아웃 함수
+export const fetchUserLogout = async () => {
+  const { data } = await axios.post(`/api/ersu / logout`, {
+    withCredentials: true,
+  });
   return data;
 };
