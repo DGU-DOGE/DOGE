@@ -4,8 +4,10 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { LoginState } from "../stores/atoms";
-import { removeCookie } from "../stores/Cookie";
+import { getCookie, removeCookie } from "../stores/Cookie";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
+import { fetchDeleteUser } from "../apis/api";
 
 const Wrapper = styled.div`
   min-width: 800px;
@@ -42,6 +44,7 @@ const DeleteWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 800px;
   h1 {
     font-size: 50px;
     margin-left: 100px;
@@ -57,21 +60,68 @@ const DeleteWrapper = styled.div`
   }
 `;
 
-interface IDelete {
+const DeleteForm = styled.form`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  input:focus {
+    background-color: transparent;
+  }
+  input[type="submit"] {
+    cursor: pointer;
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.lighter};
+    font-size: 30px;
+  }
+  padding-top: 70px;
+`;
+const Input = styled.input`
+  width: 80%;
+  height: 60px;
+  margin: 10px;
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 24px;
+`;
+
+export interface IDelete {
   password: string;
 }
 const DeleteAccount = () => {
   const [isLogin, setIsLogin] = useRecoilState(LoginState);
+  const { mutate: deleteUser } = useMutation(
+    (data: IDelete) => fetchDeleteUser(data),
+    {
+      onSuccess: () => {
+        setIsLogin(false);
+        localStorage.removeItem("sessionId");
+        removeCookie("sessionId");
+        navigate(`/`);
+      },
+    }
+  );
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<IDelete>();
 
-  const onValid = (data: IDelete) => {
+  const handleDeleteUser = async (data: IDelete) => {
     axios
-      .post(`/api/user/delete`)
+      .post(
+        `/api/user/delete`,
+        { password: data.password },
+        {
+          headers: {
+            sessionId: await getCookie("sessionId"),
+          },
+          withCredentials: true,
+        }
+      )
       .then(res => {
         console.log("회원 탈퇴 성공");
         setIsLogin(false);
@@ -80,6 +130,13 @@ const DeleteAccount = () => {
         navigate(`/`);
       })
       .catch(err => console.log("회원탈퇴 실패", err));
+  };
+  const onValid = async (data: IDelete) => {
+    try {
+      deleteUser({ password: data.password });
+    } catch (error) {
+      console.log("회원탈퇴 에러발생!", error);
+    }
   };
   return (
     <>
@@ -102,6 +159,14 @@ const DeleteAccount = () => {
             <br /> <span>탈퇴</span>하시나요
           </h1>
           <p>탈퇴를 원하시면 사용중인 비밀번호를 입력해주세요</p>
+          <DeleteForm onSubmit={handleSubmit(onValid)}>
+            <Input
+              type="password"
+              placeholder="비밀번호"
+              {...register("password", { required: true })}
+            />
+            <Input type="submit" value="회원 탈퇴" />
+          </DeleteForm>
         </DeleteWrapper>
       </Wrapper>
     </>
