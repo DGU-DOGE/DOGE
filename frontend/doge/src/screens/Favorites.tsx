@@ -1,190 +1,14 @@
 import { ReactComponent as LeftAngle } from "../assets/imgs/angle-left-solid.svg";
 import { ReactComponent as RightAngle } from "../assets/imgs/angle-right-solid.svg";
 import { ReactComponent as CancelBtn } from "../assets/imgs/xmark-solid.svg";
-import styled from "styled-components";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
-import { useLocation, useMatch, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import Loader from "../components/Loader";
-import { useQuery } from "react-query";
+import { useMatch, useNavigate } from "react-router-dom";
 import { IBook, fetchUserData } from "../apis/api";
-import axios from "axios";
 import { getCookie } from "../stores/Cookie";
-
-const Wrapper = styled.div`
-  min-width: 800px;
-  display: flex;
-  flex-direction: column;
-`;
-const Banner = styled.div`
-  min-width: 800px;
-  display: flex;
-  align-items: center;
-  margin: 30px 30px;
-`;
-const Title = styled.h1`
-  font-size: 28px;
-`;
-const InfoWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-width: 800px;
-  background-color: ${props => props.theme.gray.lighter};
-  border-radius: 10px;
-  position: relative;
-`;
-const NoResult = styled.div`
-  font-size: 45px;
-  margin: 60px 30px;
-`;
-const Slider = styled(motion.div)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 80%;
-  div:last-child {
-    margin-bottom: 80px;
-  }
-  position: relative;
-  svg {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 40px;
-    height: 40px;
-    padding-top: 5px;
-    padding-right: 5px;
-    cursor: pointer;
-  }
-`;
-const Book = styled(motion.div)`
-  display: flex;
-  background-color: ${props => props.theme.gray.lightdark};
-  width: 95%;
-  height: 200px;
-  margin: 20px 0px;
-  border-radius: 7px;
-  div {
-    margin-top: 10px;
-    margin-left: 20px;
-  }
-  cursor: pointer;
-`;
-const BookImg = styled.img`
-  background-size: cover;
-  background-position: center center;
-  min-width: 180px;
-  width: 180px;
-  height: 180px;
-`;
-const BookInfo = styled.div`
-  background-color: transparent;
-  display: flex;
-  flex-direction: column;
-  width: 800px;
-  height: 180px;
-  h1 {
-    margin: 10px 15px;
-    font-size: 27px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  h1:first-child {
-    margin-top: 20px;
-    margin-bottom: 45px;
-  }
-  h1:last-child {
-    color: rgba(0, 0, 0, 0.5);
-  }
-`;
-const Overlay = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  opacity: 0;
-`;
-const DetailWrapper = styled(motion.div)`
-  position: absolute;
-  width: 80%;
-  height: 90vh;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  background-color: ${props => props.theme.gray.medium};
-  border-radius: 15px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-const DetailInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: ${props => props.theme.gray.bright};
-  width: 70%;
-  max-width: 500px;
-
-  border-radius: 7px;
-  h1,
-  span {
-    margin: 10px 10px;
-    margin-left: 30px;
-    font-size: 18px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  h1:first-child {
-    margin-top: 20px;
-  }
-  span {
-    background-color: ${props => props.theme.orange};
-    font-size: 12px;
-    color: ${props => props.theme.white.lighter};
-    width: 60px;
-    text-align: center;
-    padding: 3px;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-`;
-const MapLocation = styled.div`
-  align-items: center;
-  background-color: red;
-  width: 70%;
-  height: 600px;
-  max-width: 550px;
-  margin: 20px 0px;
-
-  img {
-    background-size: cover;
-    background-position: center center;
-  }
-`;
-const Bottom = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 30px;
-`;
-const Circle = styled.span`
-  width: 20px;
-  height: 20px;
-  border-radius: 20px;
-  margin-right: 20px;
-  margin-top: 20px;
-`;
-
-const bookVariants = {
-  initial: { scale: 1 },
-  hover: { scale: 1.03 },
-};
+import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import styled from "styled-components";
+import axios from "axios";
 
 const Favorites = () => {
   const navigate = useNavigate();
@@ -219,7 +43,7 @@ const Favorites = () => {
     if (bookDetailMatch?.params.bookId && favoriteList) {
       setClickedBook(
         favoriteList.find(
-          book => book.bookId + "" === bookDetailMatch.params.bookId
+          (book) => book.bookId + "" === bookDetailMatch.params.bookId
         )
       );
     }
@@ -228,14 +52,14 @@ const Favorites = () => {
 
   const increaseDetailIdx = () => {
     setIsDetailNext(true);
-    setDetailIdx(prev => (prev === 1 ? 0 : prev + 1));
+    setDetailIdx((prev) => (prev === 1 ? 0 : prev + 1));
   };
   const decreaseDetailIdx = () => {
     setIsDetailNext(false);
-    setDetailIdx(prev => (prev === 0 ? 1 : prev - 1));
+    setDetailIdx((prev) => (prev === 0 ? 1 : prev - 1));
   };
   const toggleDetailLeaving = () => {
-    setDetailLeaving(prev => !prev);
+    setDetailLeaving((prev) => !prev);
   };
   const onBookClick = (bookId: number) => {
     navigate(`/favorites/book-detail/${bookId}`);
@@ -264,7 +88,7 @@ const Favorites = () => {
           <InfoWrapper>
             <AnimatePresence>
               <Slider key={0}>
-                {favoriteList.slice(0, 5).map(book => (
+                {favoriteList.slice(0, 5).map((book) => (
                   <Book
                     key={book.bookId}
                     layoutId={book.bookId + ""}
@@ -343,7 +167,7 @@ const Favorites = () => {
                             )}
                           </DetailInfo>
                           <Bottom>
-                            {[0, 1].map(idx => (
+                            {[0, 1].map((idx) => (
                               <Circle
                                 key={idx}
                                 style={{
@@ -381,7 +205,7 @@ const Favorites = () => {
                             )}
                           </DetailInfo>
                           <Bottom>
-                            {[0, 1].map(idx => (
+                            {[0, 1].map((idx) => (
                               <Circle
                                 key={idx}
                                 style={{
@@ -406,3 +230,178 @@ const Favorites = () => {
 };
 
 export default Favorites;
+
+const Wrapper = styled.div`
+  min-width: 800px;
+  display: flex;
+  flex-direction: column;
+`;
+const Banner = styled.div`
+  min-width: 800px;
+  display: flex;
+  align-items: center;
+  margin: 30px 30px;
+`;
+const Title = styled.h1`
+  font-size: 28px;
+`;
+const InfoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 800px;
+  background-color: ${(props) => props.theme.gray.lighter};
+  border-radius: 10px;
+  position: relative;
+`;
+const NoResult = styled.div`
+  font-size: 45px;
+  margin: 60px 30px;
+`;
+const Slider = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 80%;
+  div:last-child {
+    margin-bottom: 80px;
+  }
+  position: relative;
+  svg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    padding-top: 5px;
+    padding-right: 5px;
+    cursor: pointer;
+  }
+`;
+const Book = styled(motion.div)`
+  display: flex;
+  background-color: ${(props) => props.theme.gray.lightdark};
+  width: 95%;
+  height: 200px;
+  margin: 20px 0px;
+  border-radius: 7px;
+  div {
+    margin-top: 10px;
+    margin-left: 20px;
+  }
+  cursor: pointer;
+`;
+const BookImg = styled.img`
+  background-size: cover;
+  background-position: center center;
+  min-width: 180px;
+  width: 180px;
+  height: 180px;
+`;
+const BookInfo = styled.div`
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  height: 180px;
+  h1 {
+    margin: 10px 15px;
+    font-size: 27px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  h1:first-child {
+    margin-top: 20px;
+    margin-bottom: 45px;
+  }
+  h1:last-child {
+    color: rgba(0, 0, 0, 0.5);
+  }
+`;
+const Overlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+`;
+const DetailWrapper = styled(motion.div)`
+  position: absolute;
+  width: 80%;
+  height: 90vh;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background-color: ${(props) => props.theme.gray.medium};
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+const DetailInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: ${(props) => props.theme.gray.bright};
+  width: 70%;
+  max-width: 500px;
+
+  border-radius: 7px;
+  h1,
+  span {
+    margin: 10px 10px;
+    margin-left: 30px;
+    font-size: 18px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  h1:first-child {
+    margin-top: 20px;
+  }
+  span {
+    background-color: ${(props) => props.theme.orange};
+    font-size: 12px;
+    color: ${(props) => props.theme.white.lighter};
+    width: 60px;
+    text-align: center;
+    padding: 3px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+`;
+const MapLocation = styled.div`
+  align-items: center;
+  background-color: red;
+  width: 70%;
+  height: 600px;
+  max-width: 550px;
+  margin: 20px 0px;
+
+  img {
+    background-size: cover;
+    background-position: center center;
+  }
+`;
+const Bottom = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+`;
+const Circle = styled.span`
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+`;
+
+const bookVariants = {
+  initial: { scale: 1 },
+  hover: { scale: 1.03 },
+};
