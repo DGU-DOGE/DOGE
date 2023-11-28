@@ -75,8 +75,8 @@ const UserInfo = () => {
           withCredentials: true,
         })
         .then(res => {
-          console.log("회원 정보에 대해 백엔드로 부터 받은 값", res);
-          setUserEmail(res.data);
+          console.log("사용자 email 받아오기 성공!");
+          setUserEmail(res.data.email);
         })
         .catch(err => console.log("사용자 email 받아오기 실패!"));
     })();
