@@ -126,3 +126,18 @@ export const fetchUserLogout = async () => {
   });
   return data;
 };
+
+// 즐겨찾기 목록 조회 함수
+export const fetchFavorite = async () => {
+  const { data } = await axios.post(
+    "/api/favorite/check",
+    { sessionId: localStorage.getItem("sessionId") },
+    {
+      headers: {
+        sessionId: await getCookie("sessionId"),
+      },
+      withCredentials: true,
+    }
+  );
+  return data;
+};

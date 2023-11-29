@@ -3,7 +3,7 @@ import { ReactComponent as RightAngle } from "../assets/imgs/angle-right-solid.s
 import { ReactComponent as CancelBtn } from "../assets/imgs/xmark-solid.svg";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useMatch, useNavigate } from "react-router-dom";
-import { IBook, fetchUserData } from "../apis/api";
+import { IBook, fetchFavorite, fetchUserData } from "../apis/api";
 import { getCookie } from "../stores/Cookie";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -24,6 +24,12 @@ const Favorites = () => {
   // 즐겨찾기 조회
   useEffect(() => {
     (async () => {
+      /*const { data } = useQuery(["userFavorite"], fetchFavorite, {
+        onSuccess: () => {
+          setFavoriteList(data);
+          console.log("백에서 받아온 사용자 즐겨찾기 목록", data);
+        }
+      })*/
       const { data } = await axios.post(
         "/api/favorite/check",
         { sessionId: localStorage.getItem("sessionId") },
@@ -43,7 +49,7 @@ const Favorites = () => {
     if (bookDetailMatch?.params.bookId && favoriteList) {
       setClickedBook(
         favoriteList.find(
-          (book) => book.bookId + "" === bookDetailMatch.params.bookId
+          book => book.bookId + "" === bookDetailMatch.params.bookId
         )
       );
     }
@@ -52,14 +58,14 @@ const Favorites = () => {
 
   const increaseDetailIdx = () => {
     setIsDetailNext(true);
-    setDetailIdx((prev) => (prev === 1 ? 0 : prev + 1));
+    setDetailIdx(prev => (prev === 1 ? 0 : prev + 1));
   };
   const decreaseDetailIdx = () => {
     setIsDetailNext(false);
-    setDetailIdx((prev) => (prev === 0 ? 1 : prev - 1));
+    setDetailIdx(prev => (prev === 0 ? 1 : prev - 1));
   };
   const toggleDetailLeaving = () => {
-    setDetailLeaving((prev) => !prev);
+    setDetailLeaving(prev => !prev);
   };
   const onBookClick = (bookId: number) => {
     navigate(`/favorites/book-detail/${bookId}`);
@@ -88,7 +94,7 @@ const Favorites = () => {
           <InfoWrapper>
             <AnimatePresence>
               <Slider key={0}>
-                {favoriteList.slice(0, 5).map((book) => (
+                {favoriteList.slice(0, 5).map(book => (
                   <Book
                     key={book.bookId}
                     layoutId={book.bookId + ""}
@@ -167,7 +173,7 @@ const Favorites = () => {
                             )}
                           </DetailInfo>
                           <Bottom>
-                            {[0, 1].map((idx) => (
+                            {[0, 1].map(idx => (
                               <Circle
                                 key={idx}
                                 style={{
@@ -205,7 +211,7 @@ const Favorites = () => {
                             )}
                           </DetailInfo>
                           <Bottom>
-                            {[0, 1].map((idx) => (
+                            {[0, 1].map(idx => (
                               <Circle
                                 key={idx}
                                 style={{
@@ -250,7 +256,7 @@ const InfoWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   min-width: 800px;
-  background-color: ${(props) => props.theme.gray.lighter};
+  background-color: ${props => props.theme.gray.lighter};
   border-radius: 10px;
   position: relative;
 `;
@@ -282,7 +288,7 @@ const Slider = styled(motion.div)`
 `;
 const Book = styled(motion.div)`
   display: flex;
-  background-color: ${(props) => props.theme.gray.lightdark};
+  background-color: ${props => props.theme.gray.lightdark};
   width: 95%;
   height: 200px;
   margin: 20px 0px;
@@ -336,7 +342,7 @@ const DetailWrapper = styled(motion.div)`
   left: 0;
   right: 0;
   margin: 0 auto;
-  background-color: ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
   border-radius: 15px;
   overflow: hidden;
   display: flex;
@@ -346,7 +352,7 @@ const DetailWrapper = styled(motion.div)`
 const DetailInfo = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.gray.bright};
+  background-color: ${props => props.theme.gray.bright};
   width: 70%;
   max-width: 500px;
 
@@ -364,9 +370,9 @@ const DetailInfo = styled.div`
     margin-top: 20px;
   }
   span {
-    background-color: ${(props) => props.theme.orange};
+    background-color: ${props => props.theme.orange};
     font-size: 12px;
-    color: ${(props) => props.theme.white.lighter};
+    color: ${props => props.theme.white.lighter};
     width: 60px;
     text-align: center;
     padding: 3px;
