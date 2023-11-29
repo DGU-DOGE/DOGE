@@ -21,6 +21,21 @@ export interface IBook {
   bookCell: number;
 }
 
+// 회원 탈퇴 함수
+export const fetchDeleteUser = async (userData: IDelete) => {
+  const { data } = await axios.post(
+    `/api/user/delete`,
+    { password: userData.password },
+    {
+      headers: {
+        sessionId: await getCookie("sessionId"),
+      },
+      withCredentials: true,
+    }
+  );
+  return data;
+};
+
 // 사용자 로그인 함수
 export const fetchLogin = async (userData: IUserData) => {
   const payload = { email: userData.userId, password: userData.userPassword };
@@ -110,21 +125,6 @@ export const fetchChangePassword = async (userData: IUserData) => {
     "/api/user/change-password",
     { email: userData.userId, password: userData.userPassword },
     {
-      withCredentials: true,
-    }
-  );
-  return data;
-};
-
-// 회원 탈퇴 함수
-export const fetchDeleteUser = async (userData: IDelete) => {
-  const { data } = await axios.post(
-    `/api/user/delete`,
-    { password: userData.password },
-    {
-      headers: {
-        sessionId: await getCookie("sessionId"),
-      },
       withCredentials: true,
     }
   );
