@@ -2,9 +2,7 @@ import React from "react";
 
 const importSvg = (floor: string, folder: string, fileName: number) => {
   try {
-    const importPath = `/map/${encodeURIComponent(floor)}/${encodeURIComponent(
-      folder
-    )}/${fileName}.svg`;
+    const importPath = `/map/${floor}/${folder}/${fileName}.svg`;
     return importPath;
   } catch (error) {
     console.error(`Error importing SVG ${fileName}`, error);
