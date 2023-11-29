@@ -396,11 +396,13 @@ const Search = () => {
                       ) : (
                         <>
                           <MapLocation>
-                            <MapPath
-                              floor={"1층"}
-                              shelfname={"대장경1"}
-                              shelfnum={0}
-                            />
+                            {clickedBook && (
+                              <MapPath
+                                floor={clickedBook.floor}
+                                shelfname={clickedBook.shelfName}
+                                shelfnum={clickedBook.shelfCount}
+                              />
+                            )}
                           </MapLocation>
 
                           <DetailInfo>
