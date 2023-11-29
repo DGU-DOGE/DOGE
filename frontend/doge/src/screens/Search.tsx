@@ -396,12 +396,15 @@ const Search = () => {
                           <MapLocation>
                             {clickedBook && (
                               <MapPath
-                                floor={clickedBook.floor}
-                                shelfname={clickedBook.shelfName}
+                                floor={encodeURIComponent(clickedBook.floor)}
+                                shelfname={encodeURIComponent(
+                                  clickedBook.shelfName
+                                )}
                                 shelfnum={clickedBook.shelfCount}
                               />
                             )}
                           </MapLocation>
+
                           <DetailInfo>
                             {clickedBook && (
                               <>
