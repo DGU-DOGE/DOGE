@@ -285,7 +285,10 @@ const Search = () => {
                       whileHover="hover"
                       onClick={() => onBookClick(book.bookId)}
                     >
-                      <BookImg src={book.photoLink} />
+                      <BookImg
+                        src={book.photoLink}
+                        style={{ paddingLeft: "3px", paddingTop: "3px" }}
+                      />
                       <BookInfo>
                         <h1>{book.bookName}</h1>
                         <h1>도서 위치 정보</h1>
@@ -332,9 +335,10 @@ const Search = () => {
                             <BookImg
                               src={clickedBook?.photoLink}
                               style={{
-                                width: 250,
-                                height: 250,
+                                width: 400,
+                                height: 400,
                                 marginTop: 50,
+                                marginBottom: 20,
                               }}
                             />
                           </div>
