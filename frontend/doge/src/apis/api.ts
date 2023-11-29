@@ -36,6 +36,38 @@ export const fetchDeleteUser = async (userData: IDelete) => {
   return data;
 };
 
+// 즐겨찾기 목록 조회 함수
+export const fetchFavorite = async () => {
+  const { data } = await axios.post(
+    "/api/favorite/check",
+    { sessionId: localStorage.getItem("sessionId") },
+    {
+      headers: {
+        sessionId: await getCookie("sessionId"),
+      },
+      withCredentials: true,
+    }
+  );
+  return data;
+};
+
+// 즐겨찾기 등록 관련 함수
+export const fetchAddFavorite = async (favoriteData: IBook) => {
+  const { data } = await axios.post(
+    `/api/favorite/post`,
+    {
+      bookId: favoriteData.bookId,
+    },
+    {
+      headers: {
+        sessionId: await getCookie("sessionId"),
+      },
+      withCredentials: true,
+    }
+  );
+  return data;
+};
+
 // 사용자 로그인 함수
 export const fetchLogin = async (userData: IUserData) => {
   const payload = { email: userData.userId, password: userData.userPassword };
@@ -78,20 +110,7 @@ export const fetchUserInfo = async () => {
   });
   return data;
 };
-// 즐겨찾기 등록 관련 함수
-export const fetchAddFavorite = async (favoriteData: IFavorite) => {
-  const { data } = await axios.post(
-    `/api/favorite/post`,
-    { book: favoriteData.book, sessionId: favoriteData.sessionId },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    }
-  );
-  return data;
-};
+
 //백엔드에 해당 이메일로 인증번호를 요청하는 함수
 export const fetchSendCode = async (email: string) => {
   const { data } = await axios.post(
@@ -136,20 +155,5 @@ export const fetchUserLogout = async () => {
   const { data } = await axios.post(`/api/ersu / logout`, {
     withCredentials: true,
   });
-  return data;
-};
-
-// 즐겨찾기 목록 조회 함수
-export const fetchFavorite = async () => {
-  const { data } = await axios.post(
-    "/api/favorite/check",
-    { sessionId: localStorage.getItem("sessionId") },
-    {
-      headers: {
-        sessionId: await getCookie("sessionId"),
-      },
-      withCredentials: true,
-    }
-  );
   return data;
 };

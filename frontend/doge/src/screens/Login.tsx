@@ -2,8 +2,6 @@ import { useForm } from "react-hook-form";
 import { ReactComponent as ElephantLogo } from "../assets/imgs/dgu-elephant.svg";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { useMutation } from "react-query";
-import { fetchLogin } from "../apis/api";
 import { useRecoilState } from "recoil";
 import { LoginState } from "../stores/atoms";
 import axios from "axios";
@@ -102,6 +100,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<ILogin>({ mode: "onSubmit" });
+
   const onValid = async (data: ILogin) => {
     axios
       .post(
