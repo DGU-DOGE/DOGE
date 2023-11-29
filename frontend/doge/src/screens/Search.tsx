@@ -404,7 +404,7 @@ const Search = () => {
                             {clickedBook && (
                               <MapPath
                                 floor={formatFloor("지하2층")}
-                                shelfname={"normal1"}
+                                shelfname={"일반도서1"}
                                 shelfnum={0}
                               />
                             )}
