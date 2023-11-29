@@ -394,15 +394,11 @@ const Search = () => {
                       ) : (
                         <>
                           <MapLocation>
-                            {clickedBook && (
-                              <MapPath
-                                floor={encodeURIComponent(clickedBook.floor)}
-                                shelfname={encodeURIComponent(
-                                  clickedBook.shelfName
-                                )}
-                                shelfnum={clickedBook.shelfCount}
-                              />
-                            )}
+                            <MapPath
+                              floor={"1층"}
+                              shelfname={"대장경1"}
+                              shelfnum={0}
+                            />
                           </MapLocation>
 
                           <DetailInfo>
