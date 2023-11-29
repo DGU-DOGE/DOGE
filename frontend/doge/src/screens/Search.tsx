@@ -83,11 +83,11 @@ const Search = () => {
             withCredentials: true,
           }
         );
-        setFavoriteList(data); //data.book
+        setFavoriteList(data);
         console.log(
           "백에서 가져온 사용자 즐겨찾기 목록 (책 객체가 있는 배열의 형태여야함)",
           data
-        ); // data.book
+        );
       })();
     }
   }, []);
@@ -398,9 +398,9 @@ const Search = () => {
                           <MapLocation>
                             {clickedBook && (
                               <MapPath
-                                floor={clickedBook.floor}
-                                shelfname={clickedBook.shelfName}
-                                shelfnum={clickedBook.shelfCount}
+                                floor={"B2"}
+                                shelfname={"normal1"}
+                                shelfnum={0}
                               />
                             )}
                           </MapLocation>
