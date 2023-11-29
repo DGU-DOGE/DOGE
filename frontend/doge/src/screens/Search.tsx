@@ -22,269 +22,16 @@ import { useRecoilValue } from "recoil";
 import { LoginState } from "../stores/atoms";
 import { useCookies } from "react-cookie";
 import { getCookie } from "../stores/Cookie";
+import MapPath from "../utils/MapPath";
+import { formatFloor } from "../utils/formatPath";
 
-const Wrapper = styled.div`
-  min-width: 800px;
-  display: flex;
-  flex-direction: column;
-`;
-const Banner = styled.div`
-  min-width: 800px;
-  display: flex;
-  align-items: center;
-  margin: 30px 30px;
-`;
-const Title = styled.h1`
-  font-size: 28px;
-`;
-const InfoWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-width: 800px;
-  background-color: ${props => props.theme.gray.lighter};
-  border-radius: 10px;
-  position: relative;
-`;
-const SearchForm = styled.form`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  input:focus {
-    background-color: rgba(255, 255, 255, 0.5);
-  }
-  padding-top: 20px;
-`;
-const Input = styled.input`
-  width: 95%;
-  height: 70px;
-  margin: 10px;
-  background-color: ${props => props.theme.gray.medium};
-  border: 1px solid ${props => props.theme.gray.medium};
-  border-radius: 10px;
-  padding: 10px;
-  font-size: 28px;
-`;
-const SearchBtn = styled.div`
-  svg {
-    width: 50px;
-    height: 50px;
-  }
-  position: absolute;
-  right: 45px;
-`;
-const Slider = styled(motion.div)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 80%;
-  div:last-child {
-    margin-bottom: 80px;
-  }
-  position: relative;
-  svg {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 40px;
-    height: 40px;
-    padding-top: 5px;
-    padding-right: 5px;
-    cursor: pointer;
-  }
-`;
-const Book = styled(motion.div)`
-  display: flex;
-  background-color: ${props => props.theme.gray.lightdark};
-  width: 95%;
-  height: 200px;
-  margin: 20px 0px;
-  border-radius: 7px;
-  div {
-    margin-top: 10px;
-    margin-left: 20px;
-  }
-  cursor: pointer;
-`;
-const BookImg = styled.img`
-  background-size: cover;
-  background-position: center center;
-  min-width: 180px;
-  width: 180px;
-  height: 180px;
-`;
-const BookInfo = styled.div`
-  background-color: transparent;
-  display: flex;
-  flex-direction: column;
-  width: 800px;
-  height: 180px;
-  h1 {
-    margin: 10px 15px;
-    font-size: 27px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  h1:first-child {
-    margin-top: 20px;
-    margin-bottom: 45px;
-  }
-  h1:last-child {
-    color: rgba(0, 0, 0, 0.5);
-  }
-`;
-const ArrowWrapper = styled.div`
-  width: 95%;
-  display: flex;
-  align-items: center;
-  position: relative;
-  h1 {
-    font-size: 32px;
-    position: absolute;
-    top: 10px;
-    left: 50%;
-  }
-  svg:first-child {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    left: 0;
-    cursor: pointer;
-  }
-  svg:last-child {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    right: 0;
-    cursor: pointer;
-  }
-`;
-const Overlay = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  opacity: 0;
-`;
-const DetailWrapper = styled(motion.div)`
-  position: absolute;
-  width: 80%;
-  height: 100vh;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  background-color: ${props => props.theme.gray.medium};
-  border-radius: 15px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-const DetailInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: ${props => props.theme.gray.bright};
-  width: 70%;
-  max-width: 500px;
-
-  border-radius: 7px;
-  h1,
-  span {
-    margin: 10px 0px;
-    margin-left: 30px;
-    font-size: 18px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  h1:first-child {
-    margin-top: 20px;
-  }
-  div {
-    display: flex;
-    margin-bottom: 15px;
-    span {
-      background-color: ${props => props.theme.orange};
-      font-size: 13px;
-      color: ${props => props.theme.white.lighter};
-      width: 60px;
-      text-align: center;
-      padding: 3px;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-    span:nth-child(2) {
-      width: 80px;
-    }
-  }
-`;
-const MapLocation = styled.div`
-  align-items: center;
-  background-color: red;
-  width: 500px;
-  height: 100%;
-  margin: 20px 0px;
-
-  img {
-    background-size: cover;
-    background-position: center center;
-  }
-`;
-const Bottom = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 30px;
-`;
-const Circle = styled.span`
-  width: 20px;
-  height: 20px;
-  border-radius: 20px;
-  margin-right: 20px;
-  margin-top: 20px;
-`;
-const NoResult = styled.div`
-  font-size: 45px;
-  margin: 60px 30px;
-`;
-const AlertMessage = styled.span`
-  margin-left: 23px;
-  margin-bottom: 10px;
-  color: ${props => props.theme.orange};
-  font-size: 20px;
-`;
-const sliderVariants = {
-  initial: (isNext: boolean) => ({
-    x: isNext ? window.outerWidth : -window.outerWidth,
-  }),
-  animate: { x: 0 },
-  exit: (isNext: boolean) => ({
-    x: isNext ? -window.outerWidth : window.outerWidth,
-  }),
-};
-const bookVariants = {
-  initial: { scale: 1 },
-  hover: { scale: 1.03 },
-};
-interface IForm {
-  keyword: string;
-}
-export interface IFavorite {
-  book: IBook;
-  sessionId: any;
-}
 const offset = 5;
 
 const Search = () => {
   const isLogin = useRecoilValue(LoginState);
   const [searchParams, _] = useSearchParams();
   const keyword = searchParams.get("keyword");
-  const [bookLoading, setBookLoading] = useState(true);
+  const [bookLoading, setBookLoading] = useState<boolean>(true);
   const [data, setData] = useState<IBook[]>([]);
   const [clickedBook, setClickedBook] = useState<IBook>();
   const [favoriteList, setFavoriteList] = useState<IBook[]>([]);
@@ -301,7 +48,9 @@ const Search = () => {
 
   useEffect(() => {
     (async () => {
+      setBookLoading(true);
       if (keyword) {
+        setIndex(0);
         const { data: searchResult } = await axios.get(
           `/search?keyword=${keyword}`,
           { withCredentials: true }
@@ -335,11 +84,11 @@ const Search = () => {
             withCredentials: true,
           }
         );
-        setFavoriteList(data); //data.book
+        setFavoriteList(data);
         console.log(
           "백에서 가져온 사용자 즐겨찾기 목록 (책 객체가 있는 배열의 형태여야함)",
           data
-        ); // data.book
+        );
       })();
     }
   }, []);
@@ -647,7 +396,16 @@ const Search = () => {
                         </>
                       ) : (
                         <>
-                          <MapLocation></MapLocation>
+                          <MapLocation>
+                            {clickedBook && (
+                              <MapPath
+                                floor={formatFloor("지하2층")}
+                                shelfname={"normal1"}
+                                shelfnum={0}
+                              />
+                            )}
+                          </MapLocation>
+
                           <DetailInfo>
                             {clickedBook && (
                               <>
@@ -697,3 +455,259 @@ const Search = () => {
 };
 
 export default Search;
+
+const Wrapper = styled.div`
+  min-width: 800px;
+  display: flex;
+  flex-direction: column;
+`;
+const Banner = styled.div`
+  min-width: 800px;
+  display: flex;
+  align-items: center;
+  margin: 30px 30px;
+`;
+const Title = styled.h1`
+  font-size: 28px;
+`;
+const InfoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 800px;
+  background-color: ${props => props.theme.gray.lighter};
+  border-radius: 10px;
+  position: relative;
+`;
+const SearchForm = styled.form`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  input:focus {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  padding-top: 20px;
+`;
+const Input = styled.input`
+  width: 95%;
+  height: 70px;
+  margin: 10px;
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 28px;
+`;
+const SearchBtn = styled.div`
+  svg {
+    width: 50px;
+    height: 50px;
+  }
+  position: absolute;
+  right: 45px;
+`;
+const Slider = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 80%;
+  div:last-child {
+    margin-bottom: 80px;
+  }
+  position: relative;
+  svg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    padding-top: 5px;
+    padding-right: 5px;
+    cursor: pointer;
+  }
+`;
+const Book = styled(motion.div)`
+  display: flex;
+  background-color: ${props => props.theme.gray.lightdark};
+  width: 95%;
+  height: 200px;
+  margin: 20px 0px;
+  border-radius: 7px;
+  div {
+    margin-top: 10px;
+    margin-left: 20px;
+  }
+  cursor: pointer;
+`;
+const BookImg = styled.img`
+  background-size: cover;
+  background-position: center center;
+  min-width: 180px;
+  width: 180px;
+  height: 180px;
+`;
+const BookInfo = styled.div`
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  height: 180px;
+  h1 {
+    margin: 10px 15px;
+    font-size: 27px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  h1:first-child {
+    margin-top: 20px;
+    margin-bottom: 45px;
+  }
+  h1:last-child {
+    color: rgba(0, 0, 0, 0.5);
+  }
+`;
+const ArrowWrapper = styled.div`
+  width: 95%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  h1 {
+    font-size: 32px;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+  }
+  svg:first-child {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    left: 0;
+    cursor: pointer;
+  }
+  svg:last-child {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    right: 0;
+    cursor: pointer;
+  }
+`;
+const Overlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+`;
+const DetailWrapper = styled(motion.div)`
+  position: absolute;
+  width: 80%;
+  height: 140vh;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background-color: ${props => props.theme.gray.medium};
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+const DetailInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: ${props => props.theme.gray.bright};
+  width: 70%;
+  max-width: 500px;
+
+  border-radius: 7px;
+  h1,
+  span {
+    margin: 10px 0px;
+    margin-left: 30px;
+    font-size: 18px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  h1:first-child {
+    margin-top: 20px;
+  }
+  div {
+    display: flex;
+    margin-bottom: 15px;
+    span {
+      background-color: ${props => props.theme.orange};
+      font-size: 13px;
+      color: ${props => props.theme.white.lighter};
+      width: 60px;
+      text-align: center;
+      padding: 3px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    span:nth-child(2) {
+      width: 80px;
+    }
+  }
+`;
+const MapLocation = styled.div`
+  align-items: center;
+  width: 450px;
+  height: 600px;
+  margin: 20px 0px;
+
+  img {
+    position: relative;
+    background-size: cover;
+    background-position: center center;
+  }
+`;
+const Bottom = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+`;
+const Circle = styled.span`
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+`;
+const NoResult = styled.div`
+  font-size: 45px;
+  margin: 60px 30px;
+`;
+const AlertMessage = styled.span`
+  margin-left: 23px;
+  margin-bottom: 10px;
+  color: ${props => props.theme.orange};
+  font-size: 20px;
+`;
+const sliderVariants = {
+  initial: (isNext: boolean) => ({
+    x: isNext ? window.outerWidth : -window.outerWidth,
+  }),
+  animate: { x: 0 },
+  exit: (isNext: boolean) => ({
+    x: isNext ? -window.outerWidth : window.outerWidth,
+  }),
+};
+const bookVariants = {
+  initial: { scale: 1 },
+  hover: { scale: 1.03 },
+};
+interface IForm {
+  keyword: string;
+}
+export interface IFavorite {
+  book: IBook;
+  sessionId: any;
+}

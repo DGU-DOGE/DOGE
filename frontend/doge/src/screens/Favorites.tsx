@@ -3,12 +3,19 @@ import { ReactComponent as RightAngle } from "../assets/imgs/angle-right-solid.s
 import { ReactComponent as CancelBtn } from "../assets/imgs/xmark-solid.svg";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useMatch, useNavigate } from "react-router-dom";
-import { IBook, fetchFavorite, fetchUserInfo } from "../apis/api";
+import {
+  IBook,
+  fetchAddFavorite,
+  fetchFavorite,
+  fetchUserInfo,
+} from "../apis/api";
 import { getCookie } from "../stores/Cookie";
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
 import axios from "axios";
+import MapPath from "../utils/MapPath";
+import { formatFloor } from "../utils/formatPath";
 
 const Favorites = () => {
   const navigate = useNavigate();
@@ -248,7 +255,15 @@ const Favorites = () => {
                         </>
                       ) : (
                         <>
-                          <MapLocation></MapLocation>
+                          <MapLocation>
+                            {clickedBook && (
+                              <MapPath
+                                floor={formatFloor("지하2층")} 
+                                shelfname={"normal1"}
+                                shelfnum={0}
+                              />
+                            )}
+                          </MapLocation>
                           <DetailInfo>
                             {clickedBook && (
                               <>
@@ -400,7 +415,7 @@ const Overlay = styled(motion.div)`
 const DetailWrapper = styled(motion.div)`
   position: absolute;
   width: 80%;
-  height: 90vh;
+  height: 140vh;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -444,10 +459,8 @@ const DetailInfo = styled.div`
 `;
 const MapLocation = styled.div`
   align-items: center;
-  background-color: red;
-  width: 70%;
+  width: 450px;
   height: 600px;
-  max-width: 550px;
   margin: 20px 0px;
 
   img {

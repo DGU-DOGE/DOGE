@@ -1,27 +1,35 @@
-import React from 'react';
+import React from "react";
 
-const importSvg = (floor: number, folder: string, fileName: number) => {
+const importSvg = (floor: string, folder: string, fileName: number) => {
   try {
-    const importPath = `/map/${floor}/${folder}/${fileName}.svg`;
+    const importPath = `/map/${encodeURIComponent(floor)}/${encodeURIComponent(
+      folder
+    )}/${fileName}.svg`;
     return importPath;
   } catch (error) {
     console.error(`Error importing SVG ${fileName}`, error);
-    return null;  
+    return null;
   }
 };
 
 interface MyComponentProps {
-  floor: number;
+  floor: string;
   shelfname: string;
   shelfnum: number;
 }
 
-const MapPath: React.FC<MyComponentProps> = ({ floor, shelfname, shelfnum }) => {
+const MapPath: React.FC<MyComponentProps> = ({
+  floor,
+  shelfname,
+  shelfnum,
+}) => {
   const svgPath = importSvg(floor, shelfname, shelfnum);
 
   return (
     <>
-      {svgPath && <img src={svgPath} alt={`SVG for ${floor}/${shelfname}/${shelfnum}`} />}
+      {svgPath && (
+        <img src={svgPath} alt={`SVG for ${floor}/${shelfname}/${shelfnum}`} />
+      )}
     </>
   );
 };
