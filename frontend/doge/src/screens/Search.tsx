@@ -30,7 +30,7 @@ const Search = () => {
   const isLogin = useRecoilValue(LoginState);
   const [searchParams, _] = useSearchParams();
   const keyword = searchParams.get("keyword");
-  const [bookLoading, setBookLoading] = useState(true);
+  const [bookLoading, setBookLoading] = useState<boolean>(true);
   const [data, setData] = useState<IBook[]>([]);
   const [clickedBook, setClickedBook] = useState<IBook>();
   const [favoriteList, setFavoriteList] = useState<IBook[]>([]);
@@ -47,7 +47,9 @@ const Search = () => {
 
   useEffect(() => {
     (async () => {
+      setBookLoading(true);
       if (keyword) {
+        setIndex(0);
         const { data: searchResult } = await axios.get(
           `/search?keyword=${keyword}`,
           { withCredentials: true }
