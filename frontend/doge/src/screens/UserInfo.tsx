@@ -64,7 +64,7 @@ const Input = styled.input`
 
 const UserInfo = () => {
   const navigate = useNavigate();
-  const [userEmail, setUserEmail] = useState();
+  const [userEmail, setUserEmail] = useState("");
   useEffect(() => {
     (async () => {
       axios
