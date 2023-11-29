@@ -287,7 +287,7 @@ const Search = () => {
                     >
                       <BookImg
                         src={book.photoLink}
-                        style={{ paddingLeft: "3px", paddingTop: "3px" }}
+                        style={{ paddingLeft: "12px", paddingTop: "12px" }}
                       />
                       <BookInfo>
                         <h1>{book.bookName}</h1>
