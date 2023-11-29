@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
 import axios from "axios";
+import MapPath from "../utils/MapPath";
 
 const Favorites = () => {
   const navigate = useNavigate();
@@ -253,7 +254,15 @@ const Favorites = () => {
                         </>
                       ) : (
                         <>
-                          <MapLocation></MapLocation>
+                          <MapLocation>
+                            {clickedBook && (
+                              <MapPath
+                                floor={"B2"}
+                                shelfname={"normal1"}
+                                shelfnum={0}
+                              />
+                            )}
+                          </MapLocation>
                           <DetailInfo>
                             {clickedBook && (
                               <>
@@ -405,7 +414,7 @@ const Overlay = styled(motion.div)`
 const DetailWrapper = styled(motion.div)`
   position: absolute;
   width: 80%;
-  height: 90vh;
+  height: 140vh;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -449,10 +458,8 @@ const DetailInfo = styled.div`
 `;
 const MapLocation = styled.div`
   align-items: center;
-  background-color: red;
-  width: 70%;
+  width: 450px;
   height: 600px;
-  max-width: 550px;
   margin: 20px 0px;
 
   img {
