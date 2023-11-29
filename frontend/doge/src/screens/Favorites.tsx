@@ -215,24 +215,28 @@ const Favorites = () => {
                                 <h1>저자명 : {clickedBook.author}</h1>
                                 <h1>발행사항 : {clickedBook.publisher}</h1>
                                 <h1>청구기호 : {clickedBook.callNumber}</h1>
-                                <span onClick={increaseDetailIdx}>
-                                  지도 보기
-                                </span>
-                                {favoriteList?.find(
-                                  book => book.bookId === clickedBook.bookId
-                                ) ? (
-                                  <span
-                                    onClick={() => deleteFavorite(clickedBook)}
-                                  >
-                                    즐겨 찾기 삭제
+                                <div>
+                                  <span onClick={increaseDetailIdx}>
+                                    지도 보기
                                   </span>
-                                ) : (
-                                  <span
-                                    onClick={() => addFavorite(clickedBook)}
-                                  >
-                                    즐겨 찾기 추가
-                                  </span>
-                                )}
+                                  {favoriteList?.find(
+                                    book => book.bookId === clickedBook.bookId
+                                  ) ? (
+                                    <span
+                                      onClick={() =>
+                                        deleteFavorite(clickedBook)
+                                      }
+                                    >
+                                      즐겨 찾기 삭제
+                                    </span>
+                                  ) : (
+                                    <span
+                                      onClick={() => addFavorite(clickedBook)}
+                                    >
+                                      즐겨 찾기 추가
+                                    </span>
+                                  )}
+                                </div>
                                 <RightAngle
                                   onClick={increaseDetailIdx}
                                   style={{
@@ -440,7 +444,7 @@ const DetailInfo = styled.div`
   border-radius: 7px;
   h1,
   span {
-    margin: 10px 10px;
+    margin: 10px 0px;
     margin-left: 30px;
     font-size: 18px;
     overflow: hidden;
@@ -450,15 +454,22 @@ const DetailInfo = styled.div`
   h1:first-child {
     margin-top: 20px;
   }
-  span {
-    background-color: ${props => props.theme.orange};
-    font-size: 12px;
-    color: ${props => props.theme.white.lighter};
-    width: 60px;
-    text-align: center;
-    padding: 3px;
-    border-radius: 3px;
-    cursor: pointer;
+  div {
+    display: flex;
+    margin-bottom: 15px;
+    span {
+      background-color: ${props => props.theme.orange};
+      font-size: 13px;
+      color: ${props => props.theme.white.lighter};
+      width: 60px;
+      text-align: center;
+      padding: 3px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    span:nth-child(2) {
+      width: 80px;
+    }
   }
 `;
 const MapLocation = styled.div`
