@@ -3,10 +3,15 @@ import { ReactComponent as RightAngle } from "../assets/imgs/angle-right-solid.s
 import { ReactComponent as CancelBtn } from "../assets/imgs/xmark-solid.svg";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useMatch, useNavigate } from "react-router-dom";
-import { IBook, fetchFavorite, fetchUserInfo } from "../apis/api";
+import {
+  IBook,
+  fetchAddFavorite,
+  fetchFavorite,
+  fetchUserInfo,
+} from "../apis/api";
 import { getCookie } from "../stores/Cookie";
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
 import axios from "axios";
 
