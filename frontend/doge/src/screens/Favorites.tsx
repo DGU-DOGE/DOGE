@@ -3,7 +3,7 @@ import { ReactComponent as RightAngle } from "../assets/imgs/angle-right-solid.s
 import { ReactComponent as CancelBtn } from "../assets/imgs/xmark-solid.svg";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useMatch, useNavigate } from "react-router-dom";
-import { IBook, fetchFavorite, fetchUserData } from "../apis/api";
+import { IBook, fetchFavorite, fetchUserInfo } from "../apis/api";
 import { getCookie } from "../stores/Cookie";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -73,6 +73,53 @@ const Favorites = () => {
   const onOverlayClick = () => {
     setDetailIdx(0);
     navigate(-1);
+  };
+  // 즐겨찾기 등록
+  const addFavorite = async (favoriteData: IBook) => {
+    axios
+      .post(
+        `/api/favorite/post`,
+        {
+          bookId: favoriteData.bookId,
+        },
+        {
+          headers: {
+            sessionId: await getCookie("sessionId"),
+          },
+          withCredentials: true,
+        }
+      )
+      .then(res => {
+        setFavoriteList(prev => [...prev, favoriteData]);
+        console.log("즐겨찾기 등록 후 즐겨찾기 목록", favoriteList);
+      })
+      .catch(err => console.log("즐겨찾기 등록 실패", err));
+  };
+  // 즐겨찾기 삭제
+  const deleteFavorite = async (deleteData: IBook) => {
+    axios
+      .post(
+        `/api/favorite/delete`,
+        {
+          bookId: deleteData.bookId,
+        },
+        {
+          headers: {
+            sessionId: await getCookie("sessionId"),
+          },
+          withCredentials: true,
+        }
+      )
+      .then(res => {
+        setFavoriteList(prev => {
+          const newFavorite = prev.filter(
+            book => book.bookId !== deleteData.bookId
+          );
+          console.log("즐겨찾기 삭제 후 즐겨찾기 목록", newFavorite);
+          return newFavorite;
+        });
+      })
+      .catch(err => console.log("즐겨 찾기 삭제 실패!"));
   };
 
   return (
@@ -160,6 +207,21 @@ const Favorites = () => {
                                 <span onClick={increaseDetailIdx}>
                                   지도 보기
                                 </span>
+                                {favoriteList?.find(
+                                  book => book.bookId === clickedBook.bookId
+                                ) ? (
+                                  <span
+                                    onClick={() => deleteFavorite(clickedBook)}
+                                  >
+                                    즐겨 찾기 삭제
+                                  </span>
+                                ) : (
+                                  <span
+                                    onClick={() => addFavorite(clickedBook)}
+                                  >
+                                    즐겨 찾기 추가
+                                  </span>
+                                )}
                                 <RightAngle
                                   onClick={increaseDetailIdx}
                                   style={{

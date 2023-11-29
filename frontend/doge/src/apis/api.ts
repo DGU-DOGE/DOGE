@@ -20,6 +20,8 @@ export interface IBook {
   bookRow: number;
   bookCell: number;
 }
+
+// 사용자 로그인 함수
 export const fetchLogin = async (userData: IUserData) => {
   const payload = { email: userData.userId, password: userData.userPassword };
   const { data } = await axios.post(`/api/user/login`, payload, {
@@ -27,6 +29,8 @@ export const fetchLogin = async (userData: IUserData) => {
   });
   return data;
 };
+
+// 사용자 회원가입 함수
 export const fetchJoin = async (userData: IUserData) => {
   const { data } = await axios.post(
     `/api/user/join`,
@@ -40,6 +44,8 @@ export const fetchJoin = async (userData: IUserData) => {
   );
   return data;
 };
+
+// 도서 검색 결과 함수
 export const fetchSearch = async (keyword: string | null) => {
   const { data } = await axios.get(`/search?keyword=${keyword}`, {
     withCredentials: true,
@@ -48,10 +54,16 @@ export const fetchSearch = async (keyword: string | null) => {
 };
 
 //사용자의 정보 (email)를 받아오는 함수
-export const fetchUserData = async () => {
-  const { data } = await axios.get(``);
+export const fetchUserInfo = async () => {
+  const { data } = await axios.post(`/api/user/check`, {
+    headers: {
+      sessionId: await getCookie("sessionId"),
+    },
+    withCredentials: true,
+  });
   return data;
 };
+// 즐겨찾기 등록 관련 함수
 export const fetchAddFavorite = async (favoriteData: IFavorite) => {
   const { data } = await axios.post(
     `/api/favorite/post`,
