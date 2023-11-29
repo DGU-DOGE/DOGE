@@ -15,6 +15,7 @@ import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
 import axios from "axios";
 import MapPath from "../utils/MapPath";
+import { formatFloor } from "../utils/formatPath";
 
 const Favorites = () => {
   const navigate = useNavigate();
@@ -257,7 +258,7 @@ const Favorites = () => {
                           <MapLocation>
                             {clickedBook && (
                               <MapPath
-                                floor={"B2"}
+                                floor={formatFloor("지하2층")} 
                                 shelfname={"normal1"}
                                 shelfnum={0}
                               />

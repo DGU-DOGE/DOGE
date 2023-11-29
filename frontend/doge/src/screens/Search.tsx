@@ -23,6 +23,7 @@ import { LoginState } from "../stores/atoms";
 import { useCookies } from "react-cookie";
 import { getCookie } from "../stores/Cookie";
 import MapPath from "../utils/MapPath";
+import { formatFloor } from "../utils/formatPath";
 
 const offset = 5;
 
@@ -398,7 +399,7 @@ const Search = () => {
                           <MapLocation>
                             {clickedBook && (
                               <MapPath
-                                floor={"B2"}
+                                floor={formatFloor("지하2층")}
                                 shelfname={"normal1"}
                                 shelfnum={0}
                               />
