@@ -10,6 +10,11 @@ const floors: IFloor = {
   지하1층: "B1",
   "1층": "1F",
   "3층": "3F",
+};
+
+const shelfNames: IShelfName = {
+  //왼쪽이 백에서 받는거, 오른쪽은 public/map/폴더명
+  //B2
   "대형예술700": "largeArt700",
   "대형예술700좌측아래": "largeArt700LeftBottom",
   "법학단행본1": "lawSingle1",
@@ -145,18 +150,94 @@ const floors: IFloor = {
   "정기간행물39" : "periodicals39",
   "정기간행물40" : "periodicals40",
   "참고도서" : "referenceBooks",
-  "참고도서C" : "referenceBooksC"
-}
-  
-const shelfNames: IShelfName = {
-  일반도서1: "normal1",
-  일반도서2: "normal2",
+  "참고도서C" : "referenceBooksC",
+
+  //B1
+  "법학참고도서1":"lawReference1",
+  "법학참고도서2":"lawReference2",
+  "법학참고도서3":"lawReference3",
+  "법학참고도서4":"lawReference4",
+  "법학참고도서5":"lawReference5",
+  "법학참고도서6":"lawReference6",
+  "일반도서56":"normal56",
+  "일반도서57":"normal57",
+  "일반도서58":"normal58",
+  "일반도서59":"normal59",
+  "일반도서60":"normal60",
+  "일반도서61":"normal61",
+  "일반도서62":"normal62",
+  "일반도서63":"normal63",
+  "일반도서64":"normal64",
+  "일반도서65":"normal65",
+  "일반도서66":"normal66",
+  "일반도서67":"normal67",
+  "일반도서68":"normal68",
+  "일반도서69":"normal69",
+  "일반도서70":"normal70",
+  "일반도서71":"normal71",
+  "일반도서72":"normal72",
+  "일반도서73":"normal73",
+  "일반도서74":"normal74",
+
+  //1F
+  "1층이름없는책장0":"1stFloorNoNameShelf0",
+  "1층이름없는책장1":"1stFloorNoNameShelf1",
+  "1층이름없는책장10":"1stFloorNoNameShelf10",
+  "1층이름없는책장2":"1stFloorNoNameShelf2",
+  "1층이름없는책장3":"1stFloorNoNameShelf3",
+  "1층이름없는책장4":"1stFloorNoNameShelf4",
+  "1층이름없는책장5":"1stFloorNoNameShelf5",
+  "1층이름없는책장6":"1stFloorNoNameShelf6",
+  "1층이름없는책장7":"1stFloorNoNameShelf7",
+  "1층이름없는책장8":"1stFloorNoNameShelf8",
+  "1층이름없는책장9":"1stFloorNoNameShelf9",
+  "기타종교1":"otherReligion1",
+  "대장경1":"greatScripture1",
+  "대장경2":"greatScripture2",
+  "대장경3":"greatScripture3",
+  "대장경4":"greatScripture4",
+  "봄산문고1":"springMountainBookstore1",
+  "봄산문고2":"springMountainBookstore2",
+  "봄산문고3":"springMountainBookstore3",
+  "봄산문고4":"springMountainBookstore4",
+  "봄산문고5":"springMountainBookstore5",
+  "봄산문고6":"springMountainBookstore6",
+  "불교일반도서1":"buddhismGeneralBooks1",
+  "불교일반도서2":"buddhismGeneralBooks2",
+  "불교일반도서3":"buddhismGeneralBooks3",
+  "불교일반도서4":"buddhismGeneralBooks4",
+  "불교일반도서5":"buddhismGeneralBooks5",
+  "불교일반도서6":"buddhismGeneralBooks6",
+  "불교일반도서7":"buddhismGeneralBooks7",
+  "불교정간물1,대장경5":"buddhismPeriodicals1_GreatScripture5",
+  "불교정간물2":"buddhismPeriodicals2",
+  "불교정간물3":"buddhismPeriodicals3",
+  "불교정간물4":"buddhismPeriodicals4",
+  "불교정간물5":"buddhismPeriodicals5",
+  "불교정간물6":"buddhismPeriodicals6",
+  "불교정간물7":"buddhismPeriodicals7",
+  "불교정간물8":"buddhismPeriodicals8",
+  "불교참고도서1":"buddhismReferenceBooks1",
+  "불교참고도서2":"buddhismReferenceBooks2",
+  "예술체육일반도서1":"artSportsGeneralBooks1",
+  "예술체육일반도서2":"artSportsGeneralBooks2",
+  "예술체육일반도서3":"artSportsGeneralBooks3",
+  "예술체육일반도서4":"artSportsGeneralBooks4",
+  "철학일반도서1":"philosophyGeneralBooks1",
+  "철학일반도서2":"philosophyGeneralBooks2",
+  "철학일반도서3":"philosophyGeneralBooks3",
+  "철학일반도서4":"philosophyGeneralBooks4",
+  "철학일반도서5":"philosophyGeneralBooks5",
+  "학위논문1":"thesis1",
+  "학위논문2":"thesis2",
+
+  //3F - 전부 normal이라서 겹침
 };
 
 export const formatFloor = (floor: string) => {
   return floors[floor];
+  
 };
-
 export const formatShelfName = (shelfName: string) => {
   return shelfNames[shelfName];
 };
