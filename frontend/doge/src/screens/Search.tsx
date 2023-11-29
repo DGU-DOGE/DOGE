@@ -398,7 +398,7 @@ const Search = () => {
                               <MapPath
                                 floor={clickedBook.floor}
                                 shelfname={clickedBook.shelfName}
-                                shelfnum={clickedBook.shelfnum}
+                                shelfnum={clickedBook.shelfCount}
                               />
                             )}
                           </MapLocation>
