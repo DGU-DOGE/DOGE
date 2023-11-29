@@ -7,7 +7,6 @@ import { fetchLogin } from "../apis/api";
 import { useRecoilState } from "recoil";
 import { LoginState } from "../stores/atoms";
 import axios from "axios";
-import { useCookies } from "react-cookie";
 import { setCookie } from "../stores/Cookie";
 
 const Wrapper = styled.div`

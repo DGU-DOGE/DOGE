@@ -20,6 +20,23 @@ export interface IBook {
   bookRow: number;
   bookCell: number;
 }
+
+// 회원 탈퇴 함수
+export const fetchDeleteUser = async (userData: IDelete) => {
+  const { data } = await axios.post(
+    `/api/user/delete`,
+    { password: userData.password },
+    {
+      headers: {
+        sessionId: await getCookie("sessionId"),
+      },
+      withCredentials: true,
+    }
+  );
+  return data;
+};
+
+// 사용자 로그인 함수
 export const fetchLogin = async (userData: IUserData) => {
   const payload = { email: userData.userId, password: userData.userPassword };
   const { data } = await axios.post(`/api/user/login`, payload, {
@@ -27,6 +44,8 @@ export const fetchLogin = async (userData: IUserData) => {
   });
   return data;
 };
+
+// 사용자 회원가입 함수
 export const fetchJoin = async (userData: IUserData) => {
   const { data } = await axios.post(
     `/api/user/join`,
@@ -40,6 +59,8 @@ export const fetchJoin = async (userData: IUserData) => {
   );
   return data;
 };
+
+// 도서 검색 결과 함수
 export const fetchSearch = async (keyword: string | null) => {
   const { data } = await axios.get(`/search?keyword=${keyword}`, {
     withCredentials: true,
@@ -48,10 +69,16 @@ export const fetchSearch = async (keyword: string | null) => {
 };
 
 //사용자의 정보 (email)를 받아오는 함수
-export const fetchUserData = async () => {
-  const { data } = await axios.get(``);
+export const fetchUserInfo = async () => {
+  const { data } = await axios.post(`/api/user/check`, {
+    headers: {
+      sessionId: await getCookie("sessionId"),
+    },
+    withCredentials: true,
+  });
   return data;
 };
+// 즐겨찾기 등록 관련 함수
 export const fetchAddFavorite = async (favoriteData: IFavorite) => {
   const { data } = await axios.post(
     `/api/favorite/post`,
@@ -104,11 +131,19 @@ export const fetchChangePassword = async (userData: IUserData) => {
   return data;
 };
 
-// 회원 탈퇴 함수
-export const fetchDeleteUser = async (userData: IDelete) => {
+// 사용자 로그아웃 함수
+export const fetchUserLogout = async () => {
+  const { data } = await axios.post(`/api/ersu / logout`, {
+    withCredentials: true,
+  });
+  return data;
+};
+
+// 즐겨찾기 목록 조회 함수
+export const fetchFavorite = async () => {
   const { data } = await axios.post(
-    `/api/user/delete`,
-    { password: userData.password },
+    "/api/favorite/check",
+    { sessionId: localStorage.getItem("sessionId") },
     {
       headers: {
         sessionId: await getCookie("sessionId"),
@@ -116,13 +151,5 @@ export const fetchDeleteUser = async (userData: IDelete) => {
       withCredentials: true,
     }
   );
-  return data;
-};
-
-// 사용자 로그아웃 함수
-export const fetchUserLogout = async () => {
-  const { data } = await axios.post(`/api/ersu / logout`, {
-    withCredentials: true,
-  });
   return data;
 };

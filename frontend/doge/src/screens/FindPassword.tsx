@@ -6,7 +6,6 @@ import { useMutation } from "react-query";
 import {
   fetchChangePassword,
   fetchConfirmCode,
-  fetchJoin,
   fetchSendCode,
 } from "../apis/api";
 import { useNavigate } from "react-router-dom";
@@ -41,7 +40,7 @@ const Title = styled.div`
     font-size: 68px;
   }
   span {
-    color: ${(props) => props.theme.orange};
+    color: ${props => props.theme.orange};
   }
 `;
 const JoinWrapper = styled.div`
@@ -59,8 +58,8 @@ const JoinForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${(props) => props.theme.orange};
-    color: ${(props) => props.theme.white.lighter};
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.lighter};
     font-size: 30px;
   }
   padding-top: 70px;
@@ -69,8 +68,8 @@ const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
@@ -79,7 +78,7 @@ const AlertMessage = styled.span`
   width: 80%;
   margin-left: 23px;
   margin-bottom: 10px;
-  color: ${(props) => props.theme.orange};
+  color: ${props => props.theme.orange};
   font-size: 20px;
 `;
 const Timer = styled.div`
@@ -122,7 +121,7 @@ const FindPassword = () => {
         setVerificationSent(true);
         startTimer();
       },
-      onError: (error) => {
+      onError: error => {
         console.error("인증번호 발송 실패", error);
       },
     }
@@ -143,7 +142,7 @@ const FindPassword = () => {
           navigate(`/find-password`);
         }
       },
-      onError: (error) => {
+      onError: error => {
         console.log("인증번호 인증 실패", error);
       },
     }
@@ -157,7 +156,7 @@ const FindPassword = () => {
         console.log("비밀번호 변경 성공!");
         navigate(`/login`);
       },
-      onError: (error) => {
+      onError: error => {
         console.log("비밀번호 변경 실패!", error);
       },
     }
@@ -186,11 +185,11 @@ const FindPassword = () => {
               { email: data.userId, password: data.userPassword },
               { withCredentials: true }
             )
-            .then((res) => {
+            .then(res => {
               console.log("비밀번호 변경 성공!!");
               navigate("/login");
             })
-            .catch((err) => console.log("비밀번호 변경 실패!!", err));
+            .catch(err => console.log("비밀번호 변경 실패!!", err));
         }
       }
     } catch (error) {
@@ -200,7 +199,7 @@ const FindPassword = () => {
   const startTimer = () => {
     setTimer(180); // 3분을 초 단위로 설정
     const intervalId = setInterval(() => {
-      setTimer((prevTimer) => prevTimer - 1);
+      setTimer(prevTimer => prevTimer - 1);
     }, 1000);
     setTimeout(() => {
       clearInterval(intervalId);

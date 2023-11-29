@@ -13,7 +13,7 @@ import {
   IBook,
   fetchAddFavorite,
   fetchSearch,
-  fetchUserData,
+  fetchUserInfo,
 } from "../apis/api";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
@@ -389,7 +389,7 @@ const Search = () => {
           return newFavorite;
         });
       })
-      .catch(err => console.log("즐겨 찾기 실패!"));
+      .catch(err => console.log("즐겨 찾기 삭제 실패!"));
   };
 
   const {
