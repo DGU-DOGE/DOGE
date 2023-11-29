@@ -156,7 +156,10 @@ const Favorites = () => {
                     whileHover="hover"
                     onClick={() => onBookClick(book.bookId!)}
                   >
-                    <BookImg src={book.photoLink} />
+                    <BookImg
+                      src={book.photoLink}
+                      style={{ paddingLeft: "12px", paddingTop: "18px" }}
+                    />
                     <BookInfo>
                       <h1>{book.bookName}</h1>
                       <h1>도서 위치 정보</h1>
@@ -198,9 +201,10 @@ const Favorites = () => {
                             <BookImg
                               src={clickedBook?.photoLink}
                               style={{
-                                width: 250,
-                                height: 250,
+                                width: 400,
+                                height: 400,
                                 marginTop: 50,
+                                marginBottom: 20,
                               }}
                             />
                           </div>
@@ -258,7 +262,7 @@ const Favorites = () => {
                           <MapLocation>
                             {clickedBook && (
                               <MapPath
-                                floor={formatFloor("지하2층")} 
+                                floor={formatFloor("지하2층")}
                                 shelfname={"normal1"}
                                 shelfnum={0}
                               />
