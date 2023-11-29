@@ -1,4 +1,4 @@
-package com.doge.backend.domain.email;
+package com.doge.backend.domain.book;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,17 +16,39 @@ import javax.persistence.Id;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthNumber {
+public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long authId;
+    private Long bookId;
 
     @Column(nullable = false, unique = true)
-    private String authEmail;
+    private String callNumber;
 
     @Column
-    private int authNumber;
+    private String bookName;
 
     @Column
-    private Long createdAt;
+    private String author;
+
+    @Column
+    private String publisher;
+
+    @Column
+    private String photoLink;
+
+
+    @Column
+    private String floor;
+
+    @Column
+    private String shelfName;
+
+    @Column
+    private int shelfCount;
+
+    @Column
+    private int bookRow;
+
+    @Column
+    private int bookCell;
 }
