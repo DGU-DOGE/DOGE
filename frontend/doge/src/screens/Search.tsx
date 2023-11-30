@@ -48,7 +48,6 @@ const Search = () => {
 
   useEffect(() => {
     (async () => {
-      setBookLoading(true);
       if (keyword) {
         setIndex(0);
         const { data: searchResult } = await axios.get(
@@ -56,9 +55,6 @@ const Search = () => {
           { withCredentials: true }
         );
         setData(searchResult);
-        setTimeout(() => {
-          setBookLoading(false);
-        }, 2000);
       }
     })();
   }, [keyword]);
@@ -93,6 +89,7 @@ const Search = () => {
         );
       })();
     }
+    setBookLoading(false);
   }, []);
 
   // 즐겨찾기 등록
