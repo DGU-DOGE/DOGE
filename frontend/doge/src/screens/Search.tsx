@@ -59,7 +59,7 @@ const Search = () => {
         setBookLoading(false);
       }
     })();
-  }, []);
+  }, [keyword]);
 
   useEffect(() => {
     if (bookDetailMatch?.params.bookId && data) {
