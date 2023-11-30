@@ -87,7 +87,7 @@ const Favorites = () => {
       .post(
         `/api/favorite/post`,
         {
-          bookId: favoriteData.bookId,
+          book: favoriteData,
         },
         {
           headers: {
