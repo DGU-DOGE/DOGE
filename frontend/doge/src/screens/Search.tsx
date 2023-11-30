@@ -56,9 +56,11 @@ const Search = () => {
           { withCredentials: true }
         );
         setData(searchResult);
+        setTimeout(() => {
+          setBookLoading(false);
+        }, 2000);
       }
     })();
-    setBookLoading(false);
   }, [keyword]);
 
   useEffect(() => {
