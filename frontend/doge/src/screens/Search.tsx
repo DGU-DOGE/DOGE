@@ -31,6 +31,7 @@ const Search = () => {
   const isLogin = useRecoilValue(LoginState);
   const [searchParams, _] = useSearchParams();
   const keyword = searchParams.get("keyword");
+  const [currentKeyword, setCurrentKeyword] = useState<string | null>(null);
   const [bookLoading, setBookLoading] = useState<boolean>(true);
   const [data, setData] = useState<IBook[]>([]);
   const [clickedBook, setClickedBook] = useState<IBook>();
@@ -58,10 +59,12 @@ const Search = () => {
         setData(searchResult);
       }
       setBookLoading(false);
+      setCurrentKeyword(keyword);
     })();
   }, [keyword]);
 
   useEffect(() => {
+    setDetailIdx(0);
     if (bookDetailMatch?.params.bookId && data) {
       setClickedBook(
         data.find((book) => book.bookId + "" === bookDetailMatch.params.bookId)
@@ -148,7 +151,7 @@ const Search = () => {
   } = useForm<IForm>({ mode: "onSubmit" });
 
   const onBookClick = (bookId: number) => {
-    navigate(`/search/book-detail/${bookId}/keyword=${keyword}`);
+    navigate(`/search/book-detail/${bookId}`);
   };
   const increaseIndex = () => {
     if (leaving) return;
@@ -184,7 +187,6 @@ const Search = () => {
     navigate(`/search?keyword=${data.keyword}`);
   };
   const onOverlayClick = () => {
-    setDetailIdx(0);
     navigate(-1);
   };
 
@@ -195,7 +197,7 @@ const Search = () => {
       {data.length === 0 ? (
         <>
           <Banner>
-            <Title>검색결과 [{searchParams.get("keyword")}]</Title>
+            <Title>검색결과 [{currentKeyword}]</Title>
           </Banner>
           <InfoWrapper>
             <SearchForm onSubmit={handleSubmit(onValid)}>
@@ -234,7 +236,7 @@ const Search = () => {
       ) : (
         <>
           <Banner>
-            <Title>검색결과 [{searchParams.get("keyword")}]</Title>
+            <Title>검색결과 [{currentKeyword}]</Title>
           </Banner>
           <InfoWrapper>
             <SearchForm onSubmit={handleSubmit(onValid)}>
