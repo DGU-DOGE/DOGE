@@ -56,9 +56,9 @@ const Search = () => {
           { withCredentials: true }
         );
         setData(searchResult);
-        setBookLoading(false);
       }
     })();
+    setBookLoading(false);
   }, [keyword]);
 
   useEffect(() => {
