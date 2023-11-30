@@ -33,6 +33,7 @@ const Search = () => {
   const keyword = searchParams.get("keyword");
   const [currentKeyword, setCurrentKeyword] = useState<string | null>(null);
   const [bookLoading, setBookLoading] = useState<boolean>(true);
+  const [detailLoading, setDetailLoading] = useState<boolean>(true);
   const [data, setData] = useState<IBook[]>([]);
   const [clickedBook, setClickedBook] = useState<IBook>();
   const [favoriteList, setFavoriteList] = useState<IBook[]>([]);
@@ -65,11 +66,13 @@ const Search = () => {
 
   useEffect(() => {
     setDetailIdx(0);
+    setDetailLoading(true);
     if (bookDetailMatch?.params.bookId && data) {
       setClickedBook(
         data.find((book) => book.bookId + "" === bookDetailMatch.params.bookId)
       );
     }
+    setDetailLoading(false);
   }, [bookDetailMatch]);
 
   // 즐겨찾기 조회
@@ -310,7 +313,7 @@ const Search = () => {
               onExitComplete={toggleDetailLeaving}
               initial={false}
             >
-              {bookDetailMatch && (
+              {bookDetailMatch && !detailLoading ? (
                 <>
                   <Overlay
                     onClick={onOverlayClick}
@@ -326,7 +329,6 @@ const Search = () => {
                     <Slider key={detailIdx}>
                       <CancelBtn
                         onClick={() => {
-                          setDetailIdx(0);
                           navigate(-1);
                         }}
                       />
@@ -453,7 +455,7 @@ const Search = () => {
                     </Slider>
                   </DetailWrapper>
                 </>
-              )}
+              ) : null}
             </AnimatePresence>
           </InfoWrapper>
         </>
