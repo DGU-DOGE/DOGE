@@ -48,7 +48,6 @@ const Search = () => {
 
   useEffect(() => {
     (async () => {
-      setBookLoading(true);
       if (keyword) {
         setIndex(0);
         const { data: searchResult } = await axios.get(
@@ -56,7 +55,6 @@ const Search = () => {
           { withCredentials: true }
         );
         setData(searchResult);
-        setBookLoading(false);
       }
     })();
   }, [keyword]);
@@ -91,6 +89,7 @@ const Search = () => {
         );
       })();
     }
+    setBookLoading(false);
   }, []);
 
   // 즐겨찾기 등록
@@ -403,8 +402,10 @@ const Search = () => {
                           <MapLocation>
                             {clickedBook && (
                               <MapPath
-                                floor={formatFloor("지하2층")}
-                                shelfname={formatShelfName("일반도서1")}
+                                floor={formatFloor(clickedBook.floor)}
+                                shelfname={formatShelfName(
+                                  clickedBook.shelfName
+                                )}
                                 shelfnum={0}
                               />
                             )}
