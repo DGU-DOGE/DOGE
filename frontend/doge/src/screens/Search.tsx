@@ -56,11 +56,11 @@ const Search = () => {
           `/search?keyword=${keyword}`,
           { withCredentials: true }
         );
+        if (keyword !== currentKeyword) {
+          setIndex(0);
+        }
         setData(searchResult);
         setCurrentKeyword(keyword);
-      }
-      if (keyword !== currentKeyword) {
-        setIndex(0);
       }
       setBookLoading(false);
     })();
