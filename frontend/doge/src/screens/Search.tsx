@@ -50,17 +50,17 @@ const Search = () => {
 
   useEffect(() => {
     (async () => {
-      setBookLoading(true);
       if (keyword) {
         const { data: searchResult } = await axios.get(
           `/search?keyword=${keyword}`,
           { withCredentials: true }
         );
+        if (keyword !== currentKeyword) {
+          setBookLoading(true);
+          setIndex(0);
+        }
         setData(searchResult);
         setCurrentKeyword(keyword);
-      }
-      if (keyword !== currentKeyword) {
-        setIndex(0);
       }
       setBookLoading(false);
     })();
