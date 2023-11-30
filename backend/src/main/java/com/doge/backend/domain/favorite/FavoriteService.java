@@ -3,12 +3,12 @@ package com.doge.backend.domain.favorite;
 import com.doge.backend.domain.book.Book;
 import com.doge.backend.domain.book.BookRepository;
 import com.doge.backend.utils.SessionManager;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
