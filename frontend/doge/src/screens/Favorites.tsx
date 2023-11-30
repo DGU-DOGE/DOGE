@@ -266,8 +266,10 @@ const Favorites = () => {
                           <MapLocation>
                             {clickedBook && (
                               <MapPath
-                                floor={formatFloor("지하2층")}
-                                shelfname={formatShelfName("일반도서1")}
+                                floor={formatFloor(clickedBook.floor)}
+                                shelfname={formatShelfName(
+                                  clickedBook.shelfName
+                                )}
                                 shelfnum={0}
                               />
                             )}
