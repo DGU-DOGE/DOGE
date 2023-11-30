@@ -70,7 +70,6 @@ const Search = () => {
         data.find((book) => book.bookId + "" === bookDetailMatch.params.bookId)
       );
     }
-    setBookLoading(false);
   }, [bookDetailMatch]);
 
   // 즐겨찾기 조회
@@ -190,7 +189,7 @@ const Search = () => {
     navigate(-1);
   };
 
-  return bookLoading || data.length === 0 ? (
+  return bookLoading ? (
     <Loader />
   ) : (
     <Wrapper>
