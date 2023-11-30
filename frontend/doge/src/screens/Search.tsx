@@ -50,13 +50,15 @@ const Search = () => {
 
   useEffect(() => {
     (async () => {
-      setBookLoading(true);
       if (keyword) {
-        setIndex(0);
         const { data: searchResult } = await axios.get(
           `/search?keyword=${keyword}`,
           { withCredentials: true }
         );
+        if (keyword !== currentKeyword) {
+          setBookLoading(true);
+          setIndex(0);
+        }
         setData(searchResult);
         setCurrentKeyword(keyword);
       }
@@ -507,7 +509,7 @@ const Input = styled.input`
   border: 1px solid ${(props) => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
-  font-size: 22px;
+  font-size: 28px;
 `;
 const SearchBtn = styled.div`
   svg {
