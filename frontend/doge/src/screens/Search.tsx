@@ -32,6 +32,7 @@ const Search = () => {
   const [searchParams, _] = useSearchParams();
   const keyword = searchParams.get("keyword");
   const [bookLoading, setBookLoading] = useState<boolean>(true);
+  const [favoriteLoading, setFavoriteLoading] = useState<boolean>(true);
   const [data, setData] = useState<IBook[]>([]);
   const [clickedBook, setClickedBook] = useState<IBook>();
   const [favoriteList, setFavoriteList] = useState<IBook[]>([]);
@@ -57,6 +58,7 @@ const Search = () => {
         setData(searchResult);
       }
     })();
+    setBookLoading(false);
   }, [keyword]);
 
   useEffect(() => {
@@ -89,7 +91,7 @@ const Search = () => {
         );
       })();
     }
-    setBookLoading(false);
+    setFavoriteLoading(false);
   }, []);
 
   // 즐겨찾기 등록
@@ -187,7 +189,7 @@ const Search = () => {
     navigate(-1);
   };
 
-  return bookLoading ? (
+  return bookLoading || favoriteLoading ? (
     <Loader />
   ) : (
     <Wrapper>
