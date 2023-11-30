@@ -57,9 +57,9 @@ const Search = () => {
           { withCredentials: true }
         );
         setData(searchResult);
+        setCurrentKeyword(keyword);
       }
       setBookLoading(false);
-      setCurrentKeyword(keyword);
     })();
   }, [keyword]);
 
