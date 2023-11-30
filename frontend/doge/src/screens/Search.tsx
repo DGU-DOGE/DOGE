@@ -167,7 +167,7 @@ const Search = () => {
     toggleLeaving();
     setNext(false);
     setIndex(prev =>
-      prev === 0 ? Math.floor(data.length / offset) : prev - 1
+      prev === 0 ? Math.floor(data.length / offset) - 1 : prev - 1
     );
   };
   const decreaseDetailIdx = () => {
