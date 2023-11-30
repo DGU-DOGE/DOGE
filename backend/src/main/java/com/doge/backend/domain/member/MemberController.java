@@ -30,8 +30,6 @@ public class MemberController {
 
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody Member req, HttpServletResponse response) {
-        log.info(req.toString());
-        log.info(response.toString());
         HashMap<String, String> result = new HashMap<>();
         result.put("sessionId", memberService.login(req, response));
         return result;
@@ -39,7 +37,6 @@ public class MemberController {
 
     @PostMapping("/logout")
     public void logout(HttpServletRequest request) {
-        log.info(request.toString());
         memberService.logout(request);
     }
 

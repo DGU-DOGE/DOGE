@@ -36,7 +36,6 @@ public class Book {
     @Column
     private String photoLink;
 
-
     @Column
     private String floor;
 
