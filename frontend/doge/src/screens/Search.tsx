@@ -32,6 +32,7 @@ const Search = () => {
   const [searchParams, _] = useSearchParams();
   const keyword = searchParams.get("keyword");
   const [bookLoading, setBookLoading] = useState<boolean>(true);
+  const [currentKeyword, setCurrentKeyword] = useState<string | null>("");
   const [data, setData] = useState<IBook[]>([]);
   const [clickedBook, setClickedBook] = useState<IBook>();
   const [favoriteList, setFavoriteList] = useState<IBook[]>([]);
@@ -58,6 +59,7 @@ const Search = () => {
         setData(searchResult);
       }
       setBookLoading(false);
+      setCurrentKeyword(searchParams.get("keyword"));
     })();
   }, [keyword]);
 
@@ -195,7 +197,7 @@ const Search = () => {
       {data.length === 0 ? (
         <>
           <Banner>
-            <Title>검색결과 [{searchParams.get("keyword")}]</Title>
+            <Title>검색결과 [{currentKeyword}]</Title>
           </Banner>
           <InfoWrapper>
             <SearchForm onSubmit={handleSubmit(onValid)}>
