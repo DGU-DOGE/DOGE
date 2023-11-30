@@ -32,7 +32,6 @@ const Search = () => {
   const [searchParams, _] = useSearchParams();
   const keyword = searchParams.get("keyword");
   const [bookLoading, setBookLoading] = useState<boolean>(true);
-  const [favoriteLoading, setFavoriteLoading] = useState<boolean>(true);
   const [data, setData] = useState<IBook[]>([]);
   const [clickedBook, setClickedBook] = useState<IBook>();
   const [favoriteList, setFavoriteList] = useState<IBook[]>([]);
@@ -49,6 +48,7 @@ const Search = () => {
 
   useEffect(() => {
     (async () => {
+      setBookLoading(true);
       if (keyword) {
         setIndex(0);
         const { data: searchResult } = await axios.get(
@@ -56,10 +56,10 @@ const Search = () => {
           { withCredentials: true }
         );
         setData(searchResult);
+        setBookLoading(false);
       }
     })();
-    setBookLoading(false);
-  }, [keyword]);
+  }, []);
 
   useEffect(() => {
     if (bookDetailMatch?.params.bookId && data) {
@@ -91,7 +91,6 @@ const Search = () => {
         );
       })();
     }
-    setFavoriteLoading(false);
   }, []);
 
   // 즐겨찾기 등록
@@ -189,7 +188,7 @@ const Search = () => {
     navigate(-1);
   };
 
-  return bookLoading || favoriteLoading ? (
+  return bookLoading ? (
     <Loader />
   ) : (
     <Wrapper>
