@@ -52,13 +52,15 @@ const Search = () => {
     (async () => {
       setBookLoading(true);
       if (keyword) {
-        setIndex(0);
         const { data: searchResult } = await axios.get(
           `/search?keyword=${keyword}`,
           { withCredentials: true }
         );
         setData(searchResult);
         setCurrentKeyword(keyword);
+      }
+      if (keyword !== currentKeyword) {
+        setIndex(0);
       }
       setBookLoading(false);
     })();
@@ -507,7 +509,7 @@ const Input = styled.input`
   border: 1px solid ${(props) => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
-  font-size: 22px;
+  font-size: 28px;
 `;
 const SearchBtn = styled.div`
   svg {
