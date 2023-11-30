@@ -74,7 +74,7 @@ const Input = styled.input`
   border: 1px solid ${(props) => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
-  font-size: 22px;
+  font-size: 28px;
 `;
 const SearchBtn = styled.div`
   svg {
