@@ -29,9 +29,7 @@ public class FavoriteService {
         return books;
     }
 
-    public void post(Long bookId, HttpServletRequest request) {
-        Book book = bookRepository.findByBookId(bookId);
-
+    public void post(Book book, HttpServletRequest request) {
         Favorite favorite = Favorite.builder()
                 .book(book)
                 .member(sessionManager.getSession(request))

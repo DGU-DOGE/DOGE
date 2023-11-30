@@ -24,8 +24,8 @@ public class FavoriteController {
     }
 
     @PostMapping("/post")
-    public void post(@RequestBody Book book, HttpServletRequest request) {
-        favoriteService.post(book.getBookId(), request);
+    public void post(@RequestBody FavoriteRequest book, HttpServletRequest request) {
+        favoriteService.post(book.getBook(), request);
     }
 
     @PostMapping("/delete")
