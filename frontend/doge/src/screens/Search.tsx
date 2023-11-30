@@ -46,17 +46,6 @@ const Search = () => {
   const [detailLeaving, setDetailLeaving] = useState(false);
   const { scrollY } = useScroll();
 
-  const handleWait = () => {
-    setTimeout(() => {
-      setBookLoading(false);
-    }, 2500);
-  };
-
-  useEffect(() => {
-    setBookLoading(true);
-    handleWait();
-  }, []);
-
   useEffect(() => {
     (async () => {
       setBookLoading(true);
@@ -68,7 +57,7 @@ const Search = () => {
         );
         setData(searchResult);
       }
-      handleWait();
+      setBookLoading(false);
     })();
   }, [keyword]);
 
@@ -199,7 +188,7 @@ const Search = () => {
     navigate(-1);
   };
 
-  return bookLoading ? (
+  return bookLoading || data.length === 0 ? (
     <Loader />
   ) : (
     <Wrapper>
