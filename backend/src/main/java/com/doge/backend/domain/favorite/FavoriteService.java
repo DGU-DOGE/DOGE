@@ -50,6 +50,9 @@ public class FavoriteService {
 
     @Transactional
     public void delete(Long bookId, HttpServletRequest request) {
-        favoriteRepository.delete(favoriteRepository.findByMember_MemberIdAndBook_BookId(sessionManager.getSession(request).getMemberId(), bookId));
+        Member member = memberRepository.findByEmail(sessionManager.getSession(request).getEmail());
+        member.setFavoriteCount(member.getFavoriteCount() - 1);
+
+        favoriteRepository.delete(favoriteRepository.findByMember_MemberIdAndBook_BookId(member.getMemberId(), bookId));
     }
 }
