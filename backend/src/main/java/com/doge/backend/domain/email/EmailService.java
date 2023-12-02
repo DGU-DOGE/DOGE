@@ -1,25 +1,29 @@
 package com.doge.backend.domain.email;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailService {
     private final JavaMailSender emailSender;
     private final EmailRepository emailRepository;
 
+    @Transactional
     public void sendEmail(String email) {
         if (emailRepository.existsByAuthEmail(email)) {
             emailRepository.deleteById(emailRepository.findByAuthEmail(email).getAuthId());
         }
 
         Random random = new Random();
-        int keyValue = random.nextInt(899999) + 100000;
+        String keyValue = String.format("%06d", random.nextInt(1000000));
         long nowTime = System.currentTimeMillis();
 
         AuthNumber authNumber = AuthNumber.builder()
@@ -37,7 +41,8 @@ public class EmailService {
         emailSender.send(message);
     }
 
-    public void validateNumber(AuthNumber req) {
+    @Transactional
+    public void validateNumber(EmailRequest req) {
         if (!emailRepository.existsByAuthEmail(req.getAuthEmail())) {
             throw new RuntimeException("인증번호가 없음");
         }
@@ -51,7 +56,7 @@ public class EmailService {
             throw new RuntimeException("만료된 인증");
         }
 
-        if (authNumber.getAuthNumber() != req.getAuthNumber()) {
+        if (!authNumber.getAuthNumber().equals(req.getAuthNumber())) {
             throw new RuntimeException("인증 번호가 맞지 않음");
         }
 

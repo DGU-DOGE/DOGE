@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -15,12 +17,12 @@ public class EmailController {
     private final EmailService emailService;
 
     @PostMapping("/send-email")
-    public void sendEmail(@RequestBody AuthNumber email) {
-        emailService.sendEmail(email.getAuthEmail());
+    public void sendEmail(@RequestBody Map<String, String> email) {
+        emailService.sendEmail(email.get("authEmail"));
     }
 
     @PostMapping("/validate-number")
-    public void validateNumber(@RequestBody AuthNumber authNumber) {
-        emailService.validateNumber(authNumber);
+    public void validateNumber(@RequestBody EmailRequest request) {
+        emailService.validateNumber(request);
     }
 }

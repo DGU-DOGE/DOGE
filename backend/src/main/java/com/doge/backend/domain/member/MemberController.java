@@ -1,6 +1,8 @@
 package com.doge.backend.domain.member;
 
 import com.doge.backend.utils.SessionManager;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -9,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,27 +24,24 @@ public class MemberController {
     private final SessionManager sessionManager;
 
     @PostMapping("/join")
-    public void join(@RequestBody Member req) {
+    public void join(@RequestBody MemberRequest req) {
         memberService.join(req);
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody Member req, HttpServletResponse response) {
-        log.info(req.toString());
-        log.info(response.toString());
-        HashMap<String, String> result = new HashMap<>();
+    public Map<String, String> login(@RequestBody MemberRequest req, HttpServletResponse response) {
+        Map<String, String> result = new HashMap<>();
         result.put("sessionId", memberService.login(req, response));
         return result;
     }
 
     @PostMapping("/logout")
     public void logout(HttpServletRequest request) {
-        log.info(request.toString());
         memberService.logout(request);
     }
 
     @PatchMapping("/change-password")
-    public void changePassword(@RequestBody Member req) {
+    public void changePassword(@RequestBody MemberRequest req) {
         memberService.changePassword(req);
     }
 
@@ -54,7 +51,7 @@ public class MemberController {
     }
 
     @PostMapping("/delete")
-    public void delete(@RequestBody Member password, HttpServletRequest request) {
-        memberService.delete(password.getPassword(), request);
+    public void delete(@RequestBody Map<String, String> password, HttpServletRequest request) {
+        memberService.delete(password.get("password"), request);
     }
 }
