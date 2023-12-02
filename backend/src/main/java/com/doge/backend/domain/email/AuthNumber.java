@@ -25,7 +25,7 @@ public class AuthNumber {
     private String authEmail;
 
     @Column
-    private int authNumber;
+    private String authNumber;
 
     @Column
     private Long createdAt;

@@ -23,7 +23,7 @@ public class EmailService {
         }
 
         Random random = new Random();
-        int keyValue = random.nextInt(899999) + 100000;
+        String keyValue = String.format("%06d", random.nextInt(1000000));
         long nowTime = System.currentTimeMillis();
 
         AuthNumber authNumber = AuthNumber.builder()
@@ -56,7 +56,7 @@ public class EmailService {
             throw new RuntimeException("만료된 인증");
         }
 
-        if (authNumber.getAuthNumber() != req.getAuthNumber()) {
+        if (authNumber.getAuthNumber().equals(req.getAuthNumber())) {
             throw new RuntimeException("인증 번호가 맞지 않음");
         }
 
