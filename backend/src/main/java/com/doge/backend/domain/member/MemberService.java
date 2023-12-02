@@ -1,5 +1,6 @@
 package com.doge.backend.domain.member;
 
+import com.doge.backend.domain.favorite.FavoriteRepository;
 import com.doge.backend.utils.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ import java.util.Map;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final FavoriteRepository favoriteRepository;
     private final SessionManager sessionManager;
 
     @Transactional
@@ -73,6 +75,8 @@ public class MemberService {
             throw new RuntimeException("비밀번호 불일치");
         }
         sessionManager.expire(request);
+
+        favoriteRepository.deleteAllByMember_MemberId(member.getMemberId());
         memberRepository.deleteById(member.getMemberId());
     }
 }
