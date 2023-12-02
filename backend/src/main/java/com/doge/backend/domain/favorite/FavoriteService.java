@@ -1,7 +1,6 @@
 package com.doge.backend.domain.favorite;
 
 import com.doge.backend.domain.book.Book;
-import com.doge.backend.domain.book.BookRepository;
 import com.doge.backend.utils.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
-    private final BookRepository bookRepository;
     private final SessionManager sessionManager;
 
     public List<Book> check(HttpServletRequest request) {

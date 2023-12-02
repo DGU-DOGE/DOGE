@@ -30,7 +30,7 @@ public class MemberController {
 
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody Member req, HttpServletResponse response) {
-        HashMap<String, String> result = new HashMap<>();
+        Map<String, String> result = new HashMap<>();
         result.put("sessionId", memberService.login(req, response));
         return result;
     }
