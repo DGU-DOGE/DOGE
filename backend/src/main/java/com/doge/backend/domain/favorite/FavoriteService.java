@@ -1,6 +1,8 @@
 package com.doge.backend.domain.favorite;
 
 import com.doge.backend.domain.book.Book;
+import com.doge.backend.domain.member.Member;
+import com.doge.backend.domain.member.MemberRepository;
 import com.doge.backend.utils.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
+    private final MemberRepository memberRepository;
     private final SessionManager sessionManager;
 
     public List<Book> check(HttpServletRequest request) {
@@ -29,9 +32,18 @@ public class FavoriteService {
 
     @Transactional
     public void post(Book book, HttpServletRequest request) {
+        Member member = memberRepository.findByEmail(sessionManager.getSession(request).getEmail());
+        int favoriteCount = member.getFavoriteCount();
+
+        if (favoriteCount == 20) {
+            throw new RuntimeException("즐겨찾기 개수 초과");
+        }
+
+        member.setFavoriteCount(favoriteCount + 1);
+
         Favorite favorite = Favorite.builder()
                 .book(book)
-                .member(sessionManager.getSession(request))
+                .member(member)
                 .build();
         favoriteRepository.save(favorite);
     }
