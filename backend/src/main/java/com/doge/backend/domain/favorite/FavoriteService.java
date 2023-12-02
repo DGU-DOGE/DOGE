@@ -27,6 +27,7 @@ public class FavoriteService {
         return books;
     }
 
+    @Transactional
     public void post(Book book, HttpServletRequest request) {
         Favorite favorite = Favorite.builder()
                 .book(book)

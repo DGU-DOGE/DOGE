@@ -19,6 +19,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final SessionManager sessionManager;
 
+    @Transactional
     public void join(Member req) {
         if (emailDuplicateValidate(req.getEmail())) {
             throw new RuntimeException("이메일 중복");

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 
@@ -15,6 +16,7 @@ public class EmailService {
     private final JavaMailSender emailSender;
     private final EmailRepository emailRepository;
 
+    @Transactional
     public void sendEmail(String email) {
         if (emailRepository.existsByAuthEmail(email)) {
             emailRepository.deleteById(emailRepository.findByAuthEmail(email).getAuthId());
@@ -39,6 +41,7 @@ public class EmailService {
         emailSender.send(message);
     }
 
+    @Transactional
     public void validateNumber(AuthNumber req) {
         if (!emailRepository.existsByAuthEmail(req.getAuthEmail())) {
             throw new RuntimeException("인증번호가 없음");
