@@ -22,7 +22,7 @@ public class MemberService {
     private final SessionManager sessionManager;
 
     @Transactional
-    public void join(Member req) {
+    public void join(MemberRequest req) {
         if (emailDuplicateValidate(req.getEmail())) {
             throw new RuntimeException("이메일 중복");
         }
@@ -39,7 +39,7 @@ public class MemberService {
         return memberRepository.existsByEmail(email);
     }
 
-    public String login(Member req, HttpServletResponse response) {
+    public String login(MemberRequest req, HttpServletResponse response) {
         if (!emailDuplicateValidate(req.getEmail())) {
             throw new RuntimeException("없는 계정");
         }
@@ -57,7 +57,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void changePassword(Member req) {
+    public void changePassword(MemberRequest req) {
         Member member = memberRepository.findByEmail(req.getEmail());
         member.setPassword(req.getPassword());
     }

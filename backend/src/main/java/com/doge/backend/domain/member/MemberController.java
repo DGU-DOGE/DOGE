@@ -24,12 +24,12 @@ public class MemberController {
     private final SessionManager sessionManager;
 
     @PostMapping("/join")
-    public void join(@RequestBody Member req) {
+    public void join(@RequestBody MemberRequest req) {
         memberService.join(req);
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody Member req, HttpServletResponse response) {
+    public Map<String, String> login(@RequestBody MemberRequest req, HttpServletResponse response) {
         Map<String, String> result = new HashMap<>();
         result.put("sessionId", memberService.login(req, response));
         return result;
@@ -41,7 +41,7 @@ public class MemberController {
     }
 
     @PatchMapping("/change-password")
-    public void changePassword(@RequestBody Member req) {
+    public void changePassword(@RequestBody MemberRequest req) {
         memberService.changePassword(req);
     }
 
@@ -51,7 +51,7 @@ public class MemberController {
     }
 
     @PostMapping("/delete")
-    public void delete(@RequestBody Member password, HttpServletRequest request) {
-        memberService.delete(password.getPassword(), request);
+    public void delete(@RequestBody Map<String, String> password, HttpServletRequest request) {
+        memberService.delete(password.get("password"), request);
     }
 }
