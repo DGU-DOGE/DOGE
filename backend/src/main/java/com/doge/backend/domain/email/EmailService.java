@@ -42,7 +42,7 @@ public class EmailService {
     }
 
     @Transactional
-    public void validateNumber(AuthNumber req) {
+    public void validateNumber(EmailRequest req) {
         if (!emailRepository.existsByAuthEmail(req.getAuthEmail())) {
             throw new RuntimeException("인증번호가 없음");
         }
