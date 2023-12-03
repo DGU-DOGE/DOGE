@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findTop30ByBookNameContainsOrAuthorContains(String bookName, String author);
+
+    List<Book> findTop10000ByOrderByBookIdAsc();
 }
