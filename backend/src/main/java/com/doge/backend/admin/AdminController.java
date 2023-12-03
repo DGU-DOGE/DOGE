@@ -29,9 +29,16 @@ public class AdminController {
     }
 
     @GetMapping("/books")
-    public String books(Model model){
+    public String books(Model model) {
         List<Book> books = adminService.findBooks();
         model.addAttribute("books", books);
         return "/bookList";
+    }
+
+    @GetMapping("/bookshelves")
+    public String bookshelves(Model model) {
+        List<Bookshelf> bookshelves = adminService.findBookshelves();
+        model.addAttribute("bookshelves", bookshelves);
+        return "/bookshelfList";
     }
 }

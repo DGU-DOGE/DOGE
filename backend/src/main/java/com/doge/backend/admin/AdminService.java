@@ -22,7 +22,11 @@ public class AdminService {
         return memberRepository.findAll();
     }
 
-    public List<Book> findBooks(){
+    public List<Book> findBooks() {
         return bookRepository.findTop10000ByOrderByBookIdAsc();
+    }
+
+    public List<Bookshelf> findBookshelves() {
+        return bookshelfRepository.findAll();
     }
 }
