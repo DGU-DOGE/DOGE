@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <div>
+        <table border="1">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>이메일</th>
+                <th>즐겨찾기 개수</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Thymeleaf 반복문 사용 -->
+            <tr th:each="member : ${members}">
+                <td th:text="${member.memberId}">Member ID</td>
+                <td th:text="${member.email}">Email</td>
+                <td th:text="${member.favoriteCount}">Favorite Count</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div> <!-- /container -->
+</body>
+</html>
