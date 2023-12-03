@@ -1,5 +1,6 @@
 package com.doge.backend.admin;
 
+import com.doge.backend.domain.book.Book;
 import com.doge.backend.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,5 +26,12 @@ public class AdminController {
         List<Member> members = adminService.findMembers();
         model.addAttribute("members", members);
         return "/memberList";
+    }
+
+    @GetMapping("/books")
+    public String books(Model model){
+        List<Book> books = adminService.findBooks();
+        model.addAttribute("books", books);
+        return "/bookList";
     }
 }

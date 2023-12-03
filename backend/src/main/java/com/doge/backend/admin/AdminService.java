@@ -1,5 +1,6 @@
 package com.doge.backend.admin;
 
+import com.doge.backend.domain.book.Book;
 import com.doge.backend.domain.book.BookRepository;
 import com.doge.backend.domain.member.Member;
 import com.doge.backend.domain.member.MemberRepository;
@@ -19,5 +20,9 @@ public class AdminService {
 
     public List<Member> findMembers() {
         return memberRepository.findAll();
+    }
+
+    public List<Book> findBooks(){
+        return bookRepository.findTop10000ByOrderByBookIdAsc();
     }
 }
