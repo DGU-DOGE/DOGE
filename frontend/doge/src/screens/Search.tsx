@@ -413,7 +413,7 @@ const Search = () => {
                                 shelfname={formatShelfName(
                                   clickedBook.shelfName
                                 )}
-                                shelfnum={0}
+                                shelfnum={clickedBook.shelfCount}
                               />
                             )}
                           </MapLocation>
