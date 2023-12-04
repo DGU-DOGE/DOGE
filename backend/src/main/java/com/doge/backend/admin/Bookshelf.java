@@ -1,11 +1,10 @@
-package com.doge.backend.domain.member;
+package com.doge.backend.admin;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,17 +15,29 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member {
+public class Bookshelf {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false)
-    private String password;
+    private Long bookshelfId;
 
     @Column
-    private int favoriteCount;
+    private String shelfName;
+
+    @Column
+    private String floor;
+
+    @Column
+    private String numberStart;
+
+    @Column
+    private String numberEnd;
+
+    @Column
+    private String numberStart2;
+
+    @Column
+    private String numberEnd2;
+
+    @Column
+    private int shelfCount;
 }

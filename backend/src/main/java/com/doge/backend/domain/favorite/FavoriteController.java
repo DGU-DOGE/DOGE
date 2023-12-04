@@ -1,6 +1,7 @@
 package com.doge.backend.domain.favorite;
 
 import com.doge.backend.domain.book.Book;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -24,8 +24,8 @@ public class FavoriteController {
     }
 
     @PostMapping("/post")
-    public void post(@RequestBody Book book, HttpServletRequest request) {
-        favoriteService.post(book.getBookId(), request);
+    public void post(@RequestBody FavoriteRequest book, HttpServletRequest request) {
+        favoriteService.post(book.getBook(), request);
     }
 
     @PostMapping("/delete")
