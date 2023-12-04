@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+  <div>
+    <table border="1">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>청구기호</th>
+        <th>이름</th>
+        <th>저자</th>
+        <th>출판사</th>
+        <th>floor</th>
+        <th>shelfName</th>
+        <th>shelfCount</th>
+        <th>Row</th>
+        <th>Cell</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- Thymeleaf 반복문 사용 -->
+      <tr th:each="book : ${books}">
+        <td th:text="${book.bookId}">Book ID</td>
+        <td th:text="${book.callNumber}">Call Number</td>
+        <td th:text="${book.bookName}">Book Name</td>
+        <td th:text="${book.author}">Author</td>
+        <td th:text="${book.publisher}">Publisher</td>
+        <td th:text="${book.floor}">Floor</td>
+        <td th:text="${book.shelfName}">Shelf Name</td>
+        <td th:text="${book.shelfCount}">Shelf Count</td>
+        <td th:text="${book.bookRow}">Book Row</td>
+        <td th:text="${book.bookCell}">Book Cell</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div> <!-- /container -->
+</body>
+</html>

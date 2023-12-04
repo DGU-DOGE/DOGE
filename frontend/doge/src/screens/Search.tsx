@@ -413,7 +413,7 @@ const Search = () => {
                                 shelfname={formatShelfName(
                                   clickedBook.shelfName
                                 )}
-                                shelfnum={0}
+                                shelfnum={clickedBook.shelfCount - 1}
                               />
                             )}
                           </MapLocation>
@@ -424,7 +424,7 @@ const Search = () => {
                                 <h1>도서관 {clickedBook.floor}</h1>
                                 <h1>책장 이름 : {clickedBook.shelfName}</h1>
                                 <h1>
-                                  표시된 서가에서 : {clickedBook.bookRow}층,
+                                  표시된 서가에서 : {8-clickedBook.bookRow}층,
                                   왼쪽에서 {clickedBook.bookCell}번째에
                                   존재합니다
                                 </h1>
