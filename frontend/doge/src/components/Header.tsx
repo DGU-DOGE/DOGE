@@ -8,7 +8,8 @@ import { LoginState } from "../stores/atoms";
 import { useRecoilState } from "recoil";
 import { motion } from "framer-motion";
 import styled from "styled-components";
-import axios from "axios";
+import { useMutation } from "react-query";
+import { fetchLogout } from "../apis/api";
 
 const Header = () => {
   const [isLogin, setIsLogin] = useRecoilState(LoginState);
@@ -18,21 +19,28 @@ const Header = () => {
   const UserInfoMatch = useMatch("/userInfo");
   const FavoriteMatch = useMatch("/favorites");
 
+  const { mutate: LogoutUser } = useMutation(fetchLogout);
   const handleLogout = () => {
-    axios
-      .post(
-        "/api/user/logout",
-        { sessionId: localStorage.getItem("sessionId") },
-        { withCredentials: true }
-      )
-      .then(res => {
-        setIsLogin(false);
-        localStorage.removeItem("sessionId");
-        removeCookie("sessionId");
-        navigate(`/`);
-      })
-      .catch(err => console.log("로그아웃 실패", err));
+    try {
+      LogoutUser(
+        { sessionId: localStorage.getItem("sessionId")! },
+        {
+          onSuccess: () => {
+            setIsLogin(false);
+            localStorage.removeItem("sessionId");
+            removeCookie("sessionId");
+            navigate(`/`);
+          },
+          onError: err => {
+            console.log("로그아웃 요청 실패!", err);
+          },
+        }
+      );
+    } catch (err) {
+      console.log("로그아웃 실패!", err);
+    }
   };
+
   return (
     <Nav>
       <Col>
