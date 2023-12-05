@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import styled from "styled-components";
 import PageBanner from "../components/PageBanner";
+import Alert from "../components/Alert";
 
 export interface IDelete {
   password: string;
@@ -64,7 +65,7 @@ const DeleteAccount = () => {
               {...register("password", { required: "비밀번호를 입력하세요" })}
             />
             {errors.password && errors.password.type === "required" && (
-              <AlertMessage>{errors.password.message}</AlertMessage>
+              <Alert>{errors.password.message}</Alert>
             )}
             <Input type="submit" value="회원 탈퇴" />
           </DeleteForm>
@@ -128,12 +129,4 @@ const Input = styled.input`
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
-`;
-
-const AlertMessage = styled.span`
-  width: 80%;
-  margin-left: 23px;
-  margin-bottom: 10px;
-  color: ${(props) => props.theme.orange};
-  font-size: 20px;
 `;

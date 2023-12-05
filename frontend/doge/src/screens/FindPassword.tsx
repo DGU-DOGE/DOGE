@@ -10,6 +10,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { formatTime } from "../utils/formatTime";
 import PageBanner from "../components/PageBanner";
+import Alert from "../components/Alert";
 
 interface IJoin {
   userId: string;
@@ -157,10 +158,10 @@ const FindPassword = () => {
             placeholder="이메일을 입력하세요"
           />
           {errors.userId && errors.userId.type === "required" && (
-            <AlertMessage>{errors.userId.message}</AlertMessage>
+            <Alert>{errors.userId.message}</Alert>
           )}
           {errors.userId && errors.userId.type === "pattern" && (
-            <AlertMessage>{errors.userId.message}</AlertMessage>
+            <Alert>{errors.userId.message}</Alert>
           )}
           {!verificationSuccess ? (
             !verificationSent ? (
@@ -197,7 +198,7 @@ const FindPassword = () => {
                 </Timer>
                 {errors.verifyNumber &&
                   errors.verifyNumber.type === "required" && (
-                    <AlertMessage>{errors.verifyNumber.message}</AlertMessage>
+                    <Alert>{errors.verifyNumber.message}</Alert>
                   )}
                 <Input type="submit" value="인증하기" />
               </>
@@ -212,7 +213,7 @@ const FindPassword = () => {
                 />
                 {errors.userPassword &&
                   errors.userPassword.type === "required" && (
-                    <AlertMessage>{errors.userPassword.message}</AlertMessage>
+                    <Alert>{errors.userPassword.message}</Alert>
                   )}
                 <Input
                   type="password"
@@ -222,7 +223,7 @@ const FindPassword = () => {
                   placeholder="비밀번호 확인"
                 />
                 {errors.userPassword1 && (
-                  <AlertMessage>{errors.userPassword1.message}</AlertMessage>
+                  <Alert>{errors.userPassword1.message}</Alert>
                 )}
                 <Input type="submit" value="비밀번호 변경" />
               </>
@@ -271,13 +272,6 @@ const Input = styled.input`
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
-`;
-const AlertMessage = styled.span`
-  width: 80%;
-  margin-left: 23px;
-  margin-bottom: 10px;
-  color: ${(props) => props.theme.orange};
-  font-size: 20px;
 `;
 const Timer = styled.div`
   display: flex;

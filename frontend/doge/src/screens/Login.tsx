@@ -6,6 +6,7 @@ import { useRecoilState } from "recoil";
 import { LoginState } from "../stores/atoms";
 import axios from "axios";
 import { setCookie } from "../stores/Cookie";
+import Alert from "../components/Alert";
 
 interface ILogin {
   userId: string;
@@ -28,13 +29,13 @@ const Login = () => {
         { email: data.userId, password: data.userPassword },
         { withCredentials: true }
       )
-      .then(res => {
+      .then((res) => {
         localStorage.setItem("sessionId", res.data.sessionId);
         setCookie("sessionId", res.data.sessionId);
         setIsLogin(true);
         navigate(`/`);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("로그인 실패", err);
       });
   };
@@ -63,10 +64,10 @@ const Login = () => {
             placeholder="이메일을 입력하세요"
           />
           {errors.userId && errors.userId.type === "required" && (
-            <AlertMessage>{errors.userId.message}</AlertMessage>
+            <Alert>{errors.userId.message}</Alert>
           )}
           {errors.userId && errors.userId.type === "pattern" && (
-            <AlertMessage>{errors.userId.message}</AlertMessage>
+            <Alert>{errors.userId.message}</Alert>
           )}
           <Input
             type="password"
@@ -76,7 +77,7 @@ const Login = () => {
             placeholder="비밀번호를 입력하세요"
           />
           {errors.userPassword && errors.userPassword.type === "required" && (
-            <AlertMessage>{errors.userPassword.message}</AlertMessage>
+            <Alert>{errors.userPassword.message}</Alert>
           )}
           <Input type="submit" value="로그인" />
         </LoginForm>
@@ -118,7 +119,7 @@ const Title = styled.div`
   margin-top: 25px;
   h1 {
     font-size: 68px;
-    color: ${props => props.theme.orange};
+    color: ${(props) => props.theme.orange};
   }
 `;
 const LoginWrapper = styled.div`
@@ -135,8 +136,8 @@ const LoginForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${props => props.theme.orange};
-    color: ${props => props.theme.white.lighter};
+    background-color: ${(props) => props.theme.orange};
+    color: ${(props) => props.theme.white.lighter};
     font-size: 30px;
   }
 `;
@@ -144,8 +145,8 @@ const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${props => props.theme.gray.medium};
-  border: 1px solid ${props => props.theme.gray.medium};
+  background-color: ${(props) => props.theme.gray.medium};
+  border: 1px solid ${(props) => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
@@ -162,15 +163,8 @@ const Extra = styled.div`
   justify-content: flex-end;
   a,
   span {
-    color: ${props => props.theme.orange};
+    color: ${(props) => props.theme.orange};
     margin-left: 10px;
     font-size: 22px;
   }
-`;
-const AlertMessage = styled.span`
-  width: 80%;
-  margin-left: 23px;
-  margin-bottom: 10px;
-  color: ${props => props.theme.orange};
-  font-size: 20px;
 `;

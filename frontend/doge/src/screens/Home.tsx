@@ -16,6 +16,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import PageBanner from "../components/PageBanner";
+import Alert from "../components/Alert";
 
 interface IForm {
   keyword: string;
@@ -84,10 +85,10 @@ const Home = () => {
           </SearchBtn>
         </Search>
         {errors.keyword && errors.keyword.type === "required" && (
-          <AlertMessage>{errors.keyword.message}</AlertMessage>
+          <Alert>{errors.keyword.message}</Alert>
         )}
         {errors.keyword && errors.keyword.type === "minLength" && (
-          <AlertMessage>{errors.keyword.message}</AlertMessage>
+          <Alert>{errors.keyword.message}</Alert>
         )}
         <MapWrapper>
           <AnimatePresence onExitComplete={toggleLeaving} initial={false}>
@@ -211,12 +212,6 @@ const SearchBtn = styled.div`
   }
   position: absolute;
   right: 45px;
-`;
-const AlertMessage = styled.span`
-  margin-left: 23px;
-  margin-bottom: 10px;
-  color: ${(props) => props.theme.orange};
-  font-size: 20px;
 `;
 const MapWrapper = styled.div`
   display: flex;
