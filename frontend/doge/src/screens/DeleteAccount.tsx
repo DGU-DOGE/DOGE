@@ -20,20 +20,20 @@ const DeleteAccount = () => {
     formState: { errors },
   } = useForm<IDelete>({ mode: "onSubmit" });
 
-  const { mutate: deleteUser } = useMutation(
-    (data: IDelete) => fetchDeleteUser(data),
-    {
-      onSuccess: () => {
-        setIsLogin(false);
-        localStorage.removeItem("sessionId");
-        removeCookie("sessionId");
-        navigate(`/`);
-      },
-    }
-  );
+  const { mutate: deleteUser } = useMutation(fetchDeleteUser);
   const onValid = async (data: IDelete) => {
     try {
-      deleteUser({ password: data.password });
+      deleteUser(
+        { password: data.password },
+        {
+          onSuccess: () => {
+            setIsLogin(false);
+            localStorage.removeItem("sessionId");
+            removeCookie("sessionId");
+            navigate(`/`);
+          },
+        }
+      );
     } catch (error) {
       console.log("회원탈퇴 에러발생!", error);
     }
@@ -109,7 +109,7 @@ const Title = styled.div`
     font-size: 68px;
   }
   span {
-    color: ${(props) => props.theme.orange};
+    color: ${props => props.theme.orange};
   }
 `;
 const DeleteWrapper = styled.div`
@@ -124,7 +124,7 @@ const DeleteMessage = styled.div`
     margin-left: 100px;
     margin-top: 100px;
     span {
-      color: ${(props) => props.theme.red};
+      color: ${props => props.theme.red};
     }
   }
   p {
@@ -144,8 +144,8 @@ const DeleteForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${(props) => props.theme.orange};
-    color: ${(props) => props.theme.white.lighter};
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.lighter};
     font-size: 30px;
   }
   padding-top: 70px;
@@ -154,8 +154,8 @@ const Input = styled.input`
   width: 90%;
   height: 60px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
