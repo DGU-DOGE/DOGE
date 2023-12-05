@@ -1,4 +1,3 @@
-import { ReactComponent as ElephantLogo } from "../assets/imgs/dgu-elephant.svg";
 import { ReactComponent as SearchIcon } from "../assets/imgs/magnifying-glass-solid.svg";
 import FloorB2 from "../assets/imgs/floorB2.png";
 import { ReactComponent as LeftAngle } from "../assets/imgs/angle-left-solid.svg";
@@ -16,6 +15,7 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import PageBanner from "../components/PageBanner";
 
 interface IForm {
   keyword: string;
@@ -38,16 +38,16 @@ const Home = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(true);
-    setIndex(prev => (prev === 3 ? 0 : prev + 1));
+    setIndex((prev) => (prev === 3 ? 0 : prev + 1));
   };
   const decreaseIndex = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(false);
-    setIndex(prev => (prev === 0 ? 3 : prev - 1));
+    setIndex((prev) => (prev === 0 ? 3 : prev - 1));
   };
   const toggleLeaving = () => {
-    setLeaving(prev => !prev);
+    setLeaving((prev) => !prev);
   };
   const onOverlayClick = () => {
     navigate(-1);
@@ -57,18 +57,13 @@ const Home = () => {
   };
   return (
     <Wrapper>
-      <Banner>
-        <Title>
-          <h1>
-            동국대학교 <br />
-            중앙<span>도</span>서관 <span>지</span>도 <br />
-            <span>도지</span>
-          </h1>
-        </Title>
-        <BannerLogo>
-          <ElephantLogo />
-        </BannerLogo>
-      </Banner>
+      <PageBanner>
+        <h1>
+          동국대학교 <br />
+          중앙<span>도</span>서관 <span>지</span>도 <br />
+          <span>도지</span>
+        </h1>
+      </PageBanner>
       <InfoWrapper>
         <Search onSubmit={handleSubmit(onValid)}>
           <Input
@@ -163,7 +158,7 @@ const Home = () => {
           ) : null}
         </AnimatePresence>
         <Bottom>
-          {[0, 1, 2, 3].map(idx => (
+          {[0, 1, 2, 3].map((idx) => (
             <Circle
               key={idx}
               style={{ backgroundColor: idx === index ? "#898585" : "#D9D9D9" }}
@@ -182,38 +177,12 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const Banner = styled.div`
-  min-width: 800px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-const BannerLogo = styled.div`
-  svg {
-    width: 300px;
-    height: 300px;
-    margin-top: 20px;
-  }
-  margin-right: 25px;
-`;
-const Title = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 25px;
-  margin-top: 25px;
-  h1 {
-    font-size: 68px;
-  }
-  span {
-    color: ${props => props.theme.orange};
-  }
-`;
 const InfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   min-width: 800px;
-  background-color: ${props => props.theme.gray.lighter};
+  background-color: ${(props) => props.theme.gray.lighter};
   border-radius: 10px;
 `;
 const Search = styled.form`
@@ -229,8 +198,8 @@ const Input = styled.input`
   width: 95%;
   height: 70px;
   margin: 10px;
-  background-color: ${props => props.theme.gray.medium};
-  border: 1px solid ${props => props.theme.gray.medium};
+  background-color: ${(props) => props.theme.gray.medium};
+  border: 1px solid ${(props) => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 28px;
@@ -246,7 +215,7 @@ const SearchBtn = styled.div`
 const AlertMessage = styled.span`
   margin-left: 23px;
   margin-bottom: 10px;
-  color: ${props => props.theme.orange};
+  color: ${(props) => props.theme.orange};
   font-size: 20px;
 `;
 const MapWrapper = styled.div`
@@ -290,7 +259,7 @@ const DetailMap = styled(motion.div)`
   left: 0;
   right: 0;
   margin: 0 auto;
-  background-color: ${props => props.theme.gray.darker};
+  background-color: ${(props) => props.theme.gray.darker};
   border-radius: 15px;
   overflow: hidden;
   display: flex;

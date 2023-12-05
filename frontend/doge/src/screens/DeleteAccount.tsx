@@ -1,4 +1,3 @@
-import { ReactComponent as ElephantLogo } from "../assets/imgs/dgu-elephant.svg";
 import { removeCookie } from "../stores/Cookie";
 import { useNavigate } from "react-router-dom";
 import { fetchDeleteUser } from "../apis/api";
@@ -7,6 +6,7 @@ import { useSetRecoilState } from "recoil";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import styled from "styled-components";
+import PageBanner from "../components/PageBanner";
 
 export interface IDelete {
   password: string;
@@ -42,18 +42,13 @@ const DeleteAccount = () => {
   return (
     <>
       <Wrapper>
-        <Banner>
-          <Title>
-            <h1>
-              동국대학교 <br />
-              중앙<span>도</span>서관 <span>지</span>도 <br />
-              <span>도지 회원탈퇴</span>
-            </h1>
-          </Title>
-          <BannerLogo>
-            <ElephantLogo />
-          </BannerLogo>
-        </Banner>
+        <PageBanner>
+          <h1>
+            동국대학교 <br />
+            중앙<span>도</span>서관 <span>지</span>도 <br />
+            <span>도지 회원탈퇴</span>
+          </h1>
+        </PageBanner>
         <DeleteWrapper>
           <DeleteMessage>
             <h1>
@@ -86,32 +81,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const Banner = styled.div`
-  min-width: 800px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-const BannerLogo = styled.div`
-  svg {
-    width: 300px;
-    height: 300px;
-    margin-top: 20px;
-  }
-  margin-right: 25px;
-`;
-const Title = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 25px;
-  margin-top: 25px;
-  h1 {
-    font-size: 68px;
-  }
-  span {
-    color: ${props => props.theme.orange};
-  }
-`;
 const DeleteWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -124,7 +93,7 @@ const DeleteMessage = styled.div`
     margin-left: 100px;
     margin-top: 100px;
     span {
-      color: ${props => props.theme.red};
+      color: ${(props) => props.theme.red};
     }
   }
   p {
@@ -144,8 +113,8 @@ const DeleteForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${props => props.theme.orange};
-    color: ${props => props.theme.white.lighter};
+    background-color: ${(props) => props.theme.orange};
+    color: ${(props) => props.theme.white.lighter};
     font-size: 30px;
   }
   padding-top: 70px;
@@ -154,8 +123,8 @@ const Input = styled.input`
   width: 90%;
   height: 60px;
   margin: 10px;
-  background-color: ${props => props.theme.gray.medium};
-  border: 1px solid ${props => props.theme.gray.medium};
+  background-color: ${(props) => props.theme.gray.medium};
+  border: 1px solid ${(props) => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
@@ -165,6 +134,6 @@ const AlertMessage = styled.span`
   width: 80%;
   margin-left: 23px;
   margin-bottom: 10px;
-  color: ${props => props.theme.orange};
+  color: ${(props) => props.theme.orange};
   font-size: 20px;
 `;

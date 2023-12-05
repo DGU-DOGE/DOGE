@@ -1,4 +1,3 @@
-import { ReactComponent as ElephantLogo } from "../assets/imgs/dgu-elephant.svg";
 import styled from "styled-components";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -10,6 +9,7 @@ import {
 } from "../apis/api";
 import { useNavigate } from "react-router-dom";
 import { formatTime } from "../utils/formatTime";
+import PageBanner from "../components/PageBanner";
 
 interface IJoin {
   userId: string;
@@ -36,7 +36,7 @@ const FindPassword = () => {
     onSuccess: () => {
       console.log("인증번호 발송 성공");
     },
-    onError: error => {
+    onError: (error) => {
       console.error("인증번호 발송 실패", error);
     },
   });
@@ -45,7 +45,7 @@ const FindPassword = () => {
     onSuccess: () => {
       console.log("인증번호 인증 과정 성공!");
     },
-    onError: error => {
+    onError: (error) => {
       console.log("인증번호 인증 과정 실패", error);
     },
   });
@@ -55,7 +55,7 @@ const FindPassword = () => {
       console.log("비밀번호 변경 성공!");
       navigate(`/login`);
     },
-    onError: error => {
+    onError: (error) => {
       console.log("비밀번호 변경 실패!", error);
     },
   });
@@ -77,7 +77,7 @@ const FindPassword = () => {
             setVerificationSent(true);
             startTimer();
           },
-          onError: error => {
+          onError: (error) => {
             console.error("인증번호 발송 실패", error);
           },
         });
@@ -98,7 +98,7 @@ const FindPassword = () => {
                   navigate(`/find-password`);
                 }
               },
-              onError: error => {
+              onError: (error) => {
                 console.log("인증번호 인증 실패", error);
               },
             }
@@ -111,7 +111,7 @@ const FindPassword = () => {
                 console.log("비밀번호 변경 성공!");
                 navigate("/login");
               },
-              onError: err => {
+              onError: (err) => {
                 console.log("비밀번호 변경 실패!", err);
               },
             }
@@ -125,7 +125,7 @@ const FindPassword = () => {
   const startTimer = () => {
     setTimer(180); // 3분을 초 단위로 설정
     const intervalId = setInterval(() => {
-      setTimer(prevTimer => prevTimer - 1);
+      setTimer((prevTimer) => prevTimer - 1);
     }, 1000);
     setTimeout(() => {
       clearInterval(intervalId);
@@ -135,18 +135,13 @@ const FindPassword = () => {
   return (
     <>
       <Wrapper>
-        <Banner>
-          <Title>
-            <h1>
-              동국대학교 <br />
-              중앙<span>도</span>서관 <span>지</span>도 <br />
-              <span>비밀번호 찾기</span>
-            </h1>
-          </Title>
-          <BannerLogo>
-            <ElephantLogo />
-          </BannerLogo>
-        </Banner>
+        <PageBanner>
+          <h1>
+            동국대학교 <br />
+            중앙<span>도</span>서관 <span>지</span>도 <br />
+            <span>비밀번호 찾기</span>
+          </h1>
+        </PageBanner>
       </Wrapper>
       <JoinWrapper>
         <JoinForm onSubmit={handleSubmit(onValid)}>
@@ -246,32 +241,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const Banner = styled.div`
-  min-width: 800px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-const BannerLogo = styled.div`
-  svg {
-    width: 300px;
-    height: 300px;
-    margin-top: 20px;
-  }
-  margin-right: 25px;
-`;
-const Title = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 25px;
-  margin-top: 25px;
-  h1 {
-    font-size: 68px;
-  }
-  span {
-    color: ${props => props.theme.orange};
-  }
-`;
 const JoinWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -287,8 +256,8 @@ const JoinForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${props => props.theme.orange};
-    color: ${props => props.theme.white.lighter};
+    background-color: ${(props) => props.theme.orange};
+    color: ${(props) => props.theme.white.lighter};
     font-size: 30px;
   }
   padding-top: 70px;
@@ -297,8 +266,8 @@ const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${props => props.theme.gray.medium};
-  border: 1px solid ${props => props.theme.gray.medium};
+  background-color: ${(props) => props.theme.gray.medium};
+  border: 1px solid ${(props) => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
@@ -307,7 +276,7 @@ const AlertMessage = styled.span`
   width: 80%;
   margin-left: 23px;
   margin-bottom: 10px;
-  color: ${props => props.theme.orange};
+  color: ${(props) => props.theme.orange};
   font-size: 20px;
 `;
 const Timer = styled.div`

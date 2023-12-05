@@ -1,9 +1,9 @@
-import { ReactComponent as ElephantLogo } from "../assets/imgs/dgu-elephant.svg";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from "../stores/Cookie";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import PageBanner from "../components/PageBanner";
 
 const UserInfo = () => {
   const navigate = useNavigate();
@@ -17,11 +17,11 @@ const UserInfo = () => {
           },
           withCredentials: true,
         })
-        .then(res => {
+        .then((res) => {
           console.log("사용자 email 받아오기 성공!");
           setUserEmail(res.data.email);
         })
-        .catch(err => console.log("사용자 email 받아오기 실패!"));
+        .catch((err) => console.log("사용자 email 받아오기 실패!"));
     })();
   }, []);
 
@@ -35,23 +35,18 @@ const UserInfo = () => {
   return (
     <>
       <Wrapper>
-        <Banner>
-          <Title>
-            <h1>
-              동국대학교 <br />
-              중앙<span>도</span>서관 <span>지</span>도 <br />
-              <span>도지 회원정보</span>
-            </h1>
-          </Title>
-          <BannerLogo>
-            <ElephantLogo />
-          </BannerLogo>
-        </Banner>
+        <PageBanner>
+          <h1>
+            동국대학교 <br />
+            중앙<span>도</span>서관 <span>지</span>도 <br />
+            <span>도지 회원정보</span>
+          </h1>
+        </PageBanner>
       </Wrapper>
       <InfoWrapper>
         <Input
           value={userEmail}
-          onClick={event => {
+          onClick={(event) => {
             event.currentTarget.blur();
           }}
           readOnly
@@ -70,32 +65,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const Banner = styled.div`
-  min-width: 800px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-const BannerLogo = styled.div`
-  svg {
-    width: 300px;
-    height: 300px;
-    margin-top: 20px;
-  }
-  margin-right: 25px;
-`;
-const Title = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 25px;
-  margin-top: 25px;
-  h1 {
-    font-size: 68px;
-  }
-  span {
-    color: ${props => props.theme.orange};
-  }
-`;
 const InfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -106,8 +75,8 @@ const InfoWrapper = styled.div`
     margin: 80px;
   }
   input[type="button"] {
-    background-color: ${props => props.theme.orange};
-    color: ${props => props.theme.white.darker};
+    background-color: ${(props) => props.theme.orange};
+    color: ${(props) => props.theme.white.darker};
     cursor: pointer;
   }
 `;
@@ -115,8 +84,8 @@ const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${props => props.theme.yellow};
-  border: 1px solid ${props => props.theme.yellow};
+  background-color: ${(props) => props.theme.yellow};
+  border: 1px solid ${(props) => props.theme.yellow};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;

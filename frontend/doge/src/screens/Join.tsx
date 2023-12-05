@@ -1,4 +1,3 @@
-import { ReactComponent as ElephantLogo } from "../assets/imgs/dgu-elephant.svg";
 import { fetchConfirmCode, fetchJoin, fetchSendCode } from "../apis/api";
 import { formatTime } from "../utils/formatTime";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import styled from "styled-components";
 import { useState } from "react";
+import PageBanner from "../components/PageBanner";
 
 interface IJoin {
   userId: string;
@@ -32,7 +32,7 @@ const Join = () => {
     onSuccess: () => {
       console.log("인증번호 발송 요청 성공!");
     },
-    onError: error => {
+    onError: (error) => {
       console.error("인증번호 발송 요청 실패", error);
     },
   });
@@ -41,7 +41,7 @@ const Join = () => {
     onSuccess: () => {
       console.log("인증번호 인증 요청 성공!");
     },
-    onError: error => {
+    onError: (error) => {
       console.log("인증번호 인증 요청 실패", error);
     },
   });
@@ -50,7 +50,7 @@ const Join = () => {
     onSuccess: () => {
       console.log("회원가입 요청 성공!");
     },
-    onError: error => {
+    onError: (error) => {
       console.log("회원가입 요청 실패!", error);
     },
   });
@@ -73,7 +73,7 @@ const Join = () => {
             setVerificationSent(true);
             startTimer();
           },
-          onError: error => {
+          onError: (error) => {
             console.error("인증번호 발송 실패", error);
           },
         });
@@ -94,7 +94,7 @@ const Join = () => {
                   navigate(`/join`);
                 }
               },
-              onError: error => {
+              onError: (error) => {
                 console.log("인증번호 인증 실패", error);
               },
             }
@@ -110,7 +110,7 @@ const Join = () => {
                 console.log("회원가입 성공!");
                 navigate(`/login`);
               },
-              onError: error => {
+              onError: (error) => {
                 console.log("회원가입 실패!", error);
               },
             }
@@ -124,7 +124,7 @@ const Join = () => {
   const startTimer = () => {
     setTimer(180);
     const intervalId = setInterval(() => {
-      setTimer(prevTimer => prevTimer - 1);
+      setTimer((prevTimer) => prevTimer - 1);
     }, 1000);
     setTimeout(() => {
       clearInterval(intervalId);
@@ -134,18 +134,13 @@ const Join = () => {
   return (
     <>
       <Wrapper>
-        <Banner>
-          <Title>
-            <h1>
-              동국대학교 <br />
-              중앙<span>도</span>서관 <span>지</span>도 <br />
-              <span>도지 회원가입</span>
-            </h1>
-          </Title>
-          <BannerLogo>
-            <ElephantLogo />
-          </BannerLogo>
-        </Banner>
+        <PageBanner>
+          <h1>
+            동국대학교 <br />
+            중앙<span>도</span>서관 <span>지</span>도 <br />
+            <span>도지 회원가입</span>
+          </h1>
+        </PageBanner>
       </Wrapper>
       <JoinWrapper>
         <JoinForm onSubmit={handleSubmit(onValid)}>
@@ -245,32 +240,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const Banner = styled.div`
-  min-width: 800px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-const BannerLogo = styled.div`
-  svg {
-    width: 300px;
-    height: 300px;
-    margin-top: 20px;
-  }
-  margin-right: 25px;
-`;
-const Title = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 25px;
-  margin-top: 25px;
-  h1 {
-    font-size: 68px;
-  }
-  span {
-    color: ${props => props.theme.orange};
-  }
-`;
 const JoinWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -286,8 +255,8 @@ const JoinForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${props => props.theme.orange};
-    color: ${props => props.theme.white.lighter};
+    background-color: ${(props) => props.theme.orange};
+    color: ${(props) => props.theme.white.lighter};
     font-size: 30px;
   }
   padding-top: 70px;
@@ -296,8 +265,8 @@ const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${props => props.theme.gray.medium};
-  border: 1px solid ${props => props.theme.gray.medium};
+  background-color: ${(props) => props.theme.gray.medium};
+  border: 1px solid ${(props) => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
@@ -306,7 +275,7 @@ const AlertMessage = styled.span`
   width: 80%;
   margin-left: 23px;
   margin-bottom: 10px;
-  color: ${props => props.theme.orange};
+  color: ${(props) => props.theme.orange};
   font-size: 20px;
 `;
 const Timer = styled.div`
