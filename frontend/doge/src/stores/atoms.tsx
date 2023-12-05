@@ -2,8 +2,8 @@ import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
 const { persistAtom } = recoilPersist({
-  key: "localstorage", // this key is using to store data in local storage
-  storage: localStorage, // configure which storage will be used to store t
+  key: "localstorage",
+  storage: localStorage,
 });
 
 export const LoginState = atom<boolean>({
