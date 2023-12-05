@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { formatTime } from "../utils/formatTime";
 import PageBanner from "../components/PageBanner";
 import Alert from "../components/Alert";
+import Container from "../components/Container";
 
 interface IJoin {
   userId: string;
@@ -135,7 +136,7 @@ const FindPassword = () => {
 
   return (
     <>
-      <Wrapper>
+      <Container>
         <PageBanner>
           <h1>
             동국대학교 <br />
@@ -143,7 +144,7 @@ const FindPassword = () => {
             <span>비밀번호 찾기</span>
           </h1>
         </PageBanner>
-      </Wrapper>
+      </Container>
       <JoinWrapper>
         <JoinForm onSubmit={handleSubmit(onValid)}>
           <Input
@@ -237,11 +238,6 @@ const FindPassword = () => {
 
 export default FindPassword;
 
-const Wrapper = styled.div`
-  min-width: 800px;
-  display: flex;
-  flex-direction: column;
-`;
 const JoinWrapper = styled.div`
   display: flex;
   flex-direction: column;

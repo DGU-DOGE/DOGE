@@ -17,6 +17,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import PageBanner from "../components/PageBanner";
 import Alert from "../components/Alert";
+import Container from "../components/Container";
 
 interface IForm {
   keyword: string;
@@ -57,7 +58,7 @@ const Home = () => {
     navigate(`/search?keyword=${data.keyword}`);
   };
   return (
-    <Wrapper>
+    <Container>
       <PageBanner>
         <h1>
           동국대학교 <br />
@@ -167,17 +168,12 @@ const Home = () => {
           ))}
         </Bottom>
       </InfoWrapper>
-    </Wrapper>
+    </Container>
   );
 };
 
 export default Home;
 
-const Wrapper = styled.div`
-  min-width: 800px;
-  display: flex;
-  flex-direction: column;
-`;
 const InfoWrapper = styled.div`
   display: flex;
   flex-direction: column;

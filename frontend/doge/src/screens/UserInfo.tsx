@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import PageBanner from "../components/PageBanner";
+import Container from "../components/Container";
 
 const UserInfo = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const UserInfo = () => {
 
   return (
     <>
-      <Wrapper>
+      <Container>
         <PageBanner>
           <h1>
             동국대학교 <br />
@@ -42,7 +43,7 @@ const UserInfo = () => {
             <span>도지 회원정보</span>
           </h1>
         </PageBanner>
-      </Wrapper>
+      </Container>
       <InfoWrapper>
         <Input
           value={userEmail}
@@ -60,11 +61,6 @@ const UserInfo = () => {
 
 export default UserInfo;
 
-const Wrapper = styled.div`
-  min-width: 800px;
-  display: flex;
-  flex-direction: column;
-`;
 const InfoWrapper = styled.div`
   display: flex;
   flex-direction: column;

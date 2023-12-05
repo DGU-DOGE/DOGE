@@ -7,6 +7,7 @@ import { LoginState } from "../stores/atoms";
 import axios from "axios";
 import { setCookie } from "../stores/Cookie";
 import Alert from "../components/Alert";
+import Container from "../components/Container";
 
 interface ILogin {
   userId: string;
@@ -41,7 +42,7 @@ const Login = () => {
   };
 
   return (
-    <Wrapper>
+    <Container>
       <Banner>
         <BannerLogo>
           <ElephantLogo />
@@ -89,17 +90,12 @@ const Login = () => {
           <Link to={"/join"}>회원가입</Link>
         </Extra>
       </ExtraWrapper>
-    </Wrapper>
+    </Container>
   );
 };
 
 export default Login;
 
-const Wrapper = styled.div`
-  min-width: 800px;
-  display: flex;
-  flex-direction: column;
-`;
 const Banner = styled.div`
   display: flex;
   flex-direction: column;

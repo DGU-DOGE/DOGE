@@ -19,6 +19,7 @@ import { IBook, fetchAddFavorite, fetchDeleteFavorite } from "../apis/api";
 import axios from "axios";
 import { useMutation } from "react-query";
 import Alert from "../components/Alert";
+import Container from "../components/Container";
 
 const offset = 5;
 
@@ -180,7 +181,7 @@ const Search = () => {
   return bookLoading ? (
     <Loader />
   ) : (
-    <Wrapper>
+    <Container>
       {data.length === 0 ? (
         <>
           <Banner>
@@ -445,17 +446,12 @@ const Search = () => {
           </InfoWrapper>
         </>
       )}
-    </Wrapper>
+    </Container>
   );
 };
 
 export default Search;
 
-const Wrapper = styled.div`
-  min-width: 800px;
-  display: flex;
-  flex-direction: column;
-`;
 const Banner = styled.div`
   min-width: 800px;
   display: flex;

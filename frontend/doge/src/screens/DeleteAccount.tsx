@@ -8,6 +8,7 @@ import { useMutation } from "react-query";
 import styled from "styled-components";
 import PageBanner from "../components/PageBanner";
 import Alert from "../components/Alert";
+import Container from "../components/Container";
 
 export interface IDelete {
   password: string;
@@ -42,7 +43,7 @@ const DeleteAccount = () => {
 
   return (
     <>
-      <Wrapper>
+      <Container>
         <PageBanner>
           <h1>
             동국대학교 <br />
@@ -70,18 +71,13 @@ const DeleteAccount = () => {
             <Input type="submit" value="회원 탈퇴" />
           </DeleteForm>
         </DeleteWrapper>
-      </Wrapper>
+      </Container>
     </>
   );
 };
 
 export default DeleteAccount;
 
-const Wrapper = styled.div`
-  min-width: 800px;
-  display: flex;
-  flex-direction: column;
-`;
 const DeleteWrapper = styled.div`
   display: flex;
   flex-direction: column;
