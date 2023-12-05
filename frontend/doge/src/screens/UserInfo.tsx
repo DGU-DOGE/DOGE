@@ -1,66 +1,9 @@
-import { useNavigate } from "react-router-dom";
 import { ReactComponent as ElephantLogo } from "../assets/imgs/dgu-elephant.svg";
+import { useNavigate } from "react-router-dom";
+import { getCookie } from "../stores/Cookie";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { getCookie } from "../stores/Cookie";
-
-const Wrapper = styled.div`
-  min-width: 800px;
-  display: flex;
-  flex-direction: column;
-`;
-const Banner = styled.div`
-  min-width: 800px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-const BannerLogo = styled.div`
-  svg {
-    width: 300px;
-    height: 300px;
-    margin-top: 20px;
-  }
-  margin-right: 25px;
-`;
-const Title = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 25px;
-  margin-top: 25px;
-  h1 {
-    font-size: 68px;
-  }
-  span {
-    color: ${props => props.theme.orange};
-  }
-`;
-const InfoWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 800px;
-
-  input:first-child {
-    margin: 80px;
-  }
-  input[type="button"] {
-    background-color: ${props => props.theme.orange};
-    color: ${props => props.theme.white.darker};
-    cursor: pointer;
-  }
-`;
-const Input = styled.input`
-  width: 80%;
-  height: 60px;
-  margin: 10px;
-  background-color: ${props => props.theme.yellow};
-  border: 1px solid ${props => props.theme.yellow};
-  border-radius: 10px;
-  padding: 10px;
-  font-size: 24px;
-`;
 
 const UserInfo = () => {
   const navigate = useNavigate();
@@ -121,3 +64,60 @@ const UserInfo = () => {
 };
 
 export default UserInfo;
+
+const Wrapper = styled.div`
+  min-width: 800px;
+  display: flex;
+  flex-direction: column;
+`;
+const Banner = styled.div`
+  min-width: 800px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+const BannerLogo = styled.div`
+  svg {
+    width: 300px;
+    height: 300px;
+    margin-top: 20px;
+  }
+  margin-right: 25px;
+`;
+const Title = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 25px;
+  margin-top: 25px;
+  h1 {
+    font-size: 68px;
+  }
+  span {
+    color: ${props => props.theme.orange};
+  }
+`;
+const InfoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 800px;
+
+  input:first-child {
+    margin: 80px;
+  }
+  input[type="button"] {
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.darker};
+    cursor: pointer;
+  }
+`;
+const Input = styled.input`
+  width: 80%;
+  height: 60px;
+  margin: 10px;
+  background-color: ${props => props.theme.yellow};
+  border: 1px solid ${props => props.theme.yellow};
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 24px;
+`;
