@@ -23,10 +23,14 @@
 
 # ⚒️ Tech
 <div>
-  <img src="https://img.shields.io/badge/REACT-61DAFB?style=flat-square&logo=simpleicons_REACT&logoColor=white"/>
-  <img src="https://img.shields.io/badge/TYPESCRIPT-3178C6?style=flat-square&logo=simpleicons_TYPESCRIPT&logoColor=white"/>
-  <img src="https://img.shields.io/badge/SPRING-6DB33F?style=flat-square&logo=simpleicons_SPRING&logoColor=white"/>
-  <img src="https://img.shields.io/badge/SPRING BOOT-6DB33F?style=flat-square&logo=simpleicons_SPRING BOOT&logoColor=white"/>
+  <img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white"/>
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=TypeScript&logoColor=white"/>
+  <img src="https://img.shields.io/badge/styled-components-DB7093?style=flat-square&logo=styled-components&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Recoil-3578E5?style=flat-square&logo=Recoil&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Springboot-6DB33F?style=flat-square&logo=springboot&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white"/>
+  <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white"/>  
 </div>
 
 ## 1. 프로젝트명
