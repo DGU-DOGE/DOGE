@@ -12,7 +12,7 @@
 | [김태윤](https://github.com/Cllaude99)       | 컴퓨터공학전공 | 19학번 | xodbsrla1025@naver.com
 | [이민수](https://github.com/nanaoko705) |   컴퓨터공학전공  | 17학번 | penpenguin2018@gmail.com  |
 
-## [Back-end]
+## [Back-End]
 
 | 이름                                      | 전공           | 학번   | Email               |
 | ----------------------------------------- | -------------- | ------ | ------------------- |
