@@ -17,7 +17,7 @@
 | 이름                                      | 전공           | 학번   | Email               |
 | ----------------------------------------- | -------------- | ------ | ------------------- |
 | [손기민](https://github.com/KiminSon)      | 컴퓨터공학전공       | 19학번 |   kimin0331@naver.com  |
-| [이형준](https://github.com/01HyungJun)     | 컴퓨터공학전공 | 19학번 |  |
+| [이형준](https://github.com/01HyungJun)     | 컴퓨터공학전공 | 19학번 | asd56780@naver.com  |
 
 ---
 
@@ -32,6 +32,10 @@
   <img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white"/>
   <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white"/>  
 </div>
+
+![badges](https://img.shields.io/badge/IDE-VSCode-informational)
+![badges](https://img.shields.io/badge/axios-1.6.0-red)
+![badges](https://img.shields.io/badge/npm-8.5.0-green)
 
 ## 1. 프로젝트명
 > 동국대학교 중앙 도서관 지도 - **DOGE**
