@@ -6,9 +6,9 @@ import { useSetRecoilState } from "recoil";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import styled from "styled-components";
-import PageBanner from "../components/PageBanner";
-import Alert from "../components/Alert";
-import Container from "../components/Container";
+import PageBanner from "../components/Banner";
+import Alert from "../components/UI/Alert";
+import Container from "../components/UI/Container";
 
 export interface IDelete {
   password: string;
@@ -90,7 +90,7 @@ const DeleteMessage = styled.div`
     margin-left: 100px;
     margin-top: 100px;
     span {
-      color: ${(props) => props.theme.red};
+      color: ${props => props.theme.red};
     }
   }
   p {
@@ -110,8 +110,8 @@ const DeleteForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${(props) => props.theme.orange};
-    color: ${(props) => props.theme.white.lighter};
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.lighter};
     font-size: 30px;
   }
   padding-top: 70px;
@@ -120,8 +120,8 @@ const Input = styled.input`
   width: 90%;
   height: 60px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;

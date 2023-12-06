@@ -1,15 +1,15 @@
-import { ReactComponent as HomeLogo } from "../assets/imgs/house-solid.svg";
-import { ReactComponent as Logout } from "../assets/imgs/right-from-bracket-solid.svg";
-import { ReactComponent as User } from "../assets/imgs/user-solid.svg";
-import { ReactComponent as FullStar } from "../assets/imgs/star-solid.svg";
+import { ReactComponent as HomeLogo } from "../../assets/imgs/house-solid.svg";
+import { ReactComponent as Logout } from "../../assets/imgs/right-from-bracket-solid.svg";
+import { ReactComponent as User } from "../../assets/imgs/user-solid.svg";
+import { ReactComponent as FullStar } from "../../assets/imgs/star-solid.svg";
 import { useMatch, Link, useNavigate } from "react-router-dom";
-import { removeCookie } from "../stores/Cookie";
-import { LoginState } from "../stores/atoms";
+import { removeCookie } from "../../stores/Cookie";
+import { LoginState } from "../../stores/atoms";
 import { useRecoilState } from "recoil";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { useMutation } from "react-query";
-import { fetchLogout } from "../apis/api";
+import { fetchLogout } from "../../apis/api";
 
 const Header = () => {
   const [isLogin, setIsLogin] = useRecoilState(LoginState);

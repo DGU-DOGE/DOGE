@@ -4,10 +4,10 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { LoginState } from "../stores/atoms";
-import axios from "axios";
 import { setCookie } from "../stores/Cookie";
-import Alert from "../components/Alert";
-import Container from "../components/Container";
+import Alert from "../components/UI/Alert";
+import Container from "../components/UI/Container";
+import axios from "axios";
 
 interface ILogin {
   userId: string;
@@ -30,13 +30,13 @@ const Login = () => {
         { email: data.userId, password: data.userPassword },
         { withCredentials: true }
       )
-      .then((res) => {
+      .then(res => {
         localStorage.setItem("sessionId", res.data.sessionId);
         setCookie("sessionId", res.data.sessionId);
         setIsLogin(true);
         navigate(`/`);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log("로그인 실패", err);
       });
   };
@@ -115,7 +115,7 @@ const Title = styled.div`
   margin-top: 25px;
   h1 {
     font-size: 68px;
-    color: ${(props) => props.theme.orange};
+    color: ${props => props.theme.orange};
   }
 `;
 const LoginWrapper = styled.div`
@@ -132,8 +132,8 @@ const LoginForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${(props) => props.theme.orange};
-    color: ${(props) => props.theme.white.lighter};
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.lighter};
     font-size: 30px;
   }
 `;
@@ -141,8 +141,8 @@ const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
@@ -159,7 +159,7 @@ const Extra = styled.div`
   justify-content: flex-end;
   a,
   span {
-    color: ${(props) => props.theme.orange};
+    color: ${props => props.theme.orange};
     margin-left: 10px;
     font-size: 22px;
   }

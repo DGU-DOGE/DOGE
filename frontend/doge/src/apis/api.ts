@@ -1,5 +1,5 @@
 import { getCookie } from "../stores/Cookie";
-import { IDelete } from "../screens/DeleteAccount";
+import { IDelete } from "../pages/DeleteAccount";
 import axios from "axios";
 
 export interface IUserData {

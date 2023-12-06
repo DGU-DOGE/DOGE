@@ -5,9 +5,9 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import styled from "styled-components";
 import { useState } from "react";
-import PageBanner from "../components/PageBanner";
-import Alert from "../components/Alert";
-import Container from "../components/Container";
+import PageBanner from "../components/Banner";
+import Alert from "../components/UI/Alert";
+import Container from "../components/UI/Container";
 
 interface IJoin {
   userId: string;
@@ -34,7 +34,7 @@ const Join = () => {
     onSuccess: () => {
       console.log("인증번호 발송 요청 성공!");
     },
-    onError: (error) => {
+    onError: error => {
       console.error("인증번호 발송 요청 실패", error);
     },
   });
@@ -43,7 +43,7 @@ const Join = () => {
     onSuccess: () => {
       console.log("인증번호 인증 요청 성공!");
     },
-    onError: (error) => {
+    onError: error => {
       console.log("인증번호 인증 요청 실패", error);
     },
   });
@@ -52,7 +52,7 @@ const Join = () => {
     onSuccess: () => {
       console.log("회원가입 요청 성공!");
     },
-    onError: (error) => {
+    onError: error => {
       console.log("회원가입 요청 실패!", error);
     },
   });
@@ -75,7 +75,7 @@ const Join = () => {
             setVerificationSent(true);
             startTimer();
           },
-          onError: (error) => {
+          onError: error => {
             console.error("인증번호 발송 실패", error);
           },
         });
@@ -96,7 +96,7 @@ const Join = () => {
                   navigate(`/join`);
                 }
               },
-              onError: (error) => {
+              onError: error => {
                 console.log("인증번호 인증 실패", error);
               },
             }
@@ -112,7 +112,7 @@ const Join = () => {
                 console.log("회원가입 성공!");
                 navigate(`/login`);
               },
-              onError: (error) => {
+              onError: error => {
                 console.log("회원가입 실패!", error);
               },
             }
@@ -126,7 +126,7 @@ const Join = () => {
   const startTimer = () => {
     setTimer(180);
     const intervalId = setInterval(() => {
-      setTimer((prevTimer) => prevTimer - 1);
+      setTimer(prevTimer => prevTimer - 1);
     }, 1000);
     setTimeout(() => {
       clearInterval(intervalId);
@@ -252,8 +252,8 @@ const JoinForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${(props) => props.theme.orange};
-    color: ${(props) => props.theme.white.lighter};
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.lighter};
     font-size: 30px;
   }
   padding-top: 70px;
@@ -262,8 +262,8 @@ const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;

@@ -10,7 +10,7 @@ import { formatFloor, formatShelfName } from "../utils/formatPath";
 import { getCookie } from "../stores/Cookie";
 import { LoginState } from "../stores/atoms";
 import { useEffect, useState } from "react";
-import Loader from "./../components/Loader";
+import Loader from "../components/UI/Loader";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import MapPath from "../utils/MapPath";
@@ -18,8 +18,8 @@ import styled from "styled-components";
 import { IBook, fetchAddFavorite, fetchDeleteFavorite } from "../apis/api";
 import axios from "axios";
 import { useMutation } from "react-query";
-import Alert from "../components/Alert";
-import Container from "../components/Container";
+import Alert from "../components/UI/Alert";
+import Container from "../components/UI/Container";
 
 const offset = 5;
 
@@ -67,7 +67,7 @@ const Search = () => {
     setDetailLoading(true);
     if (bookDetailMatch?.params.bookId && data) {
       setClickedBook(
-        data.find((book) => book.bookId + "" === bookDetailMatch.params.bookId)
+        data.find(book => book.bookId + "" === bookDetailMatch.params.bookId)
       );
     }
     setDetailLoading(false);
@@ -98,10 +98,10 @@ const Search = () => {
     try {
       registerFavorite(favoriteData, {
         onSuccess: () => {
-          setFavoriteList((prev) => [...prev, favoriteData]);
+          setFavoriteList(prev => [...prev, favoriteData]);
           console.log("즐겨찾기 등록 후 즐겨찾기 목록", favoriteList);
         },
-        onError: (err) => {
+        onError: err => {
           console.log("즐겨찾기 등록 실패!", err);
         },
       });
@@ -115,15 +115,15 @@ const Search = () => {
     try {
       deleteFavoriteBook(deleteData, {
         onSuccess: () => {
-          setFavoriteList((prev) => {
+          setFavoriteList(prev => {
             const newFavorite = prev.filter(
-              (book) => book.bookId !== deleteData.bookId
+              book => book.bookId !== deleteData.bookId
             );
             console.log("즐겨찾기 삭제 후 즐겨찾기 목록", newFavorite);
             return newFavorite;
           });
         },
-        onError: (err) => {
+        onError: err => {
           console.log("즐겨 찾기 삭제 실패!", err);
         },
       });
@@ -145,31 +145,31 @@ const Search = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(true);
-    setIndex((prev) =>
+    setIndex(prev =>
       prev === Math.floor(data.length / offset) - 1 ? 0 : prev + 1
     );
   };
   const increaseDetailIdx = () => {
     setIsDetailNext(true);
-    setDetailIdx((prev) => (prev === 1 ? 0 : prev + 1));
+    setDetailIdx(prev => (prev === 1 ? 0 : prev + 1));
   };
   const decreaseIndex = () => {
     if (leaving) return;
     toggleLeaving();
     setNext(false);
-    setIndex((prev) =>
+    setIndex(prev =>
       prev === 0 ? Math.floor(data.length / offset) - 1 : prev - 1
     );
   };
   const decreaseDetailIdx = () => {
     setIsDetailNext(false);
-    setDetailIdx((prev) => (prev === 0 ? 1 : prev - 1));
+    setDetailIdx(prev => (prev === 0 ? 1 : prev - 1));
   };
   const toggleLeaving = () => {
-    setLeaving((prev) => !prev);
+    setLeaving(prev => !prev);
   };
   const toggleDetailLeaving = () => {
-    setDetailLeaving((prev) => !prev);
+    setDetailLeaving(prev => !prev);
   };
   const onValid = (data: IForm) => {
     navigate(`/search?keyword=${data.keyword}`);
@@ -267,7 +267,7 @@ const Search = () => {
               >
                 {data!
                   .slice(index * offset, index * offset + offset)
-                  .map((book) => (
+                  .map(book => (
                     <Book
                       key={book.bookId}
                       layoutId={book.bookId + ""}
@@ -345,8 +345,7 @@ const Search = () => {
 
                                   {isLogin ? (
                                     favoriteList?.find(
-                                      (book) =>
-                                        book.bookId === clickedBook.bookId
+                                      book => book.bookId === clickedBook.bookId
                                     ) ? (
                                       <span
                                         onClick={() =>
@@ -377,7 +376,7 @@ const Search = () => {
                             )}
                           </DetailInfo>
                           <Bottom>
-                            {[0, 1].map((idx) => (
+                            {[0, 1].map(idx => (
                               <Circle
                                 key={idx}
                                 style={{
@@ -426,7 +425,7 @@ const Search = () => {
                             )}
                           </DetailInfo>
                           <Bottom>
-                            {[0, 1].map((idx) => (
+                            {[0, 1].map(idx => (
                               <Circle
                                 key={idx}
                                 style={{
@@ -466,7 +465,7 @@ const InfoWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   min-width: 800px;
-  background-color: ${(props) => props.theme.gray.lighter};
+  background-color: ${props => props.theme.gray.lighter};
   border-radius: 10px;
   position: relative;
 `;
@@ -484,8 +483,8 @@ const Input = styled.input`
   width: 95%;
   height: 70px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 28px;
@@ -522,7 +521,7 @@ const Slider = styled(motion.div)`
 `;
 const Book = styled(motion.div)`
   display: flex;
-  background-color: ${(props) => props.theme.gray.lightdark};
+  background-color: ${props => props.theme.gray.lightdark};
   width: 95%;
   height: 200px;
   margin: 20px 0px;
@@ -602,7 +601,7 @@ const DetailWrapper = styled(motion.div)`
   left: 0;
   right: 0;
   margin: 0 auto;
-  background-color: ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
   border-radius: 15px;
   overflow: hidden;
   display: flex;
@@ -612,7 +611,7 @@ const DetailWrapper = styled(motion.div)`
 const DetailInfo = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.gray.bright};
+  background-color: ${props => props.theme.gray.bright};
   width: 70%;
   max-width: 500px;
 
@@ -633,9 +632,9 @@ const DetailInfo = styled.div`
     display: flex;
     margin-bottom: 15px;
     span {
-      background-color: ${(props) => props.theme.orange};
+      background-color: ${props => props.theme.orange};
       font-size: 13px;
-      color: ${(props) => props.theme.white.lighter};
+      color: ${props => props.theme.white.lighter};
       width: 60px;
       text-align: center;
       padding: 3px;

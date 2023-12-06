@@ -9,9 +9,9 @@ import {
 } from "../apis/api";
 import { useNavigate } from "react-router-dom";
 import { formatTime } from "../utils/formatTime";
-import PageBanner from "../components/PageBanner";
-import Alert from "../components/Alert";
-import Container from "../components/Container";
+import PageBanner from "../components/Banner";
+import Alert from "../components/UI/Alert";
+import Container from "../components/UI/Container";
 
 interface IJoin {
   userId: string;
@@ -38,7 +38,7 @@ const FindPassword = () => {
     onSuccess: () => {
       console.log("인증번호 발송 성공");
     },
-    onError: (error) => {
+    onError: error => {
       console.error("인증번호 발송 실패", error);
     },
   });
@@ -47,7 +47,7 @@ const FindPassword = () => {
     onSuccess: () => {
       console.log("인증번호 인증 과정 성공!");
     },
-    onError: (error) => {
+    onError: error => {
       console.log("인증번호 인증 과정 실패", error);
     },
   });
@@ -57,7 +57,7 @@ const FindPassword = () => {
       console.log("비밀번호 변경 성공!");
       navigate(`/login`);
     },
-    onError: (error) => {
+    onError: error => {
       console.log("비밀번호 변경 실패!", error);
     },
   });
@@ -79,7 +79,7 @@ const FindPassword = () => {
             setVerificationSent(true);
             startTimer();
           },
-          onError: (error) => {
+          onError: error => {
             console.error("인증번호 발송 실패", error);
           },
         });
@@ -100,7 +100,7 @@ const FindPassword = () => {
                   navigate(`/find-password`);
                 }
               },
-              onError: (error) => {
+              onError: error => {
                 console.log("인증번호 인증 실패", error);
               },
             }
@@ -113,7 +113,7 @@ const FindPassword = () => {
                 console.log("비밀번호 변경 성공!");
                 navigate("/login");
               },
-              onError: (err) => {
+              onError: err => {
                 console.log("비밀번호 변경 실패!", err);
               },
             }
@@ -127,7 +127,7 @@ const FindPassword = () => {
   const startTimer = () => {
     setTimer(180); // 3분을 초 단위로 설정
     const intervalId = setInterval(() => {
-      setTimer((prevTimer) => prevTimer - 1);
+      setTimer(prevTimer => prevTimer - 1);
     }, 1000);
     setTimeout(() => {
       clearInterval(intervalId);
@@ -253,8 +253,8 @@ const JoinForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${(props) => props.theme.orange};
-    color: ${(props) => props.theme.white.lighter};
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.lighter};
     font-size: 30px;
   }
   padding-top: 70px;
@@ -263,8 +263,8 @@ const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;

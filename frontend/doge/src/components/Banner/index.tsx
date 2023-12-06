@@ -1,4 +1,4 @@
-import { ReactComponent as ElephantLogo } from "../assets/imgs/dgu-elephant.svg";
+import { ReactComponent as ElephantLogo } from "../../assets/imgs/dgu-elephant.svg";
 import styled from "styled-components";
 import { ReactNode } from "react";
 
@@ -42,6 +42,6 @@ const Title = styled.div`
     font-size: 68px;
   }
   span {
-    color: ${(props) => props.theme.orange};
+    color: ${props => props.theme.orange};
   }
 `;

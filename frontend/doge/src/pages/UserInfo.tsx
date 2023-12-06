@@ -3,8 +3,8 @@ import { getCookie } from "../stores/Cookie";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import PageBanner from "../components/PageBanner";
-import Container from "../components/Container";
+import PageBanner from "../components/Banner";
+import Container from "../components/UI/Container";
 
 const UserInfo = () => {
   const navigate = useNavigate();
@@ -18,11 +18,11 @@ const UserInfo = () => {
           },
           withCredentials: true,
         })
-        .then((res) => {
+        .then(res => {
           console.log("사용자 email 받아오기 성공!");
           setUserEmail(res.data.email);
         })
-        .catch((err) => console.log("사용자 email 받아오기 실패!"));
+        .catch(err => console.log("사용자 email 받아오기 실패!"));
     })();
   }, []);
 
@@ -47,7 +47,7 @@ const UserInfo = () => {
       <InfoWrapper>
         <Input
           value={userEmail}
-          onClick={(event) => {
+          onClick={event => {
             event.currentTarget.blur();
           }}
           readOnly
@@ -71,8 +71,8 @@ const InfoWrapper = styled.div`
     margin: 80px;
   }
   input[type="button"] {
-    background-color: ${(props) => props.theme.orange};
-    color: ${(props) => props.theme.white.darker};
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.darker};
     cursor: pointer;
   }
 `;
@@ -80,8 +80,8 @@ const Input = styled.input`
   width: 80%;
   height: 60px;
   margin: 10px;
-  background-color: ${(props) => props.theme.yellow};
-  border: 1px solid ${(props) => props.theme.yellow};
+  background-color: ${props => props.theme.yellow};
+  border: 1px solid ${props => props.theme.yellow};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
