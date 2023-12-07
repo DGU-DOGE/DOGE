@@ -41,7 +41,7 @@ public class SeleniumController {
     private void printInsertSQL(StringBuilder result) {  // 크롤링한 데이터를 Insert문으로 정리하여 txt파일로 저장
         BufferedOutputStream bs = null;
         try{
-            bs = new BufferedOutputStream(new FileOutputStream("C:\\IntelliJ_Workspace\\hello-spring\\src\\main\\resources\\sql_crawl\\"+ pageNum +".txt"));
+            bs = new BufferedOutputStream(new FileOutputStream("C:\\IntelliJ_Workspace\\hello-spring\\src\\main\\resources\\sql_crawl\\"+ pageNum +".txt"));    // txt파일 저장 위치
             bs.write(result.toString().getBytes());
         } catch (Exception e){
             e.getStackTrace();
@@ -122,7 +122,7 @@ public class SeleniumController {
         long beforeTime = printTimestamp();
 
         while(loop <= end){
-            // Thread pool 개수 설정
+            // Thread pool 개수 설정(컴퓨터 환경에 따라 다르게 설정)
             ExecutorService executor = Executors.newFixedThreadPool(10);
             List<Future<String>> futures = new ArrayList<>();
 

@@ -19,7 +19,7 @@ public class SeleniumCrawler implements Callable<String> {
     private final int MAX_RETRY = 3;
     private String url;
     private int loop;
-    private Path path = Paths.get("C:\\webdriver\\chromedriver-win64\\chromedriver.exe");
+    private Path path = Paths.get("C:\\webdriver\\chromedriver-win64\\chromedriver.exe");   // 크롬드라이버 경로 입력
     private WebDriver driver;
     private WebDriverWait webDriverWait;
     private final int WEB_DRIVER_WAIT_TIME = 20;
