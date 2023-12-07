@@ -1,92 +1,14 @@
-import { ReactComponent as ElephantLogo } from "../assets/imgs/dgu-elephant.svg";
-import styled from "styled-components";
-import { useState } from "react";
+import { fetchConfirmCode, fetchJoin, fetchSendCode } from "../apis/api";
+import { formatTime } from "../utils/formatTime";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { fetchConfirmCode, fetchJoin, fetchSendCode } from "../apis/api";
-import { useNavigate } from "react-router-dom";
-import { formatTime } from "../utils/formatTime";
+import styled from "styled-components";
+import { useState } from "react";
+import PageBanner from "../components/Banner";
+import Alert from "../components/UI/Alert";
+import Container from "../components/UI/Container";
 
-const Wrapper = styled.div`
-  min-width: 800px;
-  display: flex;
-  flex-direction: column;
-`;
-const Banner = styled.div`
-  min-width: 800px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-const BannerLogo = styled.div`
-  svg {
-    width: 300px;
-    height: 300px;
-    margin-top: 20px;
-  }
-  margin-right: 25px;
-`;
-const Title = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 25px;
-  margin-top: 25px;
-  h1 {
-    font-size: 68px;
-  }
-  span {
-    color: ${props => props.theme.orange};
-  }
-`;
-const JoinWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-width: 800px;
-`;
-const JoinForm = styled.form`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  input:focus {
-    background-color: transparent;
-  }
-  input[type="submit"] {
-    cursor: pointer;
-    background-color: ${props => props.theme.orange};
-    color: ${props => props.theme.white.lighter};
-    font-size: 30px;
-  }
-  padding-top: 70px;
-`;
-const Input = styled.input`
-  width: 80%;
-  height: 60px;
-  margin: 10px;
-  background-color: ${props => props.theme.gray.medium};
-  border: 1px solid ${props => props.theme.gray.medium};
-  border-radius: 10px;
-  padding: 10px;
-  font-size: 24px;
-`;
-const AlertMessage = styled.span`
-  width: 80%;
-  margin-left: 23px;
-  margin-bottom: 10px;
-  color: ${props => props.theme.orange};
-  font-size: 20px;
-`;
-const Timer = styled.div`
-  display: flex;
-  width: 80%;
-  position: relative;
-  span {
-    position: absolute;
-    top: -50px;
-    right: 20px;
-    font-size: 18px;
-  }
-`;
 interface IJoin {
   userId: string;
   verifyNumber: string;
@@ -108,53 +30,33 @@ const Join = () => {
   } = useForm<IJoin>({ mode: "onSubmit" });
 
   // 인증번호 발송에 대한 함수
-  const { mutate: sendVerificationCode } = useMutation(
-    (userId: string) => fetchSendCode(userId),
-    {
-      onSuccess: () => {
-        console.log("인증번호 발송!");
-        setVerificationSent(true);
-        startTimer();
-      },
-      onError: error => {
-        console.error("인증번호 발송 실패", error);
-      },
-    }
-  );
+  const { mutate: sendVerificationCode } = useMutation(fetchSendCode, {
+    onSuccess: () => {
+      console.log("인증번호 발송 요청 성공!");
+    },
+    onError: error => {
+      console.error("인증번호 발송 요청 실패", error);
+    },
+  });
   // 인증번호 검증을 위한 함수
-  const { mutate: verifyCode } = useMutation(
-    (data: { userId: string; verifyNumber: string }) => fetchConfirmCode(data),
-    {
-      onSuccess: () => {
-        setValue("userPassword", "");
-        if (timer > 0) {
-          setVerificationSuccess(true);
-          console.log("인증번호 인증 성공!");
-        } else {
-          console.log("인증번호 실패!");
-          setVerificationSuccess(false);
-          alert(`인증실패`);
-          navigate(`/join`);
-        }
-      },
-      onError: error => {
-        console.log("인증번호 인증 실패", error);
-      },
-    }
-  );
+  const { mutate: verifyCode } = useMutation(fetchConfirmCode, {
+    onSuccess: () => {
+      console.log("인증번호 인증 요청 성공!");
+    },
+    onError: error => {
+      console.log("인증번호 인증 요청 실패", error);
+    },
+  });
   // 회원가입 post요청 함수
-  const { mutate: registerUser } = useMutation(
-    (data: { userId: string; userPassword: string }) => fetchJoin(data),
-    {
-      onSuccess: () => {
-        console.log("회원가입 성공!");
-        navigate(`/login`);
-      },
-      onError: error => {
-        console.log("회원가입 실패!", error);
-      },
-    }
-  );
+  const { mutate: registerUser } = useMutation(fetchJoin, {
+    onSuccess: () => {
+      console.log("회원가입 요청 성공!");
+    },
+    onError: error => {
+      console.log("회원가입 요청 실패!", error);
+    },
+  });
+
   const onValid = (data: IJoin) => {
     // 비밀번호와 비밀번호확인이 일치하지 않으면 에러발생하도록 구현
     if (verificationSuccess && data.userPassword !== data.userPassword1) {
@@ -167,15 +69,54 @@ const Join = () => {
     }
     try {
       if (!verificationSent) {
-        sendVerificationCode(data.userId);
+        sendVerificationCode(data.userId, {
+          onSuccess: () => {
+            console.log("인증번호 발송!");
+            setVerificationSent(true);
+            startTimer();
+          },
+          onError: error => {
+            console.error("인증번호 발송 실패", error);
+          },
+        });
       } else {
         if (!verificationSuccess) {
-          verifyCode({ userId: data.userId, verifyNumber: data.verifyNumber });
+          verifyCode(
+            { userId: data.userId, verifyNumber: data.verifyNumber },
+            {
+              onSuccess: () => {
+                setValue("userPassword", "");
+                if (timer > 0) {
+                  setVerificationSuccess(true);
+                  console.log("인증번호 인증 성공!");
+                } else {
+                  console.log("인증번호 실패!");
+                  setVerificationSuccess(false);
+                  alert(`인증실패`);
+                  navigate(`/join`);
+                }
+              },
+              onError: error => {
+                console.log("인증번호 인증 실패", error);
+              },
+            }
+          );
         } else {
-          registerUser({
-            userId: data.userId,
-            userPassword: data.userPassword,
-          });
+          registerUser(
+            {
+              userId: data.userId,
+              userPassword: data.userPassword,
+            },
+            {
+              onSuccess: () => {
+                console.log("회원가입 성공!");
+                navigate(`/login`);
+              },
+              onError: error => {
+                console.log("회원가입 실패!", error);
+              },
+            }
+          );
         }
       }
     } catch (error) {
@@ -191,22 +132,18 @@ const Join = () => {
       clearInterval(intervalId);
     }, 180000);
   };
+
   return (
     <>
-      <Wrapper>
-        <Banner>
-          <Title>
-            <h1>
-              동국대학교 <br />
-              중앙<span>도</span>서관 <span>지</span>도 <br />
-              <span>도지 회원가입</span>
-            </h1>
-          </Title>
-          <BannerLogo>
-            <ElephantLogo />
-          </BannerLogo>
-        </Banner>
-      </Wrapper>
+      <Container>
+        <PageBanner>
+          <h1>
+            동국대학교 <br />
+            중앙<span>도</span>서관 <span>지</span>도 <br />
+            <span>도지 회원가입</span>
+          </h1>
+        </PageBanner>
+      </Container>
       <JoinWrapper>
         <JoinForm onSubmit={handleSubmit(onValid)}>
           <Input
@@ -221,10 +158,10 @@ const Join = () => {
             placeholder="이메일을 입력하세요"
           />
           {errors.userId && errors.userId.type === "required" && (
-            <AlertMessage>{errors.userId.message}</AlertMessage>
+            <Alert>{errors.userId.message}</Alert>
           )}
           {errors.userId && errors.userId.type === "pattern" && (
-            <AlertMessage>{errors.userId.message}</AlertMessage>
+            <Alert>{errors.userId.message}</Alert>
           )}
           {!verificationSuccess ? (
             !verificationSent ? (
@@ -261,7 +198,7 @@ const Join = () => {
                 </Timer>
                 {errors.verifyNumber &&
                   errors.verifyNumber.type === "required" && (
-                    <AlertMessage>{errors.verifyNumber.message}</AlertMessage>
+                    <Alert>{errors.verifyNumber.message}</Alert>
                   )}
                 <Input type="submit" value="인증하기" />
               </>
@@ -276,7 +213,7 @@ const Join = () => {
                 />
                 {errors.userPassword &&
                   errors.userPassword.type === "required" && (
-                    <AlertMessage>{errors.userPassword.message}</AlertMessage>
+                    <Alert>{errors.userPassword.message}</Alert>
                   )}
                 <Input
                   type="password"
@@ -286,7 +223,7 @@ const Join = () => {
                   placeholder="비밀번호 확인"
                 />
                 {errors.userPassword1 && (
-                  <AlertMessage>{errors.userPassword1.message}</AlertMessage>
+                  <Alert>{errors.userPassword1.message}</Alert>
                 )}
                 <Input type="submit" value="회원가입" />
               </>
@@ -299,3 +236,46 @@ const Join = () => {
 };
 
 export default Join;
+
+const JoinWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-width: 800px;
+`;
+const JoinForm = styled.form`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  input:focus {
+    background-color: transparent;
+  }
+  input[type="submit"] {
+    cursor: pointer;
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.lighter};
+    font-size: 30px;
+  }
+  padding-top: 70px;
+`;
+const Input = styled.input`
+  width: 80%;
+  height: 60px;
+  margin: 10px;
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 24px;
+`;
+const Timer = styled.div`
+  display: flex;
+  width: 80%;
+  position: relative;
+  span {
+    position: absolute;
+    top: -50px;
+    right: 20px;
+    font-size: 18px;
+  }
+`;

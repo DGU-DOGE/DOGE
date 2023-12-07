@@ -1,16 +1,15 @@
-import { ReactComponent as HomeLogo } from "../assets/imgs/house-solid.svg";
-import { ReactComponent as Logout } from "../assets/imgs/right-from-bracket-solid.svg";
-import { ReactComponent as User } from "../assets/imgs/user-solid.svg";
-import { ReactComponent as FullStar } from "../assets/imgs/star-solid.svg";
+import { ReactComponent as HomeLogo } from "../../assets/imgs/house-solid.svg";
+import { ReactComponent as Logout } from "../../assets/imgs/right-from-bracket-solid.svg";
+import { ReactComponent as User } from "../../assets/imgs/user-solid.svg";
+import { ReactComponent as FullStar } from "../../assets/imgs/star-solid.svg";
 import { useMatch, Link, useNavigate } from "react-router-dom";
-import { removeCookie } from "../stores/Cookie";
-import { fetchUserLogout } from "../apis/api";
-import { LoginState } from "../stores/atoms";
-import { useMutation } from "react-query";
+import { removeCookie } from "../../stores/Cookie";
+import { LoginState } from "../../stores/atoms";
 import { useRecoilState } from "recoil";
 import { motion } from "framer-motion";
 import styled from "styled-components";
-import axios from "axios";
+import { useMutation } from "react-query";
+import { fetchLogout } from "../../apis/api";
 
 const Header = () => {
   const [isLogin, setIsLogin] = useRecoilState(LoginState);
@@ -19,39 +18,29 @@ const Header = () => {
   const LoginMatch = useMatch("/login");
   const UserInfoMatch = useMatch("/userInfo");
   const FavoriteMatch = useMatch("/favorites");
-  const { mutate: fetchLogout } = useMutation(fetchUserLogout, {
-    onSuccess: () => {
-      setIsLogin(false);
-      localStorage.removeItem("sessionId");
-      removeCookie("sessionId");
-      console.log("로그아웃 성공!");
-      navigate(`/`);
-    },
-  });
 
+  const { mutate: LogoutUser } = useMutation(fetchLogout);
   const handleLogout = () => {
-    /*try{
-      fetchLogout();
+    try {
+      LogoutUser(
+        { sessionId: localStorage.getItem("sessionId")! },
+        {
+          onSuccess: () => {
+            setIsLogin(false);
+            localStorage.removeItem("sessionId");
+            removeCookie("sessionId");
+            navigate(`/`);
+          },
+          onError: err => {
+            console.log("로그아웃 요청 실패!", err);
+          },
+        }
+      );
+    } catch (err) {
+      console.log("로그아웃 실패!", err);
     }
-    catch(error){
-      console.log("로그아웃 실패!");
-    }*/
-    axios
-      .post(
-        "/api/user/logout",
-        { sessionId: localStorage.getItem("sessionId") },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        setIsLogin(false);
-        console.log(localStorage.getItem("sessionId"));
-        localStorage.removeItem("sessionId");
-        removeCookie("sessionId");
-        console.log("로그아웃 성공!");
-        navigate(`/`);
-      })
-      .catch((err) => console.log("로그아웃 실패", err));
   };
+
   return (
     <Nav>
       <Col>
@@ -107,14 +96,14 @@ const Nav = styled(motion.nav)`
   width: 100%;
   min-width: 800px;
   top: 0;
-  background-color: ${(props) => props.theme.orange};
+  background-color: ${props => props.theme.orange};
   font-size: 24px;
   padding: 15px 20px;
   color: rgba(255, 255, 255, 1);
   svg {
     width: 30px;
     height: 30px;
-    fill: ${(props) => props.theme.white.lighter};
+    fill: ${props => props.theme.white.lighter};
   }
 `;
 const Col = styled.div`
@@ -127,13 +116,13 @@ const Items = styled.ul`
 `;
 const Item = styled.li`
   margin-right: 20px;
-  color: ${(props) => props.theme.white.darker};
+  color: ${props => props.theme.white.darker};
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   &:hover {
-    color: ${(props) => props.theme.white.lighter};
+    color: ${props => props.theme.white.lighter};
   }
   svg {
     cursor: pointer;
@@ -148,5 +137,5 @@ const Circle = styled(motion.span)`
   left: 0;
   right: 0;
   margin: 0 auto;
-  background-color: ${(props) => props.theme.white.lighter};
+  background-color: ${props => props.theme.white.lighter};
 `;

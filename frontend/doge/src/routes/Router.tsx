@@ -1,13 +1,13 @@
-import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import Home from "../screens/Home";
-import Login from "../screens/Login";
-import Join from "../screens/Join";
-import UserInfo from "../screens/UserInfo";
-import Favorites from "../screens/Favorites";
-import Search from "../screens/Search";
-import FindPassword from "../screens/FindPassword";
-import DeleteAccount from "../screens/DeleteAccount";
+import Home from "../pages/Home";
+import Join from "../pages/Join";
+import Login from "../pages/Login";
+import Search from "../pages/Search";
+import UserInfo from "../pages/UserInfo";
+import Favorites from "../pages/Favorites";
+import FindPassword from "../pages/FindPassword";
+import DeleteAccount from "../pages/DeleteAccount";
+import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
   {

@@ -1,4 +1,3 @@
-import { ReactComponent as ElephantLogo } from "../assets/imgs/dgu-elephant.svg";
 import { removeCookie } from "../stores/Cookie";
 import { useNavigate } from "react-router-dom";
 import { fetchDeleteUser } from "../apis/api";
@@ -7,6 +6,9 @@ import { useSetRecoilState } from "recoil";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import styled from "styled-components";
+import PageBanner from "../components/Banner";
+import Alert from "../components/UI/Alert";
+import Container from "../components/UI/Container";
 
 export interface IDelete {
   password: string;
@@ -20,20 +22,20 @@ const DeleteAccount = () => {
     formState: { errors },
   } = useForm<IDelete>({ mode: "onSubmit" });
 
-  const { mutate: deleteUser } = useMutation(
-    (data: IDelete) => fetchDeleteUser(data),
-    {
-      onSuccess: () => {
-        setIsLogin(false);
-        localStorage.removeItem("sessionId");
-        removeCookie("sessionId");
-        navigate(`/`);
-      },
-    }
-  );
+  const { mutate: deleteUser } = useMutation(fetchDeleteUser);
   const onValid = async (data: IDelete) => {
     try {
-      deleteUser({ password: data.password });
+      deleteUser(
+        { password: data.password },
+        {
+          onSuccess: () => {
+            setIsLogin(false);
+            localStorage.removeItem("sessionId");
+            removeCookie("sessionId");
+            navigate(`/`);
+          },
+        }
+      );
     } catch (error) {
       console.log("회원탈퇴 에러발생!", error);
     }
@@ -41,19 +43,14 @@ const DeleteAccount = () => {
 
   return (
     <>
-      <Wrapper>
-        <Banner>
-          <Title>
-            <h1>
-              동국대학교 <br />
-              중앙<span>도</span>서관 <span>지</span>도 <br />
-              <span>도지 회원탈퇴</span>
-            </h1>
-          </Title>
-          <BannerLogo>
-            <ElephantLogo />
-          </BannerLogo>
-        </Banner>
+      <Container>
+        <PageBanner>
+          <h1>
+            동국대학교 <br />
+            중앙<span>도</span>서관 <span>지</span>도 <br />
+            <span>도지 회원탈퇴</span>
+          </h1>
+        </PageBanner>
         <DeleteWrapper>
           <DeleteMessage>
             <h1>
@@ -69,49 +66,18 @@ const DeleteAccount = () => {
               {...register("password", { required: "비밀번호를 입력하세요" })}
             />
             {errors.password && errors.password.type === "required" && (
-              <AlertMessage>{errors.password.message}</AlertMessage>
+              <Alert>{errors.password.message}</Alert>
             )}
             <Input type="submit" value="회원 탈퇴" />
           </DeleteForm>
         </DeleteWrapper>
-      </Wrapper>
+      </Container>
     </>
   );
 };
 
 export default DeleteAccount;
 
-const Wrapper = styled.div`
-  min-width: 800px;
-  display: flex;
-  flex-direction: column;
-`;
-const Banner = styled.div`
-  min-width: 800px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-const BannerLogo = styled.div`
-  svg {
-    width: 300px;
-    height: 300px;
-    margin-top: 20px;
-  }
-  margin-right: 25px;
-`;
-const Title = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 25px;
-  margin-top: 25px;
-  h1 {
-    font-size: 68px;
-  }
-  span {
-    color: ${(props) => props.theme.orange};
-  }
-`;
 const DeleteWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -124,7 +90,7 @@ const DeleteMessage = styled.div`
     margin-left: 100px;
     margin-top: 100px;
     span {
-      color: ${(props) => props.theme.red};
+      color: ${props => props.theme.red};
     }
   }
   p {
@@ -144,8 +110,8 @@ const DeleteForm = styled.form`
   }
   input[type="submit"] {
     cursor: pointer;
-    background-color: ${(props) => props.theme.orange};
-    color: ${(props) => props.theme.white.lighter};
+    background-color: ${props => props.theme.orange};
+    color: ${props => props.theme.white.lighter};
     font-size: 30px;
   }
   padding-top: 70px;
@@ -154,17 +120,9 @@ const Input = styled.input`
   width: 90%;
   height: 60px;
   margin: 10px;
-  background-color: ${(props) => props.theme.gray.medium};
-  border: 1px solid ${(props) => props.theme.gray.medium};
+  background-color: ${props => props.theme.gray.medium};
+  border: 1px solid ${props => props.theme.gray.medium};
   border-radius: 10px;
   padding: 10px;
   font-size: 24px;
-`;
-
-const AlertMessage = styled.span`
-  width: 80%;
-  margin-left: 23px;
-  margin-bottom: 10px;
-  color: ${props => props.theme.orange};
-  font-size: 20px;
 `;

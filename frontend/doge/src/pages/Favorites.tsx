@@ -3,65 +3,25 @@ import { ReactComponent as RightAngle } from "../assets/imgs/angle-right-solid.s
 import { ReactComponent as CancelBtn } from "../assets/imgs/xmark-solid.svg";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useMatch, useNavigate } from "react-router-dom";
-import {
-  IBook,
-  fetchAddFavorite,
-  fetchFavorite,
-  fetchUserInfo,
-} from "../apis/api";
+import { IBook, fetchAddFavorite, fetchDeleteFavorite } from "../apis/api";
 import { getCookie } from "../stores/Cookie";
 import { useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
 import axios from "axios";
 import MapPath from "../utils/MapPath";
 import { formatFloor, formatShelfName } from "../utils/formatPath";
+import { useMutation } from "react-query";
+import Container from "../components/UI/Container";
 
 const Favorites = () => {
   const navigate = useNavigate();
   const { scrollY } = useScroll();
-  const [clickedBook, setClickedBook] = useState<IBook>();
-  const [bookLoading, setBookLoading] = useState(true);
-  const bookDetailMatch = useMatch(`/favorites/book-detail/:bookId`);
   const [detailIdx, setDetailIdx] = useState(0);
   const [isdetailNext, setIsDetailNext] = useState(true);
   const [detailLeaving, setDetailLeaving] = useState(false);
+  const [clickedBook, setClickedBook] = useState<IBook>();
   const [favoriteList, setFavoriteList] = useState<IBook[]>([]);
-
-  // 즐겨찾기 조회
-  useEffect(() => {
-    (async () => {
-      /*const { data } = useQuery(["userFavorite"], fetchFavorite, {
-        onSuccess: () => {
-          setFavoriteList(data);
-          console.log("백에서 받아온 사용자 즐겨찾기 목록", data);
-        }
-      })*/
-      const { data } = await axios.post(
-        "/api/favorite/check",
-        { sessionId: localStorage.getItem("sessionId") },
-        {
-          headers: {
-            sessionId: await getCookie("sessionId"),
-          },
-          withCredentials: true,
-        }
-      );
-      setFavoriteList(data);
-      console.log("백에서 받아온 사용자 즐겨찾기 목록", data);
-    })();
-  }, []);
-
-  useEffect(() => {
-    if (bookDetailMatch?.params.bookId && favoriteList) {
-      setClickedBook(
-        favoriteList.find(
-          book => book.bookId + "" === bookDetailMatch.params.bookId
-        )
-      );
-    }
-    setBookLoading(false);
-  }, [bookDetailMatch]);
+  const bookDetailMatch = useMatch(`/favorites/book-detail/:bookId`);
 
   const increaseDetailIdx = () => {
     setIsDetailNext(true);
@@ -78,59 +38,78 @@ const Favorites = () => {
     navigate(`/favorites/book-detail/${bookId}`);
   };
   const onOverlayClick = () => {
-    setDetailIdx(0);
     navigate(-1);
   };
-  // 즐겨찾기 등록
-  const addFavorite = async (favoriteData: IBook) => {
-    axios
-      .post(
-        `/api/favorite/post`,
-        {
-          book: favoriteData,
-        },
+
+  // 즐겨찾기 조회
+  useEffect(() => {
+    (async () => {
+      const { data } = await axios.post(
+        "/api/favorite/check",
+        { sessionId: localStorage.getItem("sessionId") },
         {
           headers: {
             sessionId: await getCookie("sessionId"),
           },
           withCredentials: true,
         }
-      )
-      .then(res => {
-        setFavoriteList(prev => [...prev, favoriteData]);
-        console.log("즐겨찾기 등록 후 즐겨찾기 목록", favoriteList);
-      })
-      .catch(err => console.log("즐겨찾기 등록 실패", err));
+      );
+      setFavoriteList(data);
+    })();
+  }, []);
+  useEffect(() => {
+    setDetailIdx(0);
+    if (bookDetailMatch?.params.bookId && favoriteList) {
+      setClickedBook(
+        favoriteList.find(
+          book => book.bookId + "" === bookDetailMatch.params.bookId
+        )
+      );
+    }
+  }, [bookDetailMatch]);
+
+  // 즐겨찾기 등록
+  const { mutate: registerFavorite } = useMutation(fetchAddFavorite);
+  const addFavorite = async (favoriteData: IBook) => {
+    try {
+      registerFavorite(favoriteData, {
+        onSuccess: () => {
+          setFavoriteList(prev => [...prev, favoriteData]);
+          console.log("즐겨찾기 등록 후 즐겨찾기 목록", favoriteList);
+        },
+        onError: err => {
+          console.log("즐겨찾기 등록 실패!", err);
+        },
+      });
+    } catch (err) {
+      console.log("즐겨찾기 등록 실패!", err);
+    }
   };
   // 즐겨찾기 삭제
+  const { mutate: deleteFavoriteBook } = useMutation(fetchDeleteFavorite);
   const deleteFavorite = async (deleteData: IBook) => {
-    axios
-      .post(
-        `/api/favorite/delete`,
-        {
-          bookId: deleteData.bookId,
+    try {
+      deleteFavoriteBook(deleteData, {
+        onSuccess: () => {
+          setFavoriteList(prev => {
+            const newFavorite = prev.filter(
+              book => book.bookId !== deleteData.bookId
+            );
+            console.log("즐겨찾기 삭제 후 즐겨찾기 목록", newFavorite);
+            return newFavorite;
+          });
         },
-        {
-          headers: {
-            sessionId: await getCookie("sessionId"),
-          },
-          withCredentials: true,
-        }
-      )
-      .then(res => {
-        setFavoriteList(prev => {
-          const newFavorite = prev.filter(
-            book => book.bookId !== deleteData.bookId
-          );
-          console.log("즐겨찾기 삭제 후 즐겨찾기 목록", newFavorite);
-          return newFavorite;
-        });
-      })
-      .catch(err => console.log("즐겨 찾기 삭제 실패!"));
+        onError: err => {
+          console.log("즐겨 찾기 삭제 실패!", err);
+        },
+      });
+    } catch (err) {
+      console.log("즐겨 찾기 삭제 실패!", err);
+    }
   };
 
   return (
-    <Wrapper>
+    <Container>
       {favoriteList.length === 0 ? (
         <>
           <Banner>
@@ -318,17 +297,12 @@ const Favorites = () => {
           </InfoWrapper>
         </>
       )}
-    </Wrapper>
+    </Container>
   );
 };
 
 export default Favorites;
 
-const Wrapper = styled.div`
-  min-width: 800px;
-  display: flex;
-  flex-direction: column;
-`;
 const Banner = styled.div`
   min-width: 800px;
   display: flex;
